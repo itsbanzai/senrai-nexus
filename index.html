@@ -729,6 +729,57 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #nexusWorld .nw-actions{grid-template-columns:1fr 1fr}
 }
 
+
+/* SENRAI WORLD REBUILD — standalone world interface, designed for landscape iPad */
+#nexusWorld{display:none;background:#080812;color:#e8e2ff;border:1px solid #51427b;box-shadow:0 0 48px #7655ff16;overflow:hidden;margin:0 0 88px;min-height:540px}
+#appView[data-nexus-view="agents"] #nexusWorld{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto}
+#appView[data-nexus-view="agents"] #agentHub,#appView[data-nexus-view="agents"] .agent-work-panel,#appView[data-nexus-view="agents"] .v06-dialog,#appView[data-nexus-view="agents"]>.hero,#appView[data-nexus-view="agents"]>.stats,#appView[data-nexus-view="agents"]>.ops-grid,#appView[data-nexus-view="agents"]>.layout,#appView[data-nexus-view="agents"]>.footer{display:none!important}
+#nexusWorld .nw-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#100e20;border-bottom:1px solid #30264b}
+#nexusWorld .nw-brand{font:14px ui-monospace,monospace;letter-spacing:.2em}#nexusWorld .nw-muted{font:9px/1.6 ui-monospace,monospace;color:#9185b8;letter-spacing:.12em}
+#nexusWorld .nw-online{font:9px ui-monospace,monospace;color:#b5f66c}
+#nexusWorld .nw-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;min-height:0}
+#nexusWorld .nw-map-wrap{padding:12px;min-width:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse,#17142a,#070811 75%)}
+#nexusWorld canvas{display:block;width:100%;height:auto;max-height:calc(100dvh - 300px);object-fit:contain;image-rendering:pixelated;border:1px solid #35294f;cursor:pointer}
+#nexusWorld .nw-inspector{padding:16px;border-left:1px solid #30264b;background:#0d0c18;display:flex;flex-direction:column;gap:12px}
+#nexusWorld .nw-inspector h2{font:22px/1.2 ui-monospace,monospace;margin:0;color:#f1ecff}
+#nexusWorld .nw-desc{font:11px/1.7 ui-monospace,monospace;color:#aaa1c4}
+#nexusWorld .nw-metric{padding-top:9px;border-top:1px solid #2a223f}.nw-metric label{display:block;font:8px ui-monospace,monospace;color:#887ba9;letter-spacing:.15em;margin-bottom:6px}
+#nexusWorld .nw-metric strong{font:11px/1.5 ui-monospace,monospace;color:#e4dcff}
+#nexusWorld .nw-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto}
+#nexusWorld button{cursor:pointer;font:9px ui-monospace,monospace;color:#dcd3ff;background:#17132a;border:1px solid #4b3d71;padding:10px 6px}
+#nexusWorld button.active{background:#1b291a;color:#caff8e;border-color:#b5f66c}
+#nexusWorld .nw-enter{background:#b5f66c;color:#11170b;border-color:#b5f66c}
+#nexusWorld .nw-rooms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:8px 10px;background:#090911;border-top:1px solid #2b2242}
+#nexusWorld .nw-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px;background:#090911;color:#8378a6;font:8px ui-monospace,monospace;letter-spacing:.12em}
+@media(orientation:landscape) and (min-width:760px){
+ #appView[data-nexus-view="agents"]{padding:8px 12px 78px!important;overflow:hidden!important}
+ #nexusWorld{height:calc(100dvh - 175px);min-height:0;margin-bottom:76px}
+ #nexusWorld .nw-head{padding:7px 14px}
+ #nexusWorld .nw-body{grid-template-columns:minmax(0,1fr) 220px}
+ #nexusWorld .nw-map-wrap{padding:6px}
+ #nexusWorld canvas{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:5/3}
+ #nexusWorld .nw-inspector{padding:10px;gap:7px}
+ #nexusWorld .nw-inspector h2{font-size:18px}
+ #nexusWorld .nw-desc{font-size:10px}
+ #nexusWorld .nw-rooms{padding:5px 8px}
+ #nexusWorld button{padding:7px 4px}
+ #bottomNav{z-index:9999!important;bottom:6px!important;max-width:min(700px,72vw)!important;padding:5px!important}
+}
+@media(orientation:landscape) and (min-width:760px) and (max-height:500px){
+ #nexusWorld{height:calc(100dvh - 145px);margin-bottom:64px}
+ #nexusWorld .nw-head{padding:4px 10px}
+ #nexusWorld .nw-body{grid-template-columns:minmax(0,1fr) 180px}
+ #nexusWorld .nw-inspector{padding:6px;gap:4px}
+ #nexusWorld .nw-desc{display:none}
+ #nexusWorld .nw-rooms{display:none}
+}
+@media(max-width:759px){
+ #nexusWorld .nw-body{grid-template-columns:1fr}
+ #nexusWorld canvas{max-height:45vh}
+ #nexusWorld .nw-inspector{border-left:0;border-top:1px solid #30264b;padding:10px}
+ #nexusWorld .nw-desc{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -1351,6 +1402,37 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  const observer=new MutationObserver(()=>{if(document.getElementById('nwTasks'))document.getElementById('nwTasks').textContent=readTasks()});const taskList=document.getElementById('taskList');if(taskList)observer.observe(taskList,{childList:true,subtree:true});
  window.addEventListener('resize',()=>{});
  choose(0);render();
+})();
+</script>
+
+<script>
+(function(){
+const app=document.getElementById('appView');if(!app||document.getElementById('nexusWorld'))return;
+const w=document.createElement('section');w.id='nexusWorld';
+w.innerHTML='<header class="nw-head"><div><div class="nw-brand">SENRAI <span style="color:#b5f66c">NEXUS</span></div><div class="nw-muted">AUTONOMOUS STATION / SECTOR 01</div></div><span class="nw-online">■ STATION ONLINE</span></header><div class="nw-body"><div class="nw-map-wrap"><canvas id="nwCanvas" width="1000" height="600" aria-label="Interactive pixel-art station"></canvas></div><aside class="nw-inspector"><div class="nw-muted">SELECTED BAY / <span id="nwNum">00</span></div><h2 id="nwName">SENRAI CORE</h2><div class="nw-desc" id="nwDesc">Station-wide coordination and task routing.</div><div class="nw-metric"><label>SPECIALIST</label><strong id="nwAgent">CORE / COORDINATOR</strong></div><div class="nw-metric"><label>SAVED TASK RECORDS</label><strong id="nwTaskCount">Checking task list…</strong></div><div class="nw-metric"><label>ROOM FUNCTION</label><strong id="nwFunction">Mission routing</strong></div><div class="nw-controls"><button id="nwEnter" class="nw-enter">OPEN WORKSPACE ↗</button><button id="nwMission">MISSIONS</button></div></aside></div><div class="nw-rooms" id="nwRooms"></div><footer class="nw-foot"><span>WORLD VIEW / CLICK A ROOM</span><span>CHARACTER IDLE ANIMATION IS VISUAL ONLY</span></footer>';
+const hub=app.querySelector('#agentHub');app.insertBefore(w,hub||app.firstChild);
+const st=document.createElement('style');st.textContent="\n/* SENRAI WORLD REBUILD — standalone world interface, designed for landscape iPad */\n#nexusWorld{display:none;background:#080812;color:#e8e2ff;border:1px solid #51427b;box-shadow:0 0 48px #7655ff16;overflow:hidden;margin:0 0 88px;min-height:540px}\n#appView[data-nexus-view=\"agents\"] #nexusWorld{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto}\n#appView[data-nexus-view=\"agents\"] #agentHub,#appView[data-nexus-view=\"agents\"] .agent-work-panel,#appView[data-nexus-view=\"agents\"] .v06-dialog,#appView[data-nexus-view=\"agents\"]>.hero,#appView[data-nexus-view=\"agents\"]>.stats,#appView[data-nexus-view=\"agents\"]>.ops-grid,#appView[data-nexus-view=\"agents\"]>.layout,#appView[data-nexus-view=\"agents\"]>.footer{display:none!important}\n#nexusWorld .nw-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#100e20;border-bottom:1px solid #30264b}\n#nexusWorld .nw-brand{font:14px ui-monospace,monospace;letter-spacing:.2em}#nexusWorld .nw-muted{font:9px/1.6 ui-monospace,monospace;color:#9185b8;letter-spacing:.12em}\n#nexusWorld .nw-online{font:9px ui-monospace,monospace;color:#b5f66c}\n#nexusWorld .nw-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;min-height:0}\n#nexusWorld .nw-map-wrap{padding:12px;min-width:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse,#17142a,#070811 75%)}\n#nexusWorld canvas{display:block;width:100%;height:auto;max-height:calc(100dvh - 300px);object-fit:contain;image-rendering:pixelated;border:1px solid #35294f;cursor:pointer}\n#nexusWorld .nw-inspector{padding:16px;border-left:1px solid #30264b;background:#0d0c18;display:flex;flex-direction:column;gap:12px}\n#nexusWorld .nw-inspector h2{font:22px/1.2 ui-monospace,monospace;margin:0;color:#f1ecff}\n#nexusWorld .nw-desc{font:11px/1.7 ui-monospace,monospace;color:#aaa1c4}\n#nexusWorld .nw-metric{padding-top:9px;border-top:1px solid #2a223f}.nw-metric label{display:block;font:8px ui-monospace,monospace;color:#887ba9;letter-spacing:.15em;margin-bottom:6px}\n#nexusWorld .nw-metric strong{font:11px/1.5 ui-monospace,monospace;color:#e4dcff}\n#nexusWorld .nw-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto}\n#nexusWorld button{cursor:pointer;font:9px ui-monospace,monospace;color:#dcd3ff;background:#17132a;border:1px solid #4b3d71;padding:10px 6px}\n#nexusWorld button.active{background:#1b291a;color:#caff8e;border-color:#b5f66c}\n#nexusWorld .nw-enter{background:#b5f66c;color:#11170b;border-color:#b5f66c}\n#nexusWorld .nw-rooms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:8px 10px;background:#090911;border-top:1px solid #2b2242}\n#nexusWorld .nw-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px;background:#090911;color:#8378a6;font:8px ui-monospace,monospace;letter-spacing:.12em}\n@media(orientation:landscape) and (min-width:760px){\n #appView[data-nexus-view=\"agents\"]{padding:8px 12px 78px!important;overflow:hidden!important}\n #nexusWorld{height:calc(100dvh - 175px);min-height:0;margin-bottom:76px}\n #nexusWorld .nw-head{padding:7px 14px}\n #nexusWorld .nw-body{grid-template-columns:minmax(0,1fr) 220px}\n #nexusWorld .nw-map-wrap{padding:6px}\n #nexusWorld canvas{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:5/3}\n #nexusWorld .nw-inspector{padding:10px;gap:7px}\n #nexusWorld .nw-inspector h2{font-size:18px}\n #nexusWorld .nw-desc{font-size:10px}\n #nexusWorld .nw-rooms{padding:5px 8px}\n #nexusWorld button{padding:7px 4px}\n #bottomNav{z-index:9999!important;bottom:6px!important;max-width:min(700px,72vw)!important;padding:5px!important}\n}\n@media(orientation:landscape) and (min-width:760px) and (max-height:500px){\n #nexusWorld{height:calc(100dvh - 145px);margin-bottom:64px}\n #nexusWorld .nw-head{padding:4px 10px}\n #nexusWorld .nw-body{grid-template-columns:minmax(0,1fr) 180px}\n #nexusWorld .nw-inspector{padding:6px;gap:4px}\n #nexusWorld .nw-desc{display:none}\n #nexusWorld .nw-rooms{display:none}\n}\n@media(max-width:759px){\n #nexusWorld .nw-body{grid-template-columns:1fr}\n #nexusWorld canvas{max-height:45vh}\n #nexusWorld .nw-inspector{border-left:0;border-top:1px solid #30264b;padding:10px}\n #nexusWorld .nw-desc{display:none}\n}\n";document.head.appendChild(st);
+const canvas=document.getElementById('nwCanvas'),c=canvas.getContext('2d');if(!c)return;
+const rooms=[
+{id:0,name:'SENRAI CORE',short:'CORE',agent:'CORE / COORDINATOR',fn:'Mission routing',desc:'Central command, task routing, and station-wide coordination.',x:35,y:55,w:390,h:210,col:'#ff914b',type:0},
+{id:1,name:'SCOUT LAB',short:'SCOUT',agent:'SCOUT / RESEARCH',fn:'Discovery & research',desc:'Research, market discovery, and source gathering.',x:465,y:55,w:220,h:210,col:'#43c7ff',type:1},
+{id:2,name:'FORGE WORKSHOP',short:'FORGE',agent:'FORGE / CREATION',fn:'Build & production',desc:'Product concepts, digital assets, and production-ready deliverables.',x:725,y:55,w:240,h:210,col:'#76e36e',type:2},
+{id:3,name:'SCRIBE STUDIO',short:'SCRIBE',agent:'SCRIBE / CONTENT',fn:'Writing & listings',desc:'Listing copy, product descriptions, instructions, and packaging.',x:150,y:330,w:350,h:210,col:'#b38bff',type:3},
+{id:4,name:'ANALYST BAY',short:'ANALYST',agent:'ANALYST / REVIEW',fn:'Quality & performance',desc:'Quality checks, workflow review, and business analysis.',x:570,y:330,w:350,h:210,col:'#ffd05a',type:4}];
+let selected=0,phase=0;
+function box(x,y,a,b,color){c.fillStyle=color;c.fillRect(x|0,y|0,a|0,b|0)}
+function label(t,x,y,size,color){c.font='bold '+size+'px monospace';c.fillStyle=color;c.fillText(t,x,y)}
+function person(x,y,col,n){let bob=Math.sin(phase*.09+n)*2;box(x-12,y-18+bob,24,29,'#080912');box(x-8,y-22+bob,16,15,'#eac69b');box(x-9,y-25+bob,18,6,col);box(x-9,y-6+bob,18,13,col);box(x-10,y+7+bob,7,9,'#252b40');box(x+3,y+7+bob,7,9,'#252b40');box(x-5,y-16+bob,3,3,'#111');box(x+3,y-16+bob,3,3,'#111')}
+function room(r){const active=r.id===selected;box(r.x-6,r.y-6,r.w+12,r.h+12,active?'#b5f66c':'#342a50');box(r.x,r.y,r.w,r.h,'#202435');box(r.x+5,r.y+5,r.w-10,25,r.col);box(r.x+5,r.y+34,r.w-10,r.h-39,'#242c3c');for(let x=r.x+10;x<r.x+r.w-10;x+=24)box(x,r.y+35,1,r.h-42,'#394054');for(let y=r.y+40;y<r.y+r.h-8;y+=24)box(r.x+5,y,r.w-10,1,'#343b50');box(r.x+18,r.y+55,65,34,'#080d17');box(r.x+23,r.y+60,55,23,'#24576d');box(r.x+28,r.y+66,22,3,'#6fe6ff');box(r.x+r.w-78,r.y+55,58,37,'#090d17');box(r.x+r.w-72,r.y+61,46,25,'#465064');box(r.x+r.w-66,r.y+66,31,4,r.col);if(r.type===0){box(r.x+r.w/2-44,r.y+72,88,88,'#080912');box(r.x+r.w/2-36,r.y+80,72,72,'#e65335');box(r.x+r.w/2-25,r.y+91,50,50,'#ffb34b');box(r.x+r.w/2-12,r.y+104,24,24,'#fff0b0')}else{box(r.x+r.w/2-21,r.y+86,42,42,'#090d17');box(r.x+r.w/2-15,r.y+92,30,30,r.col);box(r.x+r.w/2-7,r.y+100,14,14,'#111322')}person(r.x+r.w/2,r.y+r.h-40,r.col,r.id);label(r.short,r.x+12,r.y+19,13,'#11121a');label(active?'SELECTED':'CLICK TO ENTER',r.x+12,r.y+r.h-12,9,active?'#d7ff9a':'#b4accd')}
+function draw(){phase++;box(0,0,1000,600,'#080914');for(let x=0;x<1000;x+=20)box(x,0,1,600,'#111321');for(let y=0;y<600;y+=20)box(0,y,1000,1,'#111321');for(let i=0;i<60;i++)box((i*191+37)%1000,(i*83+19)%600,2,2,i%2?'#29213d':'#4b3d70');box(25,280,950,34,'#17182a');box(435,260,35,75,'#17182a');box(680,260,35,75,'#17182a');for(let x=30;x<970;x+=18)box(x,295,9,2,'#40365b');rooms.forEach(room);label('SENRAI STATION / SECTOR 01',35,30,15,'#a99bdc');label('5 SPECIALIST BAYS',810,30,11,'#7f769d');requestAnimationFrame(draw)}
+function taskCount(){const el=document.getElementById('taskList');return el?el.querySelectorAll('tr,[data-task-id],.task-row').length+' task row(s) visible':'Task list unavailable'}
+function choose(id){selected=id;const r=rooms[id];document.getElementById('nwNum').textContent=String(id).padStart(2,'0');document.getElementById('nwName').textContent=r.name;document.getElementById('nwDesc').textContent=r.desc;document.getElementById('nwAgent').textContent=r.agent;document.getElementById('nwFunction').textContent=r.fn;document.getElementById('nwTaskCount').textContent=taskCount();document.querySelectorAll('#nwRooms button').forEach((b,i)=>b.classList.toggle('active',i===id))}
+rooms.forEach(r=>{const b=document.createElement('button');b.textContent=r.short;b.addEventListener('click',()=>choose(r.id));document.getElementById('nwRooms').appendChild(b)});
+canvas.addEventListener('click',e=>{const b=canvas.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*1000,y=(e.clientY-b.top)/b.height*600;const r=rooms.find(a=>x>=a.x-6&&x<=a.x+a.w+6&&y>=a.y-6&&y<=a.y+a.h+6);if(r)choose(r.id)});
+document.getElementById('nwEnter').addEventListener('click',()=>{const view=selected===0?'home':selected===4?'missions':'business';const b=document.querySelector('#bottomNav [data-view="'+view+'"]');if(b)b.click()});
+document.getElementById('nwMission').addEventListener('click',()=>{const b=document.querySelector('#bottomNav [data-view="missions"]');if(b)b.click()});
+const list=document.getElementById('taskList');if(list)new MutationObserver(()=>{const el=document.getElementById('nwTaskCount');if(el)el.textContent=taskCount()}).observe(list,{childList:true,subtree:true});
+choose(0);draw();
 })();
 </script>
 </body>
