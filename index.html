@@ -515,6 +515,43 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  display:flex!important;
 }
 
+
+/* WIDE STATION WORLD — original SENRAI pixel-art floor plan. */
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map-top{display:flex!important;justify-content:space-between;gap:10px;align-items:center;font:7px/1.6 ui-monospace,monospace;letter-spacing:.12em;color:#aaa0d7;padding:7px 4px!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top b,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map-top b{color:#e4dcff}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map{border:1px solid #322a51!important;background:#070812!important;padding:10px!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .atlas-floor,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .atlas-floor{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-wrap{width:100%;min-width:0}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:first-child,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-col:first-child{min-width:0;align-items:stretch}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #cv,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub #cv{width:100%;height:auto;cursor:pointer}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-foot,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-top:9px;font:8px/1.5 ui-monospace,monospace;color:#837aa9}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-roster,
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-roster{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:700px){
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map,
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map{padding:5px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-foot span:nth-child(2),
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map-foot span:nth-child(2){display:none}
+}
+@media (orientation:landscape) and (min-width:760px){
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap,
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-wrap{grid-template-columns:minmax(0,2fr) minmax(260px,.85fr);min-height:0}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child,
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-col:last-child{max-height:58vh;overflow:hidden}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child canvas,
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-col:last-child canvas{max-height:48vh;width:auto!important;max-width:100%;align-self:center}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-roster,
+ #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-roster{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+
 </style>
 </head>
 <body>
@@ -797,24 +834,24 @@ init();
 'use strict';
 if(window.__nexusBase)return;window.__nexusBase=true;
 const CSS=`
-.nb-wrap{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;background:#000;padding:8px;margin:10px 0 0;border:2px solid #000;box-shadow:0 0 0 1px #29404a}
-.nb-col{line-height:0}.nb-stage{position:relative;display:inline-block;line-height:0}
-.nb-wrap canvas{image-rendering:pixelated;display:block}
+.nb-wrap{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,.72fr);align-items:stretch;gap:12px;background:#070912;padding:10px;margin:10px 0 0;border:2px solid #000;box-shadow:0 0 0 1px #37304f,0 0 30px #6d4aff12}
+.nb-col{line-height:0;min-width:0;display:flex;flex-direction:column;justify-content:center}.nb-stage{position:relative;display:block;width:100%;line-height:0}
+.nb-wrap canvas{image-rendering:pixelated;display:block;max-width:100%;height:auto;border:2px solid #211d35;background:#080b14}.nb-col:first-child{min-width:0}.nb-col:last-child{border:1px solid #28233d;background:linear-gradient(180deg,#101022,#080a12);padding:8px;align-self:stretch}.nb-col:last-child:before{content:"ROOM FEED / SELECTED BAY";font:7px/1.8 ui-monospace,monospace;letter-spacing:.14em;color:#9c8de2;padding:0 2px 8px}
 .nb-tag{position:absolute;margin:4px;padding:2px 5px;font:6px/1.4 'Press Start 2P',ui-monospace,monospace;background:#000c;border:2px solid #000;color:#fff;pointer-events:none;white-space:nowrap}
 .nb-tag i{display:inline-block;width:6px;height:6px;margin-right:4px}
-.nb-dlg{position:relative;margin:16px 4px 10px;padding:13px 10px 22px;border:3px solid #fff;outline:3px solid #000;background:#060a14;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:62px;color:#fff}
-.nb-dlg b{position:absolute;top:-10px;left:8px;font:7px 'Press Start 2P',ui-monospace,monospace;padding:4px 6px;color:#000;border:2px solid #000;background:#a3e635}
-.nb-dlg small{position:absolute;right:8px;bottom:5px;font:7px 'Press Start 2P',ui-monospace,monospace;color:#f5b942}
-.nb-roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 10px}
-.nb-ag{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 3px;background:#0b1114;border:2px solid #263e43;color:#d9e8e7;font:8px/1.2 ui-monospace,monospace;cursor:pointer;min-width:0;text-align:center}
-.nb-ag.sel{border-color:#a3e635;background:#101a13}
+.nb-dlg{position:relative;margin:12px 2px 8px;padding:16px 12px 24px;border:2px solid #6d5cb2;outline:2px solid #000;background:linear-gradient(135deg,#111125,#080a13);font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:68px;color:#eeeaff;box-shadow:inset 0 0 20px #6d4aff0d}
+.nb-dlg b{position:absolute;top:-10px;left:8px;font:7px 'Press Start 2P',ui-monospace,monospace;padding:4px 6px;color:#080914;border:2px solid #080914;background:#b7a4ff}
+.nb-dlg small{position:absolute;right:8px;bottom:5px;font:7px 'Press Start 2P',ui-monospace,monospace;color:#72e7ff}
+.nb-roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:10px 0 0}
+.nb-ag{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 3px;background:#0b0c18;border:2px solid #28243c;color:#e4e0f6;font:8px/1.2 ui-monospace,monospace;cursor:pointer;min-width:0;text-align:center}
+.nb-ag.sel{border-color:#b7a4ff;background:#17152b;box-shadow:0 0 12px #8a6aff2b}
 .nb-ag canvas{width:36px;height:48px;image-rendering:pixelated;background:#070b09;border:1px solid #263e43}
 .nb-ag em{font:6px 'Press Start 2P',ui-monospace,monospace;font-style:normal;padding:3px 3px;border:1px solid currentColor;white-space:nowrap}
 .nb-ag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-@media(max-width:480px){.nb-ag{font-size:7px}.nb-ag em{font-size:5px}.nb-ag canvas{width:30px;height:40px}}
+@media(max-width:700px){.nb-wrap{grid-template-columns:minmax(0,1fr);gap:8px}.nb-col:last-child{padding:7px}.nb-col:last-child canvas{max-height:310px;width:auto!important;max-width:100%;align-self:center}.nb-roster{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}.nb-ag{font-size:7px;padding:5px 2px}.nb-ag em{font-size:5px}.nb-ag canvas{width:30px;height:40px}.nb-tag{font-size:5px}}
 `;
 const HTML=`<div class="nexus-map-top"><span><b>NEXUS BASE</b> / ROOM: <span id="zn">CORE</span></span><span><i class="map-led"></i> STATUS FROM YOUR SAVED TASKS</span></div>
-<div class="nb-wrap"><div class="nb-col"><div class="nb-stage" id="stage"><canvas id="cv" width="168" height="232" aria-label="Top-down pixel map of the five agent rooms"></canvas><div id="tags"></div></div></div><div class="nb-col"><canvas id="zv" width="168" height="224" aria-label="Zoomed view of the selected agent room"></canvas></div></div>
+<div class="nb-wrap"><div class="nb-col"><div class="nb-stage" id="stage"><canvas id="cv" width="336" height="168" aria-label="Wide pixel-art SENRAI station with five connected specialist bays"></canvas><div id="tags"></div></div></div><div class="nb-col"><canvas id="zv" width="168" height="224" aria-label="Zoomed view of the selected agent room"></canvas></div></div>
 <div class="nb-dlg" aria-live="polite"><b id="dn">SENRAI CORE</b><span id="dt"></span><small>LIVE TASK STATUS</small></div>
 <div class="nb-roster" id="roster"></div>
 <div class="nexus-map-foot"><span>Tap a room or agent to inspect it</span><span>Status and task text come from your Nexus task queue</span><span>Idle walking is a visual animation only</span></div>`;
@@ -940,16 +977,16 @@ core(t,a){room(160,64,'#d82800','#fc7460','#241c1c','#382c2c',{b:[34,118]});
 /* ---------- agents (state comes from the app's real task status) ---------- */
 const AG=[
 {id:'core',n:'SENRAI CORE',role:'Command',r:[4,4,160,64],col:'#ff7a2a',sx:36,ax:116,y:36,hair:'#e8ecef',cloth:'#4f8a1f',acc:'#a3e635',work:'COORDINATING',key:'Core'},
-{id:'scout',n:'SCOUT',role:'Research',r:[88,76,76,72],col:'#2ad4e8',sx:30,ax:56,y:50,hair:'#6b4426',cloth:'#2f8a55',acc:'#a3e635',work:'WORKING',key:'Scout'},
-{id:'forge',n:'FORGE',role:'Product build',r:[4,76,76,72],col:'#4ade5a',sx:34,ax:54,y:46,hair:'#2b2118',cloth:'#c46a24',acc:'#ffd27a',work:'WORKING',key:'Forge'},
-{id:'scribe',n:'SCRIBE',role:'Writing',r:[4,156,76,72],col:'#b05cff',sx:36,ax:54,y:38,hair:'#d9b24c',cloth:'#7a5bd0',acc:'#d6c8ff',work:'WORKING',key:'Scribe'},
-{id:'analyst',n:'ANALYST',role:'Monitoring',r:[88,156,76,72],col:'#4a7bff',sx:12,ax:38,y:34,hair:'#8a8f99',cloth:'#2f7fc4',acc:'#9bd0ff',work:'WORKING',key:'Analyst'}];
+{id:'scout',n:'SCOUT',role:'Research',r:[176,4,76,72],col:'#2ad4e8',sx:30,ax:56,y:50,hair:'#6b4426',cloth:'#2f8a55',acc:'#a3e635',work:'WORKING',key:'Scout'},
+{id:'forge',n:'FORGE',role:'Product build',r:[256,4,76,72],col:'#4ade5a',sx:34,ax:54,y:46,hair:'#2b2118',cloth:'#c46a24',acc:'#ffd27a',work:'WORKING',key:'Forge'},
+{id:'scribe',n:'SCRIBE',role:'Writing',r:[88,84,76,72],col:'#b05cff',sx:36,ax:54,y:38,hair:'#d9b24c',cloth:'#7a5bd0',acc:'#d6c8ff',work:'WORKING',key:'Scribe'},
+{id:'analyst',n:'ANALYST',role:'Monitoring',r:[176,84,76,72],col:'#4a7bff',sx:12,ax:38,y:34,hair:'#8a8f99',cloth:'#2f7fc4',acc:'#9bd0ff',work:'WORKING',key:'Analyst'}];
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const COL={work:'#a3e635',queued:'#f5b942',idle:'#6b7f72'},LBL=a=>a.real==='work'?a.work:a.real==='queued'?'QUEUED':'STANDBY';
 const tagsEl=$('#tags'),rosterEl=$('#roster');let sel=AG[0];
 AG.forEach(a=>{a.x=a.sx;a.dir=1;a.mode='idle';a.real='idle';a.task='';a.tx=a.sx;a.next='idle';a.until=Date.now()+rnd(2000,8000);
- const tg=document.createElement('div');tg.className='nb-tag';tg.style.left=(a.r[0]/1.68)+'%';tg.style.top=(a.r[1]/2.32)+'%';tagsEl.appendChild(tg);a.tg=tg;
+ const tg=document.createElement('div');tg.className='nb-tag';tg.style.left=(a.r[0]/3.36)+'%';tg.style.top=(a.r[1]/1.68)+'%';tagsEl.appendChild(tg);a.tg=tg;
  const el=document.createElement('button');el.type='button';el.className='nb-ag';el.innerHTML='<canvas width="12" height="16"></canvas><span></span><em></em>';
  el.querySelector('span').textContent=a.n==='SENRAI CORE'?'CORE':a.n;el.onclick=()=>select(a);rosterEl.appendChild(el);a.el=el;a.pc=el.querySelector('canvas').getContext('2d')});
 function paint(a){const col=COL[a.real],tx=LBL(a);a.tg.innerHTML='<i style="background:'+col+'"></i>';a.tg.appendChild(document.createTextNode(a.n+' · '+tx));
@@ -958,7 +995,7 @@ let tw;
 function say(a,m){const n=$('#dn'),d=$('#dt');n.textContent=a.n;n.style.background=a.col;d.textContent='';clearInterval(tw);let i=0;tw=setInterval(()=>{d.textContent=m.slice(0,++i);if(i>=m.length)clearInterval(tw)},reduce?0:22)}
 const line=a=>a.real==='idle'?'Standing by. No task is assigned to this agent right now.':(a.real==='queued'?'Queued: ':'Working on: ')+(a.task||'saved task')
 function select(a){sel=a;zA=a;AG.forEach(x=>x.el.classList.toggle('sel',x===a));say(a,line(a))}
-$('#cv').addEventListener('click',e=>{const b=e.currentTarget.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*168,y=(e.clientY-b.top)/b.height*232;
+$('#cv').addEventListener('click',e=>{const b=e.currentTarget.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*336,y=(e.clientY-b.top)/b.height*168;
  const a=AG.find(a=>x>=a.r[0]&&x<a.r[0]+a.r[2]&&y>=a.r[1]&&y<a.r[1]+a.r[3]);if(a)select(a)});
 function readReal(a){const g=i=>{const e=document.getElementById(i);return e?e.textContent.trim():''};const st=g('habitat'+a.key+'State'),tk=g('habitat'+a.key+'Task');
  return{real:/WORKING|COORDINATING/i.test(st)?'work':/QUEUED/i.test(st)?'queued':'idle',task:/^Waiting for|^Monitoring/i.test(tk)?'':tk}}
@@ -969,8 +1006,11 @@ function sync(){AG.forEach(a=>{const r=readReal(a);if(r.real===a.real&&r.task===
 function step(a){const now=Date.now();
  if(a.mode==='walk'){const d=a.tx-a.x;if(Math.abs(d)<1){a.x=a.tx;a.mode=a.next;if(a.mode==='work')a.dir=1;a.until=now+rnd(6000,12000)}else{a.dir=d>0?1:-1;a.x+=a.dir}}
  else if(a.mode==='idle'&&!reduce&&now>a.until){a.tx=Math.abs(a.x-a.sx)<2?a.ax:a.sx;a.next='idle';a.mode='walk'}}
-function frame(){c.fillStyle='#000';c.fillRect(0,0,168,232);
- [[38,68],[122,68],[80,108],[38,148],[122,148],[80,188]].forEach(q2=>{const x=q2[0],y=q2[1];c.fillStyle='#503000';c.fillRect(x,y,8,8);c.fillStyle='#7c5430';for(let i=0;i<8;i+=2)for(let j=0;j<8;j+=2)if((i+j)%4==0)c.fillRect(x+i,y+j,2,2)});
+function frame(){c.fillStyle='#070914';c.fillRect(0,0,336,168);
+ /* Connected hallways between the five rooms */
+ c.fillStyle='#101125';c.fillRect(4,68,328,16);c.fillRect(38,64,12,8);c.fillRect(122,68,12,16);c.fillRect(210,68,12,16);c.fillRect(290,68,12,16);
+ for(let x=4;x<332;x+=8){c.fillStyle=((x>>3)%2)?'#25233c':'#1c1a30';c.fillRect(x,72,8,8);c.fillStyle='#ffffff08';c.fillRect(x,72,1,8)}
+ [[38,68],[122,68],[210,68],[290,68]].forEach(q2=>{const x=q2[0],y=q2[1];c.fillStyle='#3d315e';c.fillRect(x,y,8,8);c.fillStyle='#a995ff';c.fillRect(x+1,y+1,6,1);c.fillStyle='#100d20';c.fillRect(x+1,y+2,6,5)});
  AG.forEach(a=>{ox=a.r[0];oy=a.r[1];c.save();c.beginPath();c.rect(ox,oy,a.r[2],a.r[3]);c.clip();D[a.id](t,a);deco(a);deco2(a);ex(a);drawAgent(a);plate(a);vig(a);c.restore();
   if(a===sel&&(t>>2)%2){c.strokeStyle='#f8b800';c.lineWidth=2;c.strokeRect(ox+1,oy+1,a.r[2]-2,a.r[3]-2)}
   a.pc.clearRect(0,0,12,16);sp(a.pc,BODY.concat(LI),0,0,pal(a),1);acc(a.pc,a,0,0,1)})}
@@ -1051,8 +1091,10 @@ function zframe(){const a=zA,id=a.id,st=ZS[id],f=Math.min(1,Math.max(0,(a.x-Math
  $('#zn').textContent=a.n}
 
 let lastW=0;
-function fit(){const cw=host.clientWidth-16;if(cw<=0)return;lastW=host.clientWidth;const wide=cw>=2*168*2+12;let k=wide?Math.floor((cw-12)/336):Math.floor(cw/168);k=Math.min(4,k);
- const w=k>=2?168*k+'px':Math.min(cw,380)+'px';cv.style.width=w;zv.style.width=w}
+function fit(){const cw=host.clientWidth-16;if(cw<=0)return;lastW=host.clientWidth;
+ const mapW=cw<700?cw:Math.min(900,Math.floor(cw*.66));
+ const roomW=cw<700?Math.min(cw,420):Math.min(420,Math.floor(cw*.31));
+ cv.style.width=mapW+'px';cv.style.height='auto';zv.style.width=roomW+'px';zv.style.height='auto';}
 let timer=null;
 function tick(){const app=document.getElementById('appView');if(document.hidden||(app&&app.classList.contains('hidden')))return;if(host.clientWidth!==lastW)fit();sync();t++;AG.forEach(step);frame();zframe()}
 function start(){stop();timer=setInterval(tick,reduce?400:100)}function stop(){clearInterval(timer);timer=null}
