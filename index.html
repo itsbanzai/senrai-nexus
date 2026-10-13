@@ -177,6 +177,27 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 @media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
 
 
+/* NEXUS ATLAS character sprites: tiny agents physically inhabit the floor map. */
+.atlas-room{background-image:linear-gradient(145deg,#172b3aeF,#0a141df5),repeating-linear-gradient(0deg,transparent 0 18px,#8bdfff08 19px 20px)}
+.atlas-avatar{position:relative;z-index:2;width:30px;height:46px;margin:3px auto 5px;image-rendering:pixelated;filter:drop-shadow(0 0 7px #42dfff55);animation:agentIdle 3s ease-in-out infinite}
+.atlas-avatar i{position:absolute;display:block;font-style:normal}
+.atlas-avatar .av-hair{width:20px;height:7px;left:5px;top:0;background:#202b3b;box-shadow:0 4px #202b3b, -3px 4px #202b3b,3px 4px #202b3b}
+.atlas-avatar .av-head{width:18px;height:15px;left:6px;top:6px;background:#edc4a1;border:2px solid #263342;box-shadow:inset 0 -3px #bd8d70}
+.atlas-avatar .av-head u{position:absolute;top:4px;width:3px;height:3px;background:#0b1921;text-decoration:none}
+.atlas-avatar .av-head u:first-child{left:2px}.atlas-avatar .av-head u:last-child{right:2px}
+.atlas-avatar .av-body{width:18px;height:15px;left:6px;top:21px;background:#4dc7c1;border:2px solid #263342;box-shadow:inset 0 -4px #277a86}
+.atlas-avatar .av-arm{width:26px;height:5px;left:2px;top:24px;background:#edc4a1;box-shadow:0 0 0 2px #263342}
+.atlas-avatar .av-leg{width:6px;height:10px;left:8px;top:35px;background:#35485a;box-shadow:8px 0 #35485a,0 3px #17222e,8px 3px #17222e}
+.avatar-scout{filter:drop-shadow(0 0 7px #47d8ff66)}.avatar-scout .av-body{background:#5abce8;box-shadow:inset 0 -4px #2678a8}
+.avatar-forge{filter:drop-shadow(0 0 7px #ffb45c66)}.avatar-forge .av-body{background:#e4a24f;box-shadow:inset 0 -4px #99612e}
+.avatar-scribe{filter:drop-shadow(0 0 7px #c49aff66)}.avatar-scribe .av-body{background:#b18be8;box-shadow:inset 0 -4px #6c4a9c}
+.avatar-analyst{filter:drop-shadow(0 0 7px #7cffbf66)}.avatar-analyst .av-body{background:#72d6a0;box-shadow:inset 0 -4px #347b5b}
+.avatar-core{transform:scale(1.15);margin:8px auto}
+.atlas-agent-icons{display:flex;gap:7px;align-items:center;justify-content:center;margin:8px auto;height:44px}
+.atlas-agent-icons i{display:block;position:relative;width:14px;height:20px;background:#53c4db;border:2px solid #203748;box-shadow:0 -7px 0 -2px #d9b397,0 3px #182432}
+.atlas-agent-icons i:nth-child(2){background:#b18be8;transform:translateY(-4px)}.atlas-agent-icons i:nth-child(3){background:#e4a24f}
+@keyframes agentIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media(orientation:landscape) and (min-width:700px){.atlas-avatar{transform:scale(1.15);margin:7px auto 8px}.avatar-core{transform:scale(1.3)}.atlas-room{justify-content:space-between}}
 /* NEXUS ATLAS: a top-down sci-fi operations floor, designed for landscape tablet use. */
 .nexus-map{margin:14px 0 18px;padding:12px;background:#05090c;border:1px solid #35556a;box-shadow:inset 0 0 0 3px #0b1419,0 0 30px #26bfff12;color:#d8e9f4}
 .nexus-map-top,.nexus-map-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font:9px/1.4 ui-monospace,monospace;letter-spacing:.1em;color:#7e9caf}
@@ -246,12 +267,12 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
     <div class="nexus-map-top"><span><b>NEXUS ATLAS</b> / OPERATIONS FLOOR 01</span><span><i class="map-led"></i> SYSTEM ONLINE</span></div>
     <div class="atlas-floor">
       <div class="atlas-road road-h road-h1"></div><div class="atlas-road road-h road-h2"></div><div class="atlas-road road-v road-v1"></div><div class="atlas-road road-v road-v2"></div><div class="atlas-road road-v road-v3"></div>
-      <div class="atlas-room room-command"><small>00 / COMMAND</small><b>SENRAI CORE</b><div class="atlas-reactor"><i></i></div><span>Orchestration & routing</span><em id="mapCoreState">COORDINATION ONLINE</em></div>
-      <div class="atlas-room room-scout"><small>01 / INTELLIGENCE</small><b>SCOUT</b><div class="atlas-console"><i></i><i></i><i></i><i></i><i></i><i></i></div><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
-      <div class="atlas-room room-forge"><small>02 / BUILD LAB</small><b>FORGE</b><div class="atlas-console forge-console"><i></i><i></i><i></i><i></i></div><span>Products & systems</span><em id="mapForgeState">AWAITING TASK</em></div>
-      <div class="atlas-room room-scribe"><small>03 / CONTENT</small><b>SCRIBE</b><div class="atlas-console scribe-console"><i></i><i></i><i></i></div><span>Publishing studio</span><em id="mapScribeState">AWAITING TASK</em></div>
-      <div class="atlas-room room-analyst"><small>04 / QUALITY</small><b>ANALYST</b><div class="atlas-console analyst-console"><i></i><i></i><i></i><i></i></div><span>Metrics & verification</span><em id="mapAnalystState">AWAITING TASK</em></div>
-      <div class="atlas-room room-business"><small>BUSINESS NETWORK</small><b>REVENUE OPS</b><div class="atlas-ledger"><span></span><span></span><span></span><span></span></div><span>Projects & business goals</span><em id="mapBusinessState">CONNECTED</em></div>
+      <div class="atlas-room room-command"><small>00 / COMMAND</small><b>SENRAI CORE</b><div class="atlas-reactor"><i></i></div><div class="atlas-avatar avatar-core" aria-label="SENRAI core character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><span>Orchestration & routing</span><em id="mapCoreState">COORDINATION ONLINE</em></div>
+      <div class="atlas-room room-scout"><small>01 / INTELLIGENCE</small><b>SCOUT</b><div class="atlas-avatar avatar-scout" aria-label="Scout character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console"><i></i><i></i><i></i><i></i><i></i><i></i></div><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
+      <div class="atlas-room room-forge"><small>02 / BUILD LAB</small><b>FORGE</b><div class="atlas-avatar avatar-forge" aria-label="Forge character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console forge-console"><i></i><i></i><i></i><i></i></div><span>Products & systems</span><em id="mapForgeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-scribe"><small>03 / CONTENT</small><b>SCRIBE</b><div class="atlas-avatar avatar-scribe" aria-label="Scribe character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console scribe-console"><i></i><i></i><i></i></div><span>Publishing studio</span><em id="mapScribeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-analyst"><small>04 / QUALITY</small><b>ANALYST</b><div class="atlas-avatar avatar-analyst" aria-label="Analyst character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console analyst-console"><i></i><i></i><i></i><i></i></div><span>Metrics & verification</span><em id="mapAnalystState">AWAITING TASK</em></div>
+      <div class="atlas-room room-business"><small>BUSINESS NETWORK</small><b>REVENUE OPS</b><div class="atlas-agent-icons"><i></i><i></i><i></i></div><div class="atlas-ledger"><span></span><span></span><span></span><span></span></div><span>Projects & business goals</span><em id="mapBusinessState">CONNECTED</em></div>
       <div class="atlas-room room-missions"><small>MISSION CONTROL</small><b>TASK QUEUE</b><div class="atlas-terminal"><i></i><i></i><i></i></div><span>Queued / active / complete</span><em id="mapTaskCount">SYNCING TASKS</em></div>
       <div class="atlas-room room-assets"><small>ASSET WORKSHOP</small><b>CREATIVE BAY</b><div class="atlas-crates"><i></i><i></i><i></i></div><span>Files & deliverables</span><em>OUTPUT STORAGE</em></div>
       <div class="atlas-room room-automation"><small>AUTOMATION</small><b>WORKFLOW BAY</b><div class="atlas-circuit"><i></i><i></i><i></i></div><span>Repeatable processes</span><em>READY WHEN CONNECTED</em></div>
@@ -374,27 +395,32 @@ document.querySelectorAll('.habitat').forEach(h=>h.addEventListener('click',()=>
 function updateAgentHabitats(){
  const roles=[
  ['Scout',/research|market|competitor|audience|demand|scout/i],
- ['Forge',/build|create|product|design|asset|forge/i],
+ ['Forge',/build|create|product|design|asset|forge|thumbnail|video/i],
  ['Scribe',/listing|content|copy|description|seo|scribe|etsy/i],
  ['Analyst',/audit|review|analy|quality|performance|test/i]
  ];
- let working=0;
+ const open=tasks.filter(x=>!['completed','cancelled'].includes(x.status));
+ const assigned=new Set();let working=0;
  roles.forEach(([name,re])=>{
-   const t=tasks.find(x=>!['completed','cancelled'].includes(x.status)&&re.test((x.title||'')+' '+(x.description||'')));
    const habitat=$('habitat'+name),state=$('habitat'+name+'State'),taskLabel=$('habitat'+name+'Task');
-   if(!habitat)return;
+   const mapState=$('map'+name+'State');
+   const t=open.find(x=>!assigned.has(x.id)&&re.test(x.title||''));
+   if(t)assigned.add(t.id);
    const isWorking=!!t&&t.status==='in_progress';
-   habitat.classList.toggle('is-working',isWorking);
+   if(habitat){habitat.classList.toggle('is-working',isWorking);if(state)state.textContent=isWorking?'WORKING':t?'QUEUED':'STANDBY';if(taskLabel)taskLabel.textContent=t?(t.title.length>52?t.title.slice(0,49)+'…':t.title):'Waiting for assignment';}
    if(isWorking)working++;
-   state.textContent=isWorking?'WORKING':t?'QUEUED':'STANDBY';
-   taskLabel.textContent=t?(t.title.length>52?t.title.slice(0,49)+'…':t.title):'Waiting for assignment';
+   if(mapState)mapState.textContent=isWorking?'EXECUTING':t?'QUEUED':'AWAITING TASK';
  });
- $('habitatCoreState').textContent=working?'COORDINATING':'ONLINE';
- $('habitatCoreTask').textContent=working?working+' agent(s) executing':'Monitoring workspace';
- $('habitatCore').classList.toggle('is-working',working>0);
- $('habitatWorkSummary').textContent=working+' agents executing tasks';
+ const coreState=$('habitatCoreState'),coreTask=$('habitatCoreTask'),core=$('habitatCore'),summary=$('habitatWorkSummary');
+ if(coreState)coreState.textContent=working?'COORDINATING':'ONLINE';
+ if(coreTask)coreTask.textContent=working?working+' specialist(s) working':'Monitoring workspace';
+ if(core)core.classList.toggle('is-working',working>0);
+ if(summary)summary.textContent=working+' specialists executing tasks';
+ const mapCore=$('mapCoreState'),mapBiz=$('mapBusinessState'),mapCount=$('mapTaskCount');
+ if(mapCore)mapCore.textContent=working?working+' SPECIALIST(S) ACTIVE':'CORE ONLINE / STANDBY';
+ if(mapBiz)mapBiz.textContent=(projects.length||0)+' BUSINESSES CONNECTED';
+ if(mapCount)mapCount.textContent=open.length+' OPEN / '+tasks.filter(x=>x.status==='completed').length+' COMPLETE';
 }
-
 function renderMissionBoard(){
  const open=tasks.filter(t=>!['completed','cancelled'].includes(t.status));
  const active=open.find(t=>t.status==='in_progress')||open[0]||null;
