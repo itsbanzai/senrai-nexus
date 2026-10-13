@@ -140,6 +140,42 @@ body{background:#080b09;color:var(--text);font-family:ui-monospace,SFMono-Regula
 @media(min-width:760px){.habitat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ops-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.stat{border-right:1px solid #303b2b!important;border-bottom:0!important}.stat:last-child{border-right:0!important}.layout{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}.agentgrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:400px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:150px}.brand p{font-size:8px}.hero .btn{padding:7px;font-size:8px}}
 
+
+/* v0.6 Claude reference — pixel command-center presentation */
+:root{--bg:#07090a;--panel:#0c110f;--line:#1a2a21;--green:#a3e635;--green2:#4d7a1c;--muted:#6b7f72;--text:#d7e2da;--amber:#f5b942;--red:#ef5350;--radius:0}
+body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background-image:linear-gradient(rgba(163,230,53,.025) 1px,transparent 1px);background-size:100% 4px}
+.shell{max-width:540px;padding:10px 10px 84px}
+.topbar,.panel,.stat,.habitat,.agent-hub,.mission-focus,.task,.project,.approval{border-radius:0!important;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #000}
+.topbar{border:2px solid #4a5a50;background:#0c110f;padding:10px}
+.logo{border-radius:0;background:#101a13;color:#a3e635;box-shadow:none}
+.brand h1{font:10px ui-monospace,monospace;letter-spacing:.12em}.brand p{font-size:9px;letter-spacing:.05em}
+.status,.pill{border-radius:0;font-size:8px;letter-spacing:0}
+.hero{padding:12px 2px;gap:10px;align-items:center}.hero .eyebrow{font-size:8px;letter-spacing:.1em;color:#a3e635}.hero h2{font-size:clamp(19px,5vw,25px);line-height:1.25;text-transform:uppercase;letter-spacing:-.05em}.hero p{font-size:10px;line-height:1.55;color:#8c9982}.hero .btn{max-width:112px;flex:none}
+.core-stage{display:none}
+.agent-hub{padding:8px;background:#0c110f;border:2px solid #4a5a50;margin-bottom:10px}
+.agent-hub-head{padding-bottom:7px;border-bottom:1px solid #1a2a21}.hub-eyebrow{font-size:7px;letter-spacing:.08em}.agent-hub-head h3{font-size:10px;letter-spacing:.04em;color:#a3e635}.hub-live{font-size:7px}.hub-intro{font-size:9px;margin:8px 0;color:#8c9982}
+.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.habitat{border:2px solid #303b2b;background:#0c110f}
+.habitat-head{font-size:7px;padding:6px;background:#111811}.habitat-head b{font-size:7px}.pixel-room{height:115px;background-color:#070b09;background-size:8px 8px}
+.room-floor{height:22px}.room-task{font-size:6px;background:#07090a;color:#a3e635;border-color:#4d7a1c}
+.habitat-foot{padding:6px;background:#0c110f;gap:3px}.habitat-foot strong{font-size:8px}.habitat-foot span{font-size:8px}
+.habitat.is-selected{outline:2px solid #a3e635;outline-offset:-2px}.habitat.is-working .pixel-room:after{font-size:6px;padding:2px 3px}
+.habitat-legend{font-size:7px;gap:8px;padding-top:7px}
+.panel{padding:9px;border:2px solid #4a5a50;background:#0c110f}.panelhead{padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid #1a2a21}.panel h3{font-size:8px;letter-spacing:.04em;color:#a3e635}
+.btn{border-radius:0;background:#0c110f;border:1px solid #4d7a1c;color:#a3e635;font:8px ui-monospace,monospace;padding:7px}.btn.primary{background:#a3e635;color:#07090a;border-color:#a3e635}.btn.subtle{background:transparent;color:#d7e2da;border-color:#303b2b}
+.ops-grid{grid-template-columns:minmax(0,1fr);gap:8px}.mission-focus{background:#070b09;border-color:#303b2b}.mission-code{font-size:7px}.mission-focus h4{font-size:11px}.mission-focus p,.ops-foot{font-size:9px}.mission-meta{font-size:7px}.mission-meter{border-radius:0}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#1a2a21;border:2px solid #4a5a50}.stat{padding:8px;border:0;border-radius:0;background:#0c110f}.stat label{font-size:7px}.stat strong{font-size:19px}.stat small{font-size:8px}
+.layout{grid-template-columns:minmax(0,1fr);gap:8px}.stack{gap:8px}.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.agent{border-radius:0;padding:7px;background:#0c110f;border-color:#1a2a21}.agenticon{border-radius:0;background:#101a13;color:#a3e635}.agent strong{font-size:8px}.agent p{font-size:8px}
+.task,.project,.approval{padding:8px;background:#070b09;border-color:#1a2a21}.task strong,.project strong,.approval strong{font-size:9px}.task p,.project p,.approval p{font-size:9px}
+.event{padding-bottom:6px;border-bottom:1px solid #1a2a21}.event strong{font-size:8px}.event p{font-size:8px}
+.command input,textarea,.authbox input{border-radius:0;background:#07090a;border-color:#303b2b;font:10px ui-monospace,monospace}
+.authbox{border-radius:0;background:#0c110f;border-color:#4a5a50}.authbox h2{font-size:15px;color:#a3e635}
+.nav{background:#07090af5;border-top:2px solid #303b2b}.nav button{font:7px ui-monospace,monospace}.nav button.active{color:#a3e635}
+.v06-dialog{position:relative;margin:10px 0 0;padding:12px 9px 18px;background:#060a14;border:3px solid #fff;outline:2px solid #000;min-height:58px;color:#fff;font:11px/1.5 ui-monospace,monospace}
+.v06-dialog strong{position:absolute;top:-9px;left:7px;padding:3px 5px;background:#a3e635;color:#07090a;border:2px solid #000;font-size:7px}
+.v06-dialog small{position:absolute;right:6px;bottom:3px;font-size:7px;color:#f5b942}
+@media(min-width:760px){.shell{max-width:540px}.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout,.ops-grid{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
+
 </style>
 </head>
 <body>
@@ -151,7 +187,7 @@ body{background:#080b09;color:var(--text);font-family:ui-monospace,SFMono-Regula
 <div id="authMessage" class="notice">Use your own account. If email confirmation is enabled, check your inbox after signing up.</div>
 </section>
 <div id="appView" class="hidden">
-<section class="hero"><div><div class="eyebrow">MISSION CONTROL / 001</div><h2>Turn ideas into<br><span style="color:var(--green)">execution.</span></h2><p>OPERATIONS BASE / v0.2. Your real cloud tasks, specialist workstations, business portfolio, and AI runs in one command center.</p></div><button class="btn primary" id="newMission">＋ New mission</button></section>
+<section class="hero"><div><div class="eyebrow">MISSION CONTROL / 001</div><h2>Turn ideas into<br><span style="color:var(--green)">execution.</span></h2><p>PERSONAL COMMAND CENTER / v0.6. Select an agent, review real task status, and run AI missions on demand.</p></div><button class="btn primary" id="newMission">＋ New mission</button></section>
 
 
 <section class="agent-hub" id="agentHub">
@@ -204,6 +240,7 @@ body{background:#080b09;color:var(--text);font-family:ui-monospace,SFMono-Regula
   </div>
   <div class="habitat-legend"><span><i class="legend-idle"></i> STANDBY</span><span><i class="legend-working"></i> WORKING ANIMATION</span><span id="habitatWorkSummary">0 agents executing tasks</span></div>
 </section>
+<div class="v06-dialog" aria-live="polite"><strong id="v06Speaker">SENRAI CORE</strong><span id="v06Dialogue">Systems nominal. Select a workstation to inspect its current assignment.</span><small>LIVE TASK STATUS</small></div>
 <section class="ops-grid" aria-label="Live operations overview">
   <section class="panel mission-board"><div class="panelhead"><h3>ACTIVE MISSION</h3><span class="pill good" id="missionLiveState">CLOUD DATA</span></div>
     <div id="activeMission"><div class="empty">Sign in to load your live mission queue.</div></div>
@@ -232,7 +269,7 @@ body{background:#080b09;color:var(--text);font-family:ui-monospace,SFMono-Regula
 <section class="panel" id="etsyBridge"><div class="panelhead"><h3>ETSY COMMERCE BRIDGE</h3><span class="pill wait" id="etsyStatus">NOT CONNECTED</span></div><p class="sub">Prepare individual digital-product listings now. Live publishing and order sync require an approved Etsy app, an active shop, and secure OAuth authorization.</p><div class="formgrid"><label>Product idea<input id="etsyProductIdea" value="Japanese-inspired minimalist printable wall art" maxlength="180"></label><label>Target price (USD)<input id="etsyPrice" type="number" min="1" max="500" step="0.50" value="7.50"></label></div><div class="taskactions" style="margin-top:12px"><button class="btn primary" id="etsyGenerate">Generate individual listing draft</button><button class="btn subtle" id="etsyConnectInfo">Connection requirements</button></div><div id="etsyDraftOutput" class="notice" style="margin-top:12px;white-space:pre-wrap">No listing draft generated yet. Drafts are not published to Etsy.</div><div class="sub" style="margin-top:10px">Safety: this panel does not request or store Etsy passwords or API secrets. It will not claim sales or publish until the official connection is configured.</div></section>
 <section class="panel"><div class="panelhead"><h3>WORKSPACE</h3><button class="btn subtle small" id="signOutBtn">Sign out</button></div><div class="sub" id="signedInAs"></div><div class="notice">AI tasks run when requested. Background execution and live Etsy publishing are not yet enabled.</div></section>
 </div></div>
-<div class="footer">SENRAI NEXUS · v0.2 OPERATIONS BASE · CLOUD TASKS + AI ON DEMAND</div>
+<div class="footer">SENRAI NEXUS · v0.6 PIXEL COMMAND CENTER · CLOUD TASKS + AI ON DEMAND</div>
 </div></div>
 <nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Approvals</button></nav>
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
@@ -256,6 +293,11 @@ async function loadActivity(){const {data,error}=await sb.from('nexus_activity')
 function selectHabitat(name){
  document.querySelectorAll('.habitat').forEach(h=>h.classList.toggle('is-selected',h.id==='habitat'+name));
  const target=$('habitat'+name);
+ const title=target?.querySelector('.habitat-head span')?.textContent||'SENRAI CORE';
+ const task=target?.querySelector('.habitat-foot span')?.textContent||'Monitoring workspace';
+ const speaker=$('v06Speaker'),dialog=$('v06Dialogue');
+ if(speaker)speaker.textContent=title.replace(/^\\d+\\s*\\/\\s*/,'');
+ if(dialog)dialog.textContent=task==='Waiting for assignment'?'Standing by. Assign a task from Mission Terminal to give this specialist work.':task+'. This status is based on your saved task queue.';
  if(target && window.matchMedia('(max-width: 600px)').matches)target.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 document.querySelectorAll('.habitat').forEach(h=>h.addEventListener('click',()=>{
