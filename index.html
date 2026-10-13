@@ -25,6 +25,24 @@ body{background:radial-gradient(ellipse at 50% -15%,#30332a 0,transparent 45%),#
 @media(max-width:800px){.shell{padding:9px 9px 88px}.hero{gap:12px}.hero h2{font-size:24px}.core-stage{min-height:160px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{border-right:1px solid #555852;border-bottom:1px solid #555852;padding:10px}.stat:nth-child(2){border-right:0}.stat:nth-child(3),.stat:nth-child(4){border-bottom:0}.stat strong{font-size:21px}.agentgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:5px}.agent{flex:0 0 118px;scroll-snap-align:start}.agent p{min-height:48px}.panel{padding:11px}#etsyBridge .formgrid{grid-template-columns:1fr}.nav{background:#111211f5;border-top:1px solid #686a62}.nav button{font-family:ui-monospace,monospace}}
 
 
+/* v0.2 operations board — connected to real cloud tasks, no simulated telemetry */
+.ops-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:12px;margin:0 0 14px}
+.mission-board,.queue-board{min-width:0}
+.mission-focus{border:1px solid #62655b;background:#1c1d1a;padding:12px}
+.mission-code{font-size:9px;letter-spacing:.1em;color:var(--green);margin-bottom:7px}
+.mission-focus h4{font-size:15px;line-height:1.35;margin:0 0 6px;overflow-wrap:anywhere}
+.mission-focus p{font-size:11px;color:var(--muted);margin:0;overflow-wrap:anywhere}
+.mission-meter{height:8px;margin:12px 0 7px;border:1px solid #697c42;padding:1px;background:#080a08}
+.mission-meter i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 5px,#8ba83d 5px 7px)}
+.mission-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em}
+.queue-item{display:flex;gap:9px;align-items:start;border-bottom:1px solid #42443e;padding:9px 0}
+.queue-item:last-child{border-bottom:0}
+.queue-priority{flex:none;border:1px solid #697c42;color:var(--green);padding:3px 5px;font-size:8px}
+.queue-item strong{display:block;font-size:11px;overflow-wrap:anywhere}
+.queue-item small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.ops-foot{font-size:9px;line-height:1.5;color:var(--muted);margin-top:10px}
+@media(max-width:800px){.ops-grid{grid-template-columns:1fr}.mission-focus h4{font-size:13px}}
+
 /* Dedicated pixel-art rooms for each specialist agent */
 .agent-hub{margin:14px 0 18px;padding:14px;border:1px solid #686a62;background:#171817;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
 .agent-hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #42443e}
@@ -140,6 +158,15 @@ body{background:radial-gradient(ellipse at 50% -15%,#30332a 0,transparent 45%),#
   </div>
   <div class="habitat-legend"><span><i class="legend-idle"></i> STANDBY</span><span><i class="legend-working"></i> WORKING ANIMATION</span><span id="habitatWorkSummary">0 agents executing tasks</span></div>
 </section>
+<section class="ops-grid" aria-label="Live operations overview">
+  <section class="panel mission-board"><div class="panelhead"><h3>ACTIVE MISSION</h3><span class="pill good" id="missionLiveState">CLOUD DATA</span></div>
+    <div id="activeMission"><div class="empty">Sign in to load your live mission queue.</div></div>
+  </section>
+  <section class="panel queue-board"><div class="panelhead"><h3>MISSION QUEUE</h3><span class="sub" id="queueCount">0 queued</span></div>
+    <div id="missionQueue" class="tasklist"><div class="empty">Your saved tasks appear here.</div></div>
+    <div class="ops-foot">Queue data comes from your account. SENRAI runs only when you press “Run with SENRAI.”</div>
+  </section>
+</section>
 <section class="stats"><div class="stat"><label>ACTIVE PROJECTS</label><strong id="projectCount">00</strong><small>Cloud-saved projects</small></div><div class="stat"><label>OPEN TASKS</label><strong id="taskCount">00</strong><small>Queued or in progress</small></div><div class="stat"><label>NEEDS APPROVAL</label><strong id="approvalCount">00</strong><small>Human review required</small></div><div class="stat"><label>VERIFIED REVENUE</label><strong>$0.00</strong><small>Sales integration not connected</small></div></section>
 <div class="layout"><div class="stack">
 <section class="panel"><div class="panelhead"><h3>AGENT NETWORK</h3><span class="pill good">5 roles configured</span></div><div class="agentgrid">
@@ -204,9 +231,23 @@ function updateAgentHabitats(){
  $('habitatWorkSummary').textContent=working+' agents executing tasks';
 }
 
+function renderMissionBoard(){
+ const open=tasks.filter(t=>!['completed','cancelled'].includes(t.status));
+ const active=open.find(t=>t.status==='in_progress')||open[0]||null;
+ const activeEl=$('activeMission'),queueEl=$('missionQueue'),countEl=$('queueCount'),stateEl=$('missionLiveState');
+ if(!activeEl||!queueEl)return;
+ if(active){
+   const progress=active.status==='in_progress'?68:18;
+   activeEl.innerHTML='<div class="mission-focus"><div class="mission-code">'+(active.status==='in_progress'?'MSN / IN PROGRESS':'MSN / QUEUED')+'</div><h4>'+safe(active.title)+'</h4><p>'+safe((active.description||'No additional details').split('\n\n--- SENRAI RUN ')[0])+'</p><div class="mission-meter"><i style="width:'+progress+'%"></i></div><div class="mission-meta"><span>'+safe(active.status.replace('_',' '))+'</span><span>Progress is a status indicator, not measured completion</span></div><div class="taskactions"><button class="btn small" data-action="focus-task" data-id="'+active.id+'">Open mission</button></div></div>';
+ }else{activeEl.innerHTML='<div class="empty">No open missions. Add a task from Mission Terminal to start the next run.</div>'}
+ const queued=open.filter(t=>t.id!==active?.id).slice(0,4);
+ countEl.textContent=open.length+' open';
+ queueEl.innerHTML=queued.length?queued.map((t,i)=>'<div class="queue-item"><span class="queue-priority">P'+(i===0?'1':i<3?'2':'3')+'</span><div><strong>'+safe(t.title)+'</strong><small>'+safe(t.status.replace('_',' '))+' · cloud-saved task</small><div class="taskactions"><button class="btn subtle small" data-action="focus-task" data-id="'+t.id+'">Open</button></div></div></div>').join(''):'<div class="empty">No other missions waiting in the queue.</div>';
+ stateEl.textContent=tasks.length?'LIVE TASK DATA':'AWAITING TASKS';
+}
 function renderStats(){$('projectCount').textContent=String(projects.length).padStart(2,'0');$('taskCount').textContent=String(tasks.filter(t=>!['completed','cancelled'].includes(t.status)).length).padStart(2,'0');$('approvalCount').textContent=String(approvals.length).padStart(2,'0')}
 function renderProjects(){updateAgentHabitats();$('projectList').innerHTML=projects.length?projects.map((p,i)=>`<div class="project"><div class="projecttop"><strong>${String(i+1).padStart(2,'0')} · ${safe(p.name)}</strong><button class="btn subtle small" data-action="delete-project" data-id="${p.id}">Remove</button></div><p>${safe(p.description||'Business experiment')}</p><div class="progress"><span style="width:${p.progress||0}%"></span></div><p>${p.progress||0}% progress · tracked in Nexus</p><div class="taskactions"><button class="btn small" data-action="business-task" data-id="${p.id}">＋ Add task</button></div></div>`).join(''):'<div class="empty">No businesses yet. Add your first experiment.</div>';const bc=$('businessCount');if(bc)bc.textContent=String(projects.length).padStart(2,'0')}
-function renderTasks(){updateAgentHabitats();$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>'}
+function renderTasks(){updateAgentHabitats();$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>';renderMissionBoard()}
 function renderApprovals(){$('approvalList').innerHTML=approvals.length?approvals.map(a=>`<div class="approval"><strong>${safe(a.title)}</strong><p>${safe(a.description||'Review this action before proceeding.')}</p><div class="taskactions"><button class="btn small" data-action="approve" data-id="${a.id}">Approve locally</button><button class="btn subtle small" data-action="reject" data-id="${a.id}">Reject</button></div></div>`).join(''):'<div class="empty">No actions awaiting approval.</div>'}
 function renderActivity(){$('activityList').innerHTML=activity.length?activity.map(a=>`<div class="event"><span class="dot"></span><div><strong>${safe(a.title)}</strong><p>${safe(a.detail)} · ${time(a.created_at)}</p></div></div>`).join(''):'<div class="empty">Nexus is ready for its first mission.</div>'}
 function showApp(user){currentUser=user;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('bottomNav').style.display='';$('systemStatus').textContent='CLOUD CONNECTED';$('signedInAs').textContent='Signed in as '+user.email;loadAll()}
@@ -221,6 +262,7 @@ function closeModal(){$('modalBack').classList.add('hidden');$('modalBack').styl
 $('addProject').addEventListener('click',()=>openModal('project'));$('newMission').addEventListener('click',()=>{$('commandInput').focus();window.scrollTo({top:document.querySelector('.hero').offsetTop,behavior:'smooth'})});$('modalCancel').addEventListener('click',closeModal);
 $('modalForm').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser)return;const name=$('modalName').value.trim(),description=$('modalDesc').value.trim();if(!name)return;if(modalMode==='project'){const {error}=await sb.from('nexus_projects').insert({user_id:currentUser.id,name,description,progress:0});if(error)return alert('Could not save project: '+error.message);await log('Project created',name);await loadProjects();renderStats()}closeModal()});
 document.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b||!currentUser)return;const id=b.dataset.id,a=b.dataset.action;b.disabled=true;try{
+if(a==='focus-task'){const target=$('taskList');if(target){target.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{const row=[...target.querySelectorAll('.task')].find(el=>el.textContent.includes((tasks.find(t=>t.id===id)||{}).title||'\u0000'));if(row){row.style.outline='1px solid var(--green)';setTimeout(()=>row.style.outline='',1800)}},250)}}
 if(a==='business-task'){const p=projects.find(x=>x.id===id);const title=prompt('Task for '+(p?.name||'this business')+':');if(title&&title.trim()){const {error}=await sb.from('nexus_tasks').insert({user_id:currentUser.id,title:title.trim(),description:'Business: '+(p?.name||'Business')+'. Review output before external use.',status:'queued'});if(error)throw error;await log('Business task added',p?.name+': '+title.trim());await loadTasks();renderStats()}}
 if(a==='delete-project'){const p=projects.find(x=>x.id===id);const {error}=await sb.from('nexus_projects').delete().eq('id',id);if(error)throw error;await log('Project removed',p?.name||'Project');await loadProjects()}
 if(a==='run-task'){const t=tasks.find(x=>x.id===id);if(!t)throw new Error('Task not found.');b.textContent='Running…';const prompt='Execute this business task by producing a concrete deliverable in your response. Do not claim to publish listings, contact customers, spend money, or access external accounts. Clearly label assumptions and provide actionable next steps. Task: '+t.title+'\nExisting details: '+(t.description||'None');const {data,error}=await sb.functions.invoke('rapid-task',{body:{prompt}});if(error)throw error;if(!data||!data.reply)throw new Error(data?.error||'SENRAI returned no result.');const base=(t.description||'').split('\n\n--- SENRAI RUN ').slice(0,1)[0];const updatedDescription=base+'\n\n--- SENRAI RUN '+new Date().toLocaleString()+' ---\n'+data.reply;const {error:updateError}=await sb.from('nexus_tasks').update({status:'in_progress',description:updatedDescription,updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;await log('SENRAI task run completed',t.title+' — output saved to task');await loadTasks()}
