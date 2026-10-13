@@ -582,6 +582,51 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child{display:none!important}
 }
 
+
+/* HOME REBUILD V2 — make Home a full-screen station scene, not the same stacked agent dashboard. */
+#appView[data-nexus-view="home"]{min-height:calc(100vh - 76px)!important;padding:8px 12px 88px!important;overflow-x:hidden!important}
+#appView[data-nexus-view="home"]>.agent-command-layout{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub{display:block!important;width:100%!important;max-width:none!important;margin:0 auto!important;padding:10px!important;border:1px solid #40336c!important;border-radius:4px!important;background:radial-gradient(ellipse at 50% 30%,#17142b 0%,#090912 58%,#05060b 100%)!important;box-shadow:0 0 45px #7356ff16,inset 0 0 45px #100e22!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .agent-hub-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:2px 3px 10px!important;border-bottom:1px solid #2e2846!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .hub-eyebrow{font-size:9px!important;letter-spacing:.18em!important;color:#8f81c9!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .agent-hub-head h3{font-size:clamp(18px,2.3vw,30px)!important;letter-spacing:.13em!important;color:#f0ebff!important;text-shadow:0 0 18px #8e70ff44!important;margin:6px 0 0!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .hub-live{font-size:9px!important;white-space:nowrap!important;color:#b8f36b!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .hub-intro{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{margin:8px 0 0!important;padding:8px!important;border:1px solid #292343!important;background:#06070e!important;box-shadow:inset 0 0 35px #17112d!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:10px!important;padding:3px 4px 8px!important;font:8px/1.5 ui-monospace,monospace!important;letter-spacing:.15em!important;color:#8f84bc!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top b{color:#e6dfff!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap{display:block!important;width:100%!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:first-child{display:block!important;width:100%!important;padding:0!important;border:0!important;background:transparent!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-stage{width:100%!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #cv{display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:2/1!important;object-fit:contain!important;border:1px solid #292343!important;background:#080914!important;image-rendering:pixelated!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child,
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-dlg,
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-roster,
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-foot{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .atlas-floor{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-tag{font-size:clamp(6px,.8vw,10px)!important;padding:4px 6px!important;background:#080914ed!important;border:1px solid #544486!important;outline:1px solid #07060b!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-tag i{width:7px!important;height:7px!important;box-shadow:0 0 8px currentColor!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map:after{content:"SELECT A BAY  /  CLICK A ROOM TO INSPECT ITS AGENT";display:block;text-align:center;padding:8px 4px 1px;font:8px/1.5 ui-monospace,monospace;letter-spacing:.14em;color:#8173b2}
+@media (orientation:landscape) and (min-width:760px){
+ #appView[data-nexus-view="home"]{height:calc(100dvh - 68px)!important;min-height:0!important;padding:6px 12px 74px!important;overflow:hidden!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub{height:calc(100dvh - 92px)!important;min-height:0!important;padding:8px 12px!important;display:flex!important;flex-direction:column!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .agent-hub-head{flex:0 0 auto!important;padding:0 3px 6px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{flex:1 1 auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top{flex:0 0 auto!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap{flex:1 1 auto!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:first-child{height:100%!important;display:flex!important;justify-content:center!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-stage{height:100%!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #cv{width:auto!important;height:auto!important;max-width:100%!important;max-height:100%!important;aspect-ratio:2/1!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #tags{position:absolute!important;inset:0!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map:after{flex:0 0 auto!important}
+}
+@media (orientation:landscape) and (min-width:760px) and (max-height:500px){
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .hub-live{display:none!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top{display:none!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{margin-top:4px!important;padding:4px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map:after{padding:4px!important}
+}
+
 </style>
 </head>
 <body>
