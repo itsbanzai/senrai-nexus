@@ -1493,5 +1493,69 @@ choose(0);draw();
  choose(0);draw();
 })();
 </script>
+
+<!-- SENRAI_INITIAL_VIEW_FIX_20261013: normalize first paint and prevent dashboard leakage on Agents -->
+<style id="senrai-initial-view-fix">
+/* Agents is a dedicated station screen: never show Overview/Missions summary cards above it. */
+#appView[data-nexus-view="agents"] > .hero,
+#appView[data-nexus-view="agents"] > .ops-grid,
+#appView[data-nexus-view="agents"] > .stats,
+#appView[data-nexus-view="agents"] > .layout,
+#appView[data-nexus-view="agents"] > .footer,
+#appView[data-nexus-view="agents"] > #agentHub,
+#appView[data-nexus-view="agents"] > .agent-work-panel,
+#appView[data-nexus-view="agents"] > .v06-dialog {
+  display:none !important;
+}
+#appView[data-nexus-view="agents"] #nexusWorld { display:block !important; visibility:visible !important; opacity:1 !important; }
+#appView[data-nexus-view="agents"] { min-height:0; }
+</style>
+<script id="SENRAI_INITIAL_VIEW_FIX_20261013">
+(function(){
+  'use strict';
+  var app=document.getElementById('appView');
+  if(!app || window.__senraiInitialViewFix) return;
+  window.__senraiInitialViewFix=true;
+  var initialized=false;
+  function isVisible(el){
+    if(!el || !el.isConnected) return false;
+    var s=getComputedStyle(el);
+    return s.display!=='none' && s.visibility!=='hidden' && (el.offsetWidth>0 || el.offsetHeight>0);
+  }
+  function activateAgents(){
+    if(initialized || !isVisible(app)) return;
+    initialized=true;
+    app.setAttribute('data-nexus-view','agents');
+    document.querySelectorAll('#bottomNav button[data-view]').forEach(function(b){
+      b.classList.toggle('active',b.getAttribute('data-view')==='agents');
+    });
+    /* Ensure the station has been attached before the first paint. */
+    requestAnimationFrame(function(){
+      var world=document.getElementById('nexusWorld');
+      if(world){
+        world.style.display='block';
+        world.style.visibility='visible';
+        world.style.opacity='1';
+      }
+      window.dispatchEvent(new Event('resize'));
+    });
+    if(observer) observer.disconnect();
+  }
+  var observer=new MutationObserver(function(){activateAgents()});
+  observer.observe(app,{attributes:true,attributeFilter:['class','style','hidden']});
+  observer.observe(document.body,{childList:true,subtree:true});
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',activateAgents,{once:true});
+  }
+  activateAgents();
+  /* Supabase auth can reveal appView asynchronously after the DOM is ready. */
+  var attempts=0;
+  var timer=setInterval(function(){
+    activateAgents();
+    if(initialized || ++attempts>120){clearInterval(timer);if(observer)observer.disconnect();}
+  },250);
+})();
+</script>
+
 </body>
 </html>
