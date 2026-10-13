@@ -379,41 +379,5 @@ init();
 })();
 </script>
 
-<script>
-(function(){
-  function bindNexusAuth(){
-    const form=document.getElementById('authForm');
-    const signUp=document.getElementById('signUpBtn');
-    const msg=document.getElementById('authMessage');
-    if(!form||form.dataset.safeBound==='2')return;
-    form.dataset.safeBound='2';
-    async function authenticate(mode,event){
-      if(event){event.preventDefault();event.stopImmediatePropagation();}
-      const email=(document.getElementById('email')?.value||'').trim();
-      const password=document.getElementById('password')?.value||'';
-      const signIn=document.getElementById('signInBtn');
-      if(!email||!password){if(msg)msg.textContent='Enter your email and password.';return;}
-      if(!window.supabase){if(msg)msg.textContent='Secure login library did not load. Check connection and refresh.';return;}
-      if(signIn)signIn.disabled=true;
-      if(signUp)signUp.disabled=true;
-      if(msg)msg.textContent='Connecting securely…';
-      try{
-        const client=window.supabase.createClient('https://gsvyogdydnkknqjueucj.supabase.co','sb_publishable_zlID3rvy02vlcMtN6OkubQ_InOilWvk');
-        const result=mode==='signup'
-          ? await client.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}})
-          : await client.auth.signInWithPassword({email,password});
-        if(result.error)throw result.error;
-        if(mode==='signup'&&!result.data.session){if(msg)msg.textContent='Account created. Check your email to confirm, then sign in.';return;}
-        if(msg)msg.textContent='Sign-in succeeded. Reloading your workspace…';
-        location.reload();
-      }catch(err){if(msg)msg.textContent=(err&&err.message)||'Authentication failed. Please try again.';}
-      finally{if(signIn)signIn.disabled=false;if(signUp)signUp.disabled=false;}
-    }
-    form.addEventListener('submit',e=>authenticate('signin',e),true);
-    if(signUp)signUp.addEventListener('click',e=>authenticate('signup',e),true);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bindNexusAuth,{once:true});else bindNexusAuth();
-})();
-</script>
 </body>
 </html>
