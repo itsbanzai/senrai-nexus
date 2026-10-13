@@ -1435,5 +1435,50 @@ const list=document.getElementById('taskList');if(list)new MutationObserver(()=>
 choose(0);draw();
 })();
 </script>
+
+<script id="senrai-world-engine">
+(function(){
+ const app=document.getElementById('appView');if(!app||document.getElementById('nexusWorld'))return;
+ const world=document.createElement('section');world.id='nexusWorld';
+ world.innerHTML='<header class="nw-top"><div><div class="nw-brand">SENRAI <span style="color:#b5f66c">NEXUS</span></div><div class="nw-sub">AUTONOMOUS OPERATIONS STATION / SECTOR 01</div></div><div class="nw-live">■ SYSTEM ONLINE</div></header><div class="nw-layout"><div class="nw-scene"><canvas id="nwCanvas" width="1000" height="600" aria-label="Interactive SENRAI station map"></canvas></div><aside class="nw-side"><div class="nw-kicker">SELECTED BAY / <span id="nwIndex">00</span></div><h2 class="nw-room" id="nwTitle">SENRAI CORE</h2><div class="nw-description" id="nwDesc">Central coordination and task routing.</div><div class="nw-stat"><label>ASSIGNED SPECIALIST</label><strong id="nwAgent">CORE / COORDINATOR</strong></div><div class="nw-stat"><label>SAVED TASK RECORDS</label><strong id="nwTasks">Reading saved tasks…</strong></div><div class="nw-stat"><label>STATION FUNCTION</label><strong id="nwFunction">Mission routing</strong></div><div class="nw-actions"><button id="nwEnter" class="primary">OPEN WORKSPACE ↗</button><button id="nwTasksBtn">VIEW MISSIONS</button></div></aside></div><div class="nw-room-list" id="nwRooms"></div><footer class="nw-bottom"><span>WORLD VIEW / SELECT A BAY</span><span>CHARACTER ANIMATION IS VISUAL</span><span>SENRAI NEXUS</span></footer>';
+ const hub=app.querySelector('#agentHub');if(hub)app.insertBefore(world,hub);else app.insertBefore(world,app.firstChild);
+ const c=document.getElementById('nwCanvas'),ctx=c.getContext('2d');
+ const rooms=[
+ {name:'SENRAI CORE',short:'CORE',agent:'CORE / COORDINATOR',fn:'Mission routing',desc:'Central command and task routing.',x:45,y:55,w:360,h:210,color:'#ff9147'},
+ {name:'SCOUT LAB',short:'SCOUT',agent:'SCOUT / RESEARCH',fn:'Research & discovery',desc:'Market discovery and source research.',x:445,y:55,w:220,h:210,color:'#39c9ff'},
+ {name:'FORGE WORKSHOP',short:'FORGE',agent:'FORGE / CREATION',fn:'Product creation',desc:'Digital product and asset production.',x:705,y:55,w:250,h:210,color:'#7ce56f'},
+ {name:'SCRIBE STUDIO',short:'SCRIBE',agent:'SCRIBE / CONTENT',fn:'Writing & packaging',desc:'Listing copy, instructions and product packaging.',x:145,y:335,w:330,h:210,color:'#b68cff'},
+ {name:'ANALYST BAY',short:'ANALYST',agent:'ANALYST / REVIEW',fn:'Quality & performance',desc:'Quality review and performance analysis.',x:535,y:335,w:330,h:210,color:'#ffce5c'}
+ ];
+ let selected=0,phase=0;
+ function box(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+ function label(t,x,y,size,color){ctx.font='bold '+size+'px monospace';ctx.fillStyle=color;ctx.fillText(t,x,y)}
+ function agent(x,y,color,id){let bob=Math.sin(phase*.09+id)*3;box(x-13,y-18+bob,26,30,'#080a12');box(x-9,y-25+bob,18,16,'#f0c79c');box(x-10,y-29+bob,20,7,color);box(x-8,y-9+bob,16,13,color);box(x-10,y+4+bob,7,10,'#20263a');box(x+3,y+4+bob,7,10,'#20263a');box(x-5,y-18+bob,3,3,'#10131a');box(x+3,y-18+bob,3,3,'#10131a');box(x+11,y-6+bob,3,3,'#b5f66c')}
+ function room(r,i){let active=i===selected;box(r.x-6,r.y-6,r.w+12,r.h+12,active?'#b5f66c':'#34294e');box(r.x,r.y,r.w,r.h,'#1a1b29');box(r.x+4,r.y+4,r.w-8,25,r.color);box(r.x+4,r.y+33,r.w-8,r.h-37,'#242b3a');
+ for(let x=r.x+10;x<r.x+r.w-5;x+=24)box(x,r.y+36,1,r.h-43,'#343b4c');
+ for(let y=r.y+43;y<r.y+r.h-4;y+=24)box(r.x+5,y,r.w-10,1,'#343b4c');
+ box(r.x+15,r.y+50,62,32,'#080d17');box(r.x+20,r.y+55,52,22,'#24546a');box(r.x+26,r.y+61,25,3,'#70e6ff');box(r.x+26,r.y+68,35,2,'#f5a35b');
+ box(r.x+r.w-75,r.y+50,58,37,'#090c15');box(r.x+r.w-69,r.y+56,46,25,'#3c4857');box(r.x+r.w-64,r.y+61,33,4,r.color);
+ if(i===0){box(r.x+r.w/2-43,r.y+72,86,80,'#0a0a14');box(r.x+r.w/2-35,r.y+80,70,64,'#e65031');box(r.x+r.w/2-24,r.y+91,48,43,'#ffb447');box(r.x+r.w/2-10,r.y+104,20,17,'#fff0b3')}
+ else{box(r.x+r.w/2-22,r.y+91,44,44,'#0b0c15');box(r.x+r.w/2-16,r.y+97,32,32,r.color);box(r.x+r.w/2-8,r.y+105,16,16,'#171725')}
+ agent(r.x+r.w/2,r.y+r.h-38,r.color,i);
+ label(r.short,r.x+10,r.y+20,12,'#11131a');label(active?'SELECTED':'CLICK TO ENTER',r.x+10,r.y+r.h-10,9,active?'#d5ff9d':'#aaa2c1');
+ }
+ function draw(){phase++;box(0,0,1000,600,'#070811');for(let y=10;y<600;y+=20)box(0,y,1000,1,'#111321');for(let x=10;x<1000;x+=20)box(x,0,1,600,'#111321');
+ // Central corridors physically connect the bays
+ box(30,285,940,30,'#161629');box(405,255,40,85,'#161629');box(665,255,40,85,'#161629');box(125,310,35,28,'#161629');box(500,310,35,28,'#161629');
+ for(let x=35;x<965;x+=18)box(x,298,9,2,'#3a3156');
+ box(455,268,90,60,'#302447');box(468,280,64,36,'#b5f66c');box(476,288,48,20,'#101b19');
+ rooms.forEach(room);label('NEXUS STATION / SECTOR 01',38,32,14,'#a99bdc');label('5 SPECIALIST BAYS',800,32,11,'#8d83b5');
+ requestAnimationFrame(draw)}
+ function taskCount(){let list=document.getElementById('taskList');return list?list.querySelectorAll('tr,[data-task-id],.task-row').length+' visible task record(s)':'Task records available in Missions'}
+ function choose(i){selected=i;let r=rooms[i];document.getElementById('nwIndex').textContent=String(i).padStart(2,'0');document.getElementById('nwTitle').textContent=r.name;document.getElementById('nwDesc').textContent=r.desc;document.getElementById('nwAgent').textContent=r.agent;document.getElementById('nwFunction').textContent=r.fn;document.getElementById('nwTasks').textContent=taskCount();document.querySelectorAll('.nw-room-btn').forEach((b,j)=>b.classList.toggle('active',j===i))}
+ rooms.forEach((r,i)=>{let b=document.createElement('button');b.className='nw-room-btn';b.textContent=r.short;b.onclick=()=>choose(i);document.getElementById('nwRooms').appendChild(b)});
+ c.addEventListener('click',e=>{let b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*1000,y=(e.clientY-b.top)/b.height*600;let i=rooms.findIndex(r=>x>=r.x-6&&x<=r.x+r.w+6&&y>=r.y-6&&y<=r.y+r.h+6);if(i>=0)choose(i)});
+ document.getElementById('nwEnter').onclick=()=>{let target=selected===0?'home':'business';let b=document.querySelector('#bottomNav [data-view="'+target+'"]');if(b)b.click()};
+ document.getElementById('nwTasksBtn').onclick=()=>{let b=document.querySelector('#bottomNav [data-view="missions"]');if(b)b.click()};
+ choose(0);draw();
+})();
+</script>
 </body>
 </html>
