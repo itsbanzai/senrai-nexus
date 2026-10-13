@@ -24,6 +24,58 @@ body{background:radial-gradient(ellipse at 50% -15%,#30332a 0,transparent 45%),#
 #etsyBridge .formgrid{display:grid;grid-template-columns:1fr 150px;gap:10px}#etsyBridge label{display:grid;gap:5px;font-size:10px;color:var(--muted)}#etsyBridge input{width:100%;min-width:0;background:#111211;border:1px solid #555852;border-radius:2px;padding:10px;color:var(--text);font:12px ui-monospace,monospace}
 @media(max-width:800px){.shell{padding:9px 9px 88px}.hero{gap:12px}.hero h2{font-size:24px}.core-stage{min-height:160px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{border-right:1px solid #555852;border-bottom:1px solid #555852;padding:10px}.stat:nth-child(2){border-right:0}.stat:nth-child(3),.stat:nth-child(4){border-bottom:0}.stat strong{font-size:21px}.agentgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:5px}.agent{flex:0 0 118px;scroll-snap-align:start}.agent p{min-height:48px}.panel{padding:11px}#etsyBridge .formgrid{grid-template-columns:1fr}.nav{background:#111211f5;border-top:1px solid #686a62}.nav button{font-family:ui-monospace,monospace}}
 
+
+/* Dedicated pixel-art rooms for each specialist agent */
+.agent-hub{margin:14px 0 18px;padding:14px;border:1px solid #686a62;background:#171817;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+.agent-hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #42443e}
+.hub-eyebrow{font-size:9px;color:#a0a29a;letter-spacing:.12em}.agent-hub-head h3{margin:4px 0 0;font-size:14px;letter-spacing:.09em}
+.hub-live{font-size:9px;color:#c7f36a}.hub-live i{display:inline-block;width:6px;height:6px;background:#c7f36a;margin-right:4px;box-shadow:0 0 7px #c7f36a}
+.hub-intro{font-size:10px;line-height:1.5;color:#a0a29a;margin:10px 0 12px}
+.habitat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.habitat{border:1px solid #62655b;background:#1c1d1a;min-width:0}
+.habitat-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 9px;border-bottom:1px solid #45483e;font-size:9px;letter-spacing:.04em}
+.habitat-head b{font-size:8px;color:#a1a395;font-weight:500}.habitat.is-working .habitat-head b{color:#c7f36a}
+.pixel-room{height:160px;position:relative;overflow:hidden;background:#20271f;image-rendering:pixelated}
+.room-floor{position:absolute;left:0;right:0;bottom:0;height:31px;background:repeating-linear-gradient(90deg,#30362a 0 25px,#272d23 25px 27px);border-top:3px solid #444b35}
+.room-floor:after{content:"";position:absolute;inset:5px 0 0;background:repeating-linear-gradient(0deg,transparent 0 13px,#11150f33 13px 14px)}
+.room-window{position:absolute;left:10px;top:12px;width:72px;height:48px;border:4px solid #525d4b;background:#192b2b;box-shadow:inset 0 0 0 2px #283e3b}
+.room-window>i{position:relative;display:inline-block;width:4px;height:4px;background:#c7f36a;margin:4px 3px 0}
+.window-chart{position:absolute;left:7px;right:7px;bottom:5px;height:19px;border-bottom:2px solid #719c61;display:flex;align-items:end;gap:4px}
+.window-chart span{display:block;width:7px;background:#89b85b}.window-chart span:nth-child(1){height:7px}.window-chart span:nth-child(2){height:13px}.window-chart span:nth-child(3){height:9px}.window-chart span:nth-child(4){height:17px}.window-chart span:nth-child(5){height:12px}
+.window-lines{position:absolute;left:7px;right:7px;bottom:6px;display:grid;gap:4px}.window-lines span{height:2px;background:#86b9a6;width:100%}.window-lines span:nth-child(2){width:65%}.window-lines span:nth-child(3){width:82%}.window-lines span:nth-child(4){width:48%}
+.room-shelf{position:absolute;right:9px;top:17px;width:38px;height:30px;border-top:3px solid #6c7358;border-bottom:3px solid #6c7358;display:flex;align-items:end;gap:4px}
+.room-shelf i{display:block;width:7px;height:17px;background:#7c8f58}.room-shelf i:nth-child(2){height:22px;background:#b1a16b}.room-shelf i:nth-child(3){height:13px;background:#5d8068}
+.room-desk{position:absolute;left:21%;right:13%;top:78px;height:8px;background:#9a8057;border:2px solid #c0a26b;z-index:2}
+.desk-leg{position:absolute;left:8px;right:8px;top:6px;height:31px;border-left:4px solid #806744;border-right:4px solid #806744}
+.screen{position:absolute;left:35%;top:-31px;width:35px;height:28px;background:#111814;border:3px solid #718164;box-shadow:inset 0 0 0 2px #27382b}
+.screen i{display:block;height:2px;margin:4px 3px;background:#c7f36a}.screen i:nth-child(2){width:60%}.screen i:nth-child(3){width:78%}
+.pixel-person{position:absolute;z-index:4;left:43%;top:72px;width:24px;height:57px;animation:agentIdle .8s steps(2,end) infinite alternate}
+.person-hair{position:absolute;top:0;left:6px;width:13px;height:5px;background:var(--hair,#b7ce8a);box-shadow:-3px 4px 0 var(--hair,#b7ce8a),10px 4px 0 var(--hair,#b7ce8a)}
+.person-head{position:absolute;top:5px;left:4px;width:17px;height:16px;background:var(--skin,#d8bd91);border:2px solid #20241b;image-rendering:pixelated}
+.person-head i{position:absolute;top:5px;width:3px;height:3px;background:#20241b}.person-head i:first-child{left:2px}.person-head i:last-child{right:2px}
+.person-body{position:absolute;top:21px;left:2px;width:21px;height:20px;background:var(--coat,#718e4d);border:2px solid #20241b}
+.person-arm{position:absolute;top:24px;left:20px;width:8px;height:16px;background:var(--coat,#718e4d);border:2px solid #20241b;transform-origin:top;animation:agentWork .4s steps(2,end) infinite alternate}
+.person-leg{position:absolute;top:39px;width:8px;height:14px;background:var(--pants,#424b37);border:2px solid #20241b}.person-leg.left{left:3px}.person-leg.right{right:1px}
+.scout-person{--hair:#d1dfab;--coat:#78984b;--pants:#485239}.forge-person{--hair:#a6ddd0;--coat:#438b7b;--pants:#344d48;left:50%}.scribe-person{--hair:#dfb7ef;--coat:#9364a8;--pants:#55405f;left:50%}.analyst-person{--hair:#f0d7a3;--coat:#a27d42;--pants:#56482d;left:51%}.core-person{--hair:#e4ff9d;--coat:#9abd43;--pants:#3e4b25;left:47%;top:85px}
+.room-task{position:absolute;left:8px;bottom:7px;z-index:5;font-size:8px;letter-spacing:.08em;color:#d5d9c9;background:#171b14;border:1px solid #4c5640;padding:3px 5px}
+.room-research{background:linear-gradient(#263b31 0 68%,#20271f 68%)}.room-workshop{background:linear-gradient(#344038 0 68%,#252b22 68%)}.room-publishing{background:linear-gradient(#342e3b 0 68%,#26232d 68%)}.room-analytics{background:linear-gradient(#2c3940 0 68%,#232a2b 68%)}.room-command{background:linear-gradient(#333a25 0 68%,#23291b 68%)}
+.workshop-rack{position:absolute;top:15px;left:12px;width:50px;height:43px;border:3px solid #666f59;border-bottom:5px solid #7f895d}.workshop-rack i{display:inline-block;width:7px;height:13px;margin:4px 2px;background:#a5b87a}.workshop-rack i:nth-child(2){height:20px;background:#8ab8a6}
+.blueprint{position:absolute;right:12px;top:15px;width:39px;height:31px;background:#b4cbb4;border:3px solid #718b78;transform:rotate(-4deg)}.blueprint span{display:block;height:2px;margin:4px;background:#5b8070}.blueprint span:nth-child(2){width:60%}
+.forge-desk{left:16%;right:17%;top:82px}
+.paper-stack{position:absolute;right:15px;top:18px;width:30px;height:26px;background:#c8b8d0;border:2px solid #887294;box-shadow:-4px 3px 0 #a18bab,-7px 6px 0 #75647e}
+.scribe-desk{left:19%;right:15%;top:82px}
+.monitor-wall{position:absolute;left:10px;right:10px;top:12px;display:flex;gap:5px;justify-content:center}
+.monitor{width:43%;height:40px;border:3px solid #78868a;background:#101a1c;padding:4px;display:flex;align-items:end;gap:3px}
+.monitor i{display:block;width:6px;background:#8bc4b0;height:13px}.monitor i:nth-child(2){height:22px}.monitor i:nth-child(3){height:16px}.monitor i:nth-child(4){height:26px}
+.analyst-desk{left:17%;right:15%;top:82px}
+.core-rings{position:absolute;top:9px;left:50%;width:78px;height:48px;transform:translateX(-50%);border:1px solid #718747;border-radius:50%;box-shadow:0 0 0 6px #71874712,0 0 0 12px #71874710}.core-rings i{position:absolute;inset:9px 18px;border:1px solid #c7f36a;border-radius:50%}.core-rings i:nth-child(2){transform:rotate(60deg)}.core-rings i:nth-child(3){transform:rotate(-60deg)}
+.core-console{position:absolute;left:20%;right:20%;top:66px;height:22px;border:3px solid #7c8e4b;background:#1b2415;text-align:center;font-size:7px;color:#c7f36a;padding-top:4px}.core-console i{display:inline-block;width:4px;height:4px;margin-left:5px;background:#c7f36a}
+.habitat-foot{padding:9px;display:grid;gap:4px}.habitat-foot strong{font-size:10px}.habitat-foot span{font-size:9px;color:#9da092;overflow-wrap:anywhere}.habitat.is-working .pixel-person{animation:agentWork .25s steps(2,end) infinite alternate}.habitat.is-working .person-arm{animation-duration:.18s}.habitat.is-working .room-task{color:#c7f36a;border-color:#c7f36a}
+@keyframes agentIdle{from{transform:translateY(0)}to{transform:translateY(-2px)}}@keyframes agentWork{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.habitat-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-top:1px solid #42443e;padding-top:10px;margin-top:10px;font-size:8px;color:#a0a29a}.habitat-legend i{display:inline-block;width:6px;height:6px;margin-right:4px}.legend-idle{background:#777b6d}.legend-working{background:#c7f36a}
+@media(max-width:600px){.agent-hub{padding:10px}.habitat-grid{grid-template-columns:1fr}.pixel-room{height:155px}.habitat-head{font-size:10px}.hub-live{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.pixel-person,.person-arm,.habitat.is-working .pixel-person{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -37,6 +89,57 @@ body{background:radial-gradient(ellipse at 50% -15%,#30332a 0,transparent 45%),#
 <div id="appView" class="hidden">
 <section class="hero"><div><div class="eyebrow">MISSION CONTROL / 001</div><h2>Turn ideas into<br><span style="color:var(--green)">execution.</span></h2><p>Your business command center. Plan missions, coordinate specialist agents, and review every action before it leaves the system.</p></div><button class="btn primary" id="newMission">＋ New mission</button></section>
 <section class="core-stage" aria-label="SENRAI animated core"><div class="core-halo"></div><div class="core-orb" aria-hidden="true"><div class="core-diamond"></div></div><div class="core-label"><strong>SENRAI CORE</strong><span>INTELLIGENCE SYSTEM / READY</span></div></section>
+
+<section class="agent-hub" id="agentHub">
+  <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>AGENT HABITATS</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
+  <p class="hub-intro">Each agent has a dedicated station. Assign a mission to see its workspace switch from standby to working.</p>
+  <div class="habitat-grid">
+    <article class="habitat scout-habitat" id="habitatScout">
+      <div class="habitat-head"><span>01 / SCOUT</span><b id="habitatScoutState">STANDBY</b></div>
+      <div class="pixel-room room-research">
+        <div class="room-window"><i></i><i></i><i></i><div class="window-chart"><span></span><span></span><span></span><span></span><span></span></div></div>
+        <div class="room-shelf"><i></i><i></i><i></i></div><div class="room-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person scout-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">MARKET RECON</span>
+      </div><div class="habitat-foot"><strong>Research & Discovery</strong><span id="habitatScoutTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat forge-habitat" id="habitatForge">
+      <div class="habitat-head"><span>02 / FORGE</span><b id="habitatForgeState">STANDBY</b></div>
+      <div class="pixel-room room-workshop">
+        <div class="workshop-rack"><i></i><i></i><i></i></div><div class="blueprint"><span></span><span></span><span></span><span></span></div>
+        <div class="room-desk forge-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person forge-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">BUILD LAB</span>
+      </div><div class="habitat-foot"><strong>Product Workshop</strong><span id="habitatForgeTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat scribe-habitat" id="habitatScribe">
+      <div class="habitat-head"><span>03 / SCRIBE</span><b id="habitatScribeState">STANDBY</b></div>
+      <div class="pixel-room room-publishing">
+        <div class="room-window"><i></i><i></i><i></i><div class="window-lines"><span></span><span></span><span></span><span></span></div></div><div class="paper-stack"><i></i><i></i><i></i></div>
+        <div class="room-desk scribe-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person scribe-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">CONTENT STUDIO</span>
+      </div><div class="habitat-foot"><strong>Content & Publishing</strong><span id="habitatScribeTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat analyst-habitat" id="habitatAnalyst">
+      <div class="habitat-head"><span>04 / ANALYST</span><b id="habitatAnalystState">STANDBY</b></div>
+      <div class="pixel-room room-analytics">
+        <div class="monitor-wall"><div class="monitor"><i></i><i></i><i></i><i></i></div><div class="monitor"><i></i><i></i><i></i></div></div><div class="room-desk analyst-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person analyst-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">QUALITY CONTROL</span>
+      </div><div class="habitat-foot"><strong>Analysis & Quality</strong><span id="habitatAnalystTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat core-habitat" id="habitatCore">
+      <div class="habitat-head"><span>05 / SENRAI CORE</span><b id="habitatCoreState">ONLINE</b></div>
+      <div class="pixel-room room-command">
+        <div class="core-rings"><i></i><i></i><i></i></div><div class="core-console"><span>MISSION CONTROL</span><i></i><i></i><i></i></div>
+        <div class="pixel-person core-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">COORDINATION</span>
+      </div><div class="habitat-foot"><strong>Command & Coordination</strong><span id="habitatCoreTask">Monitoring workspace</span></div>
+    </article>
+  </div>
+  <div class="habitat-legend"><span><i class="legend-idle"></i> STANDBY</span><span><i class="legend-working"></i> WORKING ANIMATION</span><span id="habitatWorkSummary">0 agents executing tasks</span></div>
+</section>
 <section class="stats"><div class="stat"><label>ACTIVE PROJECTS</label><strong id="projectCount">00</strong><small>Cloud-saved projects</small></div><div class="stat"><label>OPEN TASKS</label><strong id="taskCount">00</strong><small>Queued or in progress</small></div><div class="stat"><label>NEEDS APPROVAL</label><strong id="approvalCount">00</strong><small>Human review required</small></div><div class="stat"><label>VERIFIED REVENUE</label><strong>$0.00</strong><small>Sales integration not connected</small></div></section>
 <div class="layout"><div class="stack">
 <section class="panel"><div class="panelhead"><h3>AGENT NETWORK</h3><span class="pill good">5 roles configured</span></div><div class="agentgrid">
@@ -76,9 +179,34 @@ async function loadProjects(){const {data,error}=await sb.from('nexus_projects')
 async function loadTasks(){const {data,error}=await sb.from('nexus_tasks').select('*').order('created_at',{ascending:false});if(error){console.error(error);return message('Could not load tasks: '+error.message,true)}tasks=data||[];renderTasks()}
 async function loadApprovals(){const {data,error}=await sb.from('nexus_approvals').select('*').eq('status','pending').order('created_at',{ascending:false});if(error){console.error(error);return}approvals=data||[];renderApprovals()}
 async function loadActivity(){const {data,error}=await sb.from('nexus_activity').select('*').order('created_at',{ascending:false}).limit(12);if(error){console.error(error);return}activity=data||[];renderActivity()}
+
+function updateAgentHabitats(){
+ const roles=[
+ ['Scout',/research|market|competitor|audience|demand|scout/i],
+ ['Forge',/build|create|product|design|asset|forge/i],
+ ['Scribe',/listing|content|copy|description|seo|scribe|etsy/i],
+ ['Analyst',/audit|review|analy|quality|performance|test/i]
+ ];
+ let working=0;
+ roles.forEach(([name,re])=>{
+   const t=tasks.find(x=>!['completed','cancelled'].includes(x.status)&&re.test((x.title||'')+' '+(x.description||'')));
+   const habitat=$('habitat'+name),state=$('habitat'+name+'State'),taskLabel=$('habitat'+name+'Task');
+   if(!habitat)return;
+   const isWorking=!!t&&t.status==='in_progress';
+   habitat.classList.toggle('is-working',isWorking);
+   if(isWorking)working++;
+   state.textContent=isWorking?'WORKING':t?'QUEUED':'STANDBY';
+   taskLabel.textContent=t?(t.title.length>52?t.title.slice(0,49)+'…':t.title):'Waiting for assignment';
+ });
+ $('habitatCoreState').textContent=working?'COORDINATING':'ONLINE';
+ $('habitatCoreTask').textContent=working?working+' agent(s) executing':'Monitoring workspace';
+ $('habitatCore').classList.toggle('is-working',working>0);
+ $('habitatWorkSummary').textContent=working+' agents executing tasks';
+}
+
 function renderStats(){$('projectCount').textContent=String(projects.length).padStart(2,'0');$('taskCount').textContent=String(tasks.filter(t=>!['completed','cancelled'].includes(t.status)).length).padStart(2,'0');$('approvalCount').textContent=String(approvals.length).padStart(2,'0')}
-function renderProjects(){$('projectList').innerHTML=projects.length?projects.map(p=>`<div class="project"><div class="projecttop"><strong>${safe(p.name)}</strong><button class="btn subtle small" data-action="delete-project" data-id="${p.id}">Remove</button></div><p>${safe(p.description||'Business project')}</p><div class="progress"><span style="width:${p.progress||0}%"></span></div><p>${p.progress||0}% progress · manually tracked</p></div>`).join(''):'<div class="empty">No projects yet. Add your first business project.</div>'}
-function renderTasks(){$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>'}
+function renderProjects(){updateAgentHabitats();$('projectList').innerHTML=projects.length?projects.map(p=>`<div class="project"><div class="projecttop"><strong>${safe(p.name)}</strong><button class="btn subtle small" data-action="delete-project" data-id="${p.id}">Remove</button></div><p>${safe(p.description||'Business project')}</p><div class="progress"><span style="width:${p.progress||0}%"></span></div><p>${p.progress||0}% progress · manually tracked</p></div>`).join(''):'<div class="empty">No projects yet. Add your first business project.</div>'}
+function renderTasks(){updateAgentHabitats();$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>'}
 function renderApprovals(){$('approvalList').innerHTML=approvals.length?approvals.map(a=>`<div class="approval"><strong>${safe(a.title)}</strong><p>${safe(a.description||'Review this action before proceeding.')}</p><div class="taskactions"><button class="btn small" data-action="approve" data-id="${a.id}">Approve locally</button><button class="btn subtle small" data-action="reject" data-id="${a.id}">Reject</button></div></div>`).join(''):'<div class="empty">No actions awaiting approval.</div>'}
 function renderActivity(){$('activityList').innerHTML=activity.length?activity.map(a=>`<div class="event"><span class="dot"></span><div><strong>${safe(a.title)}</strong><p>${safe(a.detail)} · ${time(a.created_at)}</p></div></div>`).join(''):'<div class="empty">Nexus is ready for its first mission.</div>'}
 function showApp(user){currentUser=user;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('bottomNav').style.display='';$('systemStatus').textContent='CLOUD CONNECTED';$('signedInAs').textContent='Signed in as '+user.email;loadAll()}
