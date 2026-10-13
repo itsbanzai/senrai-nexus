@@ -377,5 +377,38 @@ async function init(){if(!window.supabase){$('systemStatus').textContent='LIBRAR
 init();
 })();
 </script>
+
+<script>
+(function(){
+  function bindNexusAuth(){
+    const form=document.getElementById('authForm');
+    const signUp=document.getElementById('signUpBtn');
+    const message=document.getElementById('authMessage');
+    if(!form||form.dataset.safeBound==='1')return;
+    form.dataset.safeBound='1';
+    form.addEventListener('submit',function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const email=document.getElementById('email').value.trim();
+      const password=document.getElementById('password').value;
+      const signIn=document.getElementById('signInBtn');
+      if(!email||!password){if(message)message.textContent='Enter your email and password.';return;}
+      if(typeof window.authAction==='function'){window.authAction('signin');return;}
+      if(message)message.textContent='Login script did not initialize. Reload this page once; your saved data has not been deleted.';
+      if(signIn)signIn.disabled=false;
+    },true);
+    if(signUp)signUp.addEventListener('click',function(event){
+      event.preventDefault();
+      if(typeof window.authAction==='function')window.authAction('signup');
+      else if(message)message.textContent='Login script did not initialize. Reload this page once; your saved data has not been deleted.';
+    },true);
+    const nav=document.getElementById('bottomNav');
+    if(nav && !document.getElementById('appView')?.classList.contains('hidden'))nav.style.display='';
+    else if(nav)nav.style.display='none';
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bindNexusAuth,{once:true});
+  else bindNexusAuth();
+})();
+</script>
 </body>
 </html>
