@@ -177,40 +177,53 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 @media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
 
 
-/* Central neon floor map inspired by the user's top-down sci-fi operations-base reference. */
-.nexus-map{margin:14px 0 18px;padding:12px;background:#070c0d;border:1px solid #315c55;box-shadow:inset 0 0 0 3px #0d1717,0 0 22px #25d9c20d;color:#d8f6eb}
-.nexus-map-top,.nexus-map-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font:9px/1.4 ui-monospace,monospace;letter-spacing:.1em;color:#79b5a4}
-.map-led{display:inline-block;width:6px;height:6px;background:#a3e635;box-shadow:0 0 9px #a3e635;margin-right:5px}
-.nexus-map-grid{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr 1.15fr 1fr;grid-template-rows:minmax(90px,1fr) minmax(96px,1fr) minmax(90px,1fr);gap:10px;min-height:320px;margin:12px 0;padding:8px;background:radial-gradient(ellipse at center,#112d2a 0%,#081211 65%,#050909 100%);overflow:hidden}
-.nexus-map-grid:before{content:"";position:absolute;inset:0;z-index:-2;background-image:linear-gradient(#1b51471c 1px,transparent 1px),linear-gradient(90deg,#1b51471c 1px,transparent 1px);background-size:18px 18px}
-.map-corridor{position:absolute;z-index:-1;opacity:.55;box-shadow:0 0 12px #35d9c755;background:linear-gradient(90deg,transparent,#39d9bd,#64baff,#39d9bd,transparent)}
-.map-corridor.horizontal{height:2px;left:0;right:0;top:50%}.map-corridor.vertical{width:2px;top:0;bottom:0;left:50%;background:linear-gradient(transparent,#39d9bd,#64baff,#39d9bd,transparent)}
-.map-node{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;padding:10px;background:linear-gradient(145deg,#132520f2,#091210f5);border:1px solid #326e60;box-shadow:inset 0 0 0 3px #091310,0 0 16px #28e0c018}
-.map-node:after{content:"";position:absolute;inset:4px;border:1px solid #1b4a40;pointer-events:none}
-.map-node small,.map-node b,.map-node span,.map-node em{position:relative;z-index:1;overflow-wrap:anywhere}
-.map-node small{font-size:8px;letter-spacing:.12em;color:#80b5a7}.map-node b{font-size:clamp(9px,1.05vw,13px);letter-spacing:.08em;color:#9bffe0}.map-node span{font-size:10px;color:#b4c9c0}.map-node em{font-size:8px;font-style:normal;color:#91a69a;letter-spacing:.08em}
-.node-scout{grid-area:1/1;border-color:#36caff}.node-scout b,.node-scout em{color:#7ee2ff}
-.node-forge{grid-area:1/3;border-color:#ffb45c}.node-forge b,.node-forge em{color:#ffca83}
-.node-scribe{grid-area:3/1;border-color:#b28aff}.node-scribe b,.node-scribe em{color:#d0b0ff}
-.node-analyst{grid-area:3/3;border-color:#ff936b}.node-analyst b,.node-analyst em{color:#ffb29a}
-.node-core{grid-area:2/2;align-items:center;text-align:center;background:radial-gradient(circle,#164b3e,#09130f 72%);border-color:#72ffd0;box-shadow:0 0 26px #31ffbd25,inset 0 0 24px #31ffbd12}
-.node-core strong{font-size:clamp(16px,2vw,25px);letter-spacing:.16em;color:#c3ffe8;text-shadow:0 0 16px #42ffc2}.node-core span{font-size:9px;letter-spacing:.18em;color:#69ddff}.node-core small{font-size:7px;color:#9fffd7}
-.map-ring{position:absolute;width:62%;aspect-ratio:1;border:1px solid #2ad7bb80;border-radius:50%;box-shadow:0 0 0 8px #25d9bb0d,0 0 0 17px #25d9bb08;animation:nexusMapSpin 26s linear infinite}
-.node-business{grid-area:2/3;border-color:#4e9cff}.node-business b,.node-business em{color:#83baff}
-.nexus-map-foot{border-top:1px solid #24473f;padding-top:9px;font-size:8px}
-@keyframes nexusMapSpin{to{transform:rotate(360deg)}}
+/* NEXUS ATLAS: a top-down sci-fi operations floor, designed for landscape tablet use. */
+.nexus-map{margin:14px 0 18px;padding:12px;background:#05090c;border:1px solid #35556a;box-shadow:inset 0 0 0 3px #0b1419,0 0 30px #26bfff12;color:#d8e9f4}
+.nexus-map-top,.nexus-map-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font:9px/1.4 ui-monospace,monospace;letter-spacing:.1em;color:#7e9caf}
+.nexus-map-top b{color:#9cecff;letter-spacing:.18em}.map-led{display:inline-block;width:6px;height:6px;background:#a3e635;box-shadow:0 0 9px #a3e635;margin-right:5px}
+.atlas-floor{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(125px,1fr));gap:10px;min-height:480px;margin:12px 0;padding:14px;background:radial-gradient(ellipse at 50% 45%,#172d40 0%,#0a1722 48%,#060b10 100%);overflow:hidden}
+.atlas-floor:before{content:"";position:absolute;inset:0;z-index:-3;background-image:linear-gradient(#4ca4cb14 1px,transparent 1px),linear-gradient(90deg,#4ca4cb14 1px,transparent 1px);background-size:16px 16px}
+.atlas-floor:after{content:"";position:absolute;inset:8px;z-index:-2;border:1px solid #294c61;pointer-events:none}
+.atlas-road{position:absolute;z-index:-1;background:#111e2a;border:1px solid #28485b;box-shadow:inset 0 0 0 3px #0c1821,0 0 16px #37cfff16}
+.road-h{left:0;right:0;height:20px}.road-h1{top:33.3%}.road-h2{top:66.6%}.road-v{top:0;bottom:0;width:18px}.road-v1{left:20%}.road-v2{left:50%}.road-v3{left:80%}
+.atlas-room{position:relative;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:5px;padding:11px;background:linear-gradient(145deg,#172b3aeF,#0a141df5);border:1px solid #42677e;box-shadow:inset 0 0 0 4px #0a141c, inset 0 0 0 5px #274153,0 0 18px #20b9ff10}
+.atlas-room:after{content:"";position:absolute;inset:5px;border:1px solid #33556b66;pointer-events:none}
+.atlas-room>*{position:relative;z-index:1}.atlas-room small{font-size:8px;letter-spacing:.12em;color:#82a8bd}.atlas-room b{font-size:clamp(10px,.9vw,14px);letter-spacing:.1em;color:#d3f4ff}.atlas-room span{font-size:10px;color:#b0c7d4;line-height:1.35}.atlas-room em{margin-top:auto;font-style:normal;font-size:8px;letter-spacing:.08em;color:#91b4c8}
+.room-command{grid-area:2/3;background:radial-gradient(circle at 50% 38%,#163c51,#0a1822 72%);border-color:#53dfff;align-items:center;text-align:center;justify-content:center;box-shadow:inset 0 0 0 4px #0a1822,0 0 30px #35cfff2b}
+.room-command b{font-size:clamp(14px,1.4vw,22px);letter-spacing:.16em;color:#a8f2ff;text-shadow:0 0 16px #33ceff66}
+.room-command em{color:#8feaff}.room-scout{grid-area:1/1;border-color:#3acfff}.room-scout b,.room-scout em{color:#74ddff}
+.room-forge{grid-area:1/5;border-color:#ffb15e}.room-forge b,.room-forge em{color:#ffca83}
+.room-scribe{grid-area:3/1;border-color:#ba8bff}.room-scribe b,.room-scribe em{color:#d4b7ff}
+.room-analyst{grid-area:3/5;border-color:#ff966f}.room-analyst b,.room-analyst em{color:#ffb49a}
+.room-business{grid-area:2/5;border-color:#4c9fff}.room-business b,.room-business em{color:#8ac3ff}
+.room-missions{grid-area:2/1;border-color:#e5ae53}.room-missions b,.room-missions em{color:#ffd27f}
+.room-assets{grid-area:1/2;border-color:#b38aff}.room-assets b,.room-assets em{color:#d2b1ff}
+.room-automation{grid-area:1/4;border-color:#47dfb0}.room-automation b,.room-automation em{color:#86ffcf}
+.room-approval{grid-area:3/2;border-color:#ff7f9d}.room-approval b,.room-approval em{color:#ffa7bc}
+.room-data{grid-area:3/4;border-color:#5e9cff}.room-data b,.room-data em{color:#9cc4ff}
+.atlas-reactor{width:62px;height:62px;display:grid;place-items:center;border:1px solid #54dcff;border-radius:50%;margin:5px;background:radial-gradient(circle,#1a6682,#0b1d2b 72%);box-shadow:0 0 0 8px #40d6ff12,0 0 0 16px #40d6ff09,0 0 22px #34cfff42}
+.atlas-reactor i{width:19px;height:19px;display:block;transform:rotate(45deg);background:linear-gradient(135deg,#d7fbff,#37cfff 60%,#164c80);box-shadow:0 0 18px #53dcff;animation:atlasPulse 3.5s ease-in-out infinite}
+.atlas-console{display:flex;align-items:flex-end;gap:4px;width:76%;height:27px;padding:5px;border:1px solid #35627a;background:#091722}
+.atlas-console i{display:block;flex:1;height:35%;background:#36bfff;box-shadow:0 0 6px #36bfff66}.atlas-console i:nth-child(2){height:75%}.atlas-console i:nth-child(3){height:50%}.atlas-console i:nth-child(4){height:90%}.atlas-console i:nth-child(5){height:62%}.atlas-console i:nth-child(6){height:80%}
+.forge-console i{background:#ffb45c;box-shadow:0 0 6px #ffb45c66}.scribe-console i{height:3px!important;background:#bd91ff;box-shadow:none}.analyst-console i{background:#ff9872;box-shadow:0 0 6px #ff987266}
+.atlas-ledger{display:flex;gap:4px;width:80%;height:26px;padding:4px;border:1px solid #3c668c}.atlas-ledger span{flex:1;background:#245e89}.atlas-ledger span:nth-child(2){background:#47c9e8}.atlas-ledger span:nth-child(3){background:#ad80ef}.atlas-ledger span:nth-child(4){background:#e8a24f}
+.atlas-terminal{display:grid;gap:3px;width:85%}.atlas-terminal i{height:4px;background:#e4ad4d;opacity:.8}.atlas-terminal i:nth-child(2){width:72%}.atlas-terminal i:nth-child(3){width:86%}
+.atlas-crates{display:flex;gap:6px}.atlas-crates i{width:17px;height:18px;border:1px solid #aa84e8;background:#493b6c;box-shadow:inset 0 0 0 3px #17162a}
+.atlas-circuit{display:flex;align-items:center;gap:6px;height:22px}.atlas-circuit i{width:18px;height:18px;border:1px solid #54dcb2;transform:rotate(45deg);box-shadow:0 0 8px #54dcb255}
+.atlas-approval-mark{font-size:24px;color:#ff91ae;text-shadow:0 0 10px #ff91ae66}
+.atlas-data-stack{display:grid;gap:3px;width:65%}.atlas-data-stack i{height:5px;border:1px solid #659de8;background:#1a4773}.atlas-data-stack i:nth-child(2){width:80%}.atlas-data-stack i:nth-child(3){width:60%}
+.nexus-map-foot{border-top:1px solid #29485c;padding-top:9px;font-size:8px}
+@keyframes atlasPulse{0%,100%{transform:rotate(45deg) scale(.92);opacity:.8}50%{transform:rotate(135deg) scale(1.08);opacity:1}}
 @media(orientation:landscape) and (min-width:700px){
- .shell{max-width:1600px;padding:10px 22px 28px}
- .topbar{padding-bottom:10px}.hero{padding:12px 0;align-items:center}
- .nexus-map{padding:14px}.nexus-map-grid{min-height:min(48vh,470px);grid-template-rows:repeat(3,minmax(95px,1fr));gap:14px;padding:12px}
- .map-node{padding:14px}.map-node span{font-size:12px}.map-node em{font-size:9px}
- .habitat-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
- .pixel-room{height:clamp(105px,15vh,175px)}
- .ops-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
- .layout{grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr)}
- .nav{display:none}
+ .shell{max-width:1800px;padding:10px 20px 24px}.topbar{padding-bottom:10px}.hero{padding:10px 0}
+ .nexus-map{padding:14px}.atlas-floor{min-height:min(66vh,690px);grid-template-rows:repeat(3,minmax(145px,1fr));gap:12px;padding:18px}
+ .atlas-room{padding:13px}.atlas-room span{font-size:11px}.atlas-room small,.atlas-room em{font-size:9px}
+ .atlas-reactor{width:clamp(65px,7vw,104px);height:clamp(65px,7vw,104px)}
+ .habitat-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.pixel-room{height:clamp(105px,15vh,175px)}.nav{display:none}
 }
-@media(max-width:500px){.nexus-map{padding:8px}.nexus-map-grid{gap:5px;padding:4px;min-height:285px;grid-template-rows:82px 95px 82px}.map-node{padding:6px}.map-node b{font-size:8px}.map-node span{font-size:8px}.map-node em,.map-node small{font-size:6px}.node-core strong{font-size:12px}.node-core span,.node-core small{font-size:6px}.nexus-map-top,.nexus-map-foot{font-size:7px}}
+@media(max-width:700px){.atlas-floor{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(105px,1fr));gap:7px;min-height:465px;padding:8px}.room-command{grid-area:2/2}.room-scout{grid-area:1/1}.room-forge{grid-area:1/3}.room-scribe{grid-area:4/1}.room-analyst{grid-area:4/3}.room-business{grid-area:3/3}.room-missions{grid-area:3/1}.room-assets{grid-area:2/1}.room-automation{grid-area:2/3}.room-approval{grid-area:4/2}.room-data{grid-area:3/2}.atlas-room{padding:7px}.atlas-room b{font-size:9px}.atlas-room span{font-size:8px}.atlas-room em,.atlas-room small{font-size:6px}.atlas-console{height:19px}.atlas-reactor{width:35px;height:35px}.atlas-reactor i{width:12px;height:12px}.nexus-map-top,.nexus-map-foot{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.atlas-reactor i{animation:none!important}}
+
 
 </style>
 </head>
@@ -229,18 +242,23 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 <section class="agent-hub" id="agentHub">
   <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>AGENT HABITATS</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
   <p class="hub-intro">Select a specialist workstation to inspect its role. Status reflects saved task records; room animation is visual only.</p>
-  <section class="nexus-map" aria-label="Nexus operations floor map">
-    <div class="nexus-map-top"><span>OPERATIONS MAP / LIVE WORKSPACE</span><span><i class="map-led"></i> CORE ONLINE</span></div>
-    <div class="nexus-map-grid">
-      <div class="map-corridor horizontal"></div><div class="map-corridor vertical"></div>
-      <div class="map-node node-scout"><small>ZONE 01</small><b>SCOUT</b><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
-      <div class="map-node node-forge"><small>ZONE 02</small><b>FORGE</b><span>Product workshop</span><em id="mapForgeState">AWAITING TASK</em></div>
-      <div class="map-node node-scribe"><small>ZONE 03</small><b>SCRIBE</b><span>Content studio</span><em id="mapScribeState">AWAITING TASK</em></div>
-      <div class="map-node node-analyst"><small>ZONE 04</small><b>ANALYST</b><span>Quality & intelligence</span><em id="mapAnalystState">AWAITING TASK</em></div>
-      <div class="map-node node-core"><div class="map-ring"></div><strong>SENRAI</strong><span>NEXUS CORE</span><small id="mapCoreState">COORDINATION ONLINE</small></div>
-      <div class="map-node node-business"><small>OPERATIONS</small><b>BUSINESS NETWORK</b><span>Projects • tasks • approvals</span><em id="mapBusinessState">CONNECTED</em></div>
+  <section class="nexus-map nexus-atlas" aria-label="SENRAI top-down operations base">
+    <div class="nexus-map-top"><span><b>NEXUS ATLAS</b> / OPERATIONS FLOOR 01</span><span><i class="map-led"></i> SYSTEM ONLINE</span></div>
+    <div class="atlas-floor">
+      <div class="atlas-road road-h road-h1"></div><div class="atlas-road road-h road-h2"></div><div class="atlas-road road-v road-v1"></div><div class="atlas-road road-v road-v2"></div><div class="atlas-road road-v road-v3"></div>
+      <div class="atlas-room room-command"><small>00 / COMMAND</small><b>SENRAI CORE</b><div class="atlas-reactor"><i></i></div><span>Orchestration & routing</span><em id="mapCoreState">COORDINATION ONLINE</em></div>
+      <div class="atlas-room room-scout"><small>01 / INTELLIGENCE</small><b>SCOUT</b><div class="atlas-console"><i></i><i></i><i></i><i></i><i></i><i></i></div><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
+      <div class="atlas-room room-forge"><small>02 / BUILD LAB</small><b>FORGE</b><div class="atlas-console forge-console"><i></i><i></i><i></i><i></i></div><span>Products & systems</span><em id="mapForgeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-scribe"><small>03 / CONTENT</small><b>SCRIBE</b><div class="atlas-console scribe-console"><i></i><i></i><i></i></div><span>Publishing studio</span><em id="mapScribeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-analyst"><small>04 / QUALITY</small><b>ANALYST</b><div class="atlas-console analyst-console"><i></i><i></i><i></i><i></i></div><span>Metrics & verification</span><em id="mapAnalystState">AWAITING TASK</em></div>
+      <div class="atlas-room room-business"><small>BUSINESS NETWORK</small><b>REVENUE OPS</b><div class="atlas-ledger"><span></span><span></span><span></span><span></span></div><span>Projects & business goals</span><em id="mapBusinessState">CONNECTED</em></div>
+      <div class="atlas-room room-missions"><small>MISSION CONTROL</small><b>TASK QUEUE</b><div class="atlas-terminal"><i></i><i></i><i></i></div><span>Queued / active / complete</span><em id="mapTaskCount">SYNCING TASKS</em></div>
+      <div class="atlas-room room-assets"><small>ASSET WORKSHOP</small><b>CREATIVE BAY</b><div class="atlas-crates"><i></i><i></i><i></i></div><span>Files & deliverables</span><em>OUTPUT STORAGE</em></div>
+      <div class="atlas-room room-automation"><small>AUTOMATION</small><b>WORKFLOW BAY</b><div class="atlas-circuit"><i></i><i></i><i></i></div><span>Repeatable processes</span><em>READY WHEN CONNECTED</em></div>
+      <div class="atlas-room room-approval"><small>GOVERNANCE</small><b>APPROVAL DESK</b><div class="atlas-approval-mark">✓</div><span>Human review gate</span><em>OWNER CONTROLLED</em></div>
+      <div class="atlas-room room-data"><small>DATA VAULT</small><b>MEMORY BANK</b><div class="atlas-data-stack"><i></i><i></i><i></i></div><span>Saved workspace records</span><em>CLOUD LINK</em></div>
     </div>
-    <div class="nexus-map-foot"><span><i class="map-led"></i> CLOUD LINK ACTIVE</span><span id="mapTaskCount">TASKS SYNCED TO NEXUS</span><span>LANDSCAPE COMMAND VIEW</span></div>
+    <div class="nexus-map-foot"><span><i class="map-led"></i> CLOUD LINK ACTIVE</span><span>ROOMS REPRESENT SYSTEM DEPARTMENTS</span><span>ATLAS EXPANDS WITH REAL WORK</span></div>
   </section>
   <div class="habitat-grid">
     <article class="habitat scout-habitat" id="habitatScout">
