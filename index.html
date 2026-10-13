@@ -299,6 +299,28 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  .atlas-room em{font-size:6px}
  #appView > .layout{grid-template-columns:1fr}
 }
+
+/* NEXUS WORKSPACE TABS */
+#appView[data-nexus-view]>.hero,#appView[data-nexus-view]>#agentHub,#appView[data-nexus-view]>.v06-dialog,#appView[data-nexus-view]>.ops-grid,#appView[data-nexus-view]>.stats,#appView[data-nexus-view]>.layout,#appView[data-nexus-view]>.footer,#appView[data-nexus-view]>.agent-work-panel{display:none!important}
+#appView[data-nexus-view="home"]>.hero,#appView[data-nexus-view="home"]>.ops-grid,#appView[data-nexus-view="home"]>.stats{display:grid!important}
+#appView[data-nexus-view="home"]>.hero{display:flex!important}
+#appView[data-nexus-view="agents"]>#agentHub,#appView[data-nexus-view="agents"]>.v06-dialog,#appView[data-nexus-view="agents"]>.agent-work-panel{display:block!important}
+#appView[data-nexus-view="missions"]>.ops-grid,#appView[data-nexus-view="missions"]>.layout,#appView[data-nexus-view="business"]>.layout{display:grid!important}
+#appView[data-nexus-view]>.layout{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+#appView[data-nexus-view]>.layout>.stack{display:contents!important}
+#appView[data-nexus-view] .stack>[data-nexus-page]{display:none!important}
+#appView[data-nexus-view="home"] .stack>[data-nexus-page="home"],#appView[data-nexus-view="agents"] .stack>[data-nexus-page="agents"],#appView[data-nexus-view="missions"] .stack>[data-nexus-page="missions"],#appView[data-nexus-view="business"] .stack>[data-nexus-page="business"]{display:block!important}
+#appView[data-nexus-view="agents"] .habitat-grid{display:none}
+.agent-work-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.agent-work-head{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:12px}
+.agent-work-head h3{margin:0;font-size:15px}.agent-work-head p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.agent-work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.agent-work-card{min-width:0;border:1px solid var(--line);background:#0b110f;border-radius:12px;padding:12px}
+.agent-work-card strong{display:block;font-size:13px;letter-spacing:.04em}.agent-work-card .agent-role{color:var(--muted);font-size:11px;margin:5px 0 10px}
+.agent-work-card .agent-assignment{font-size:12px;line-height:1.5;overflow-wrap:anywhere}.agent-work-card .agent-state{display:inline-block;margin-top:10px;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:10px;color:var(--green);text-transform:uppercase}
+.agent-work-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}.nav button{min-width:0}.nav button.active{color:var(--green);border-color:var(--green)}
+@media(max-width:540px){.agent-work-grid{grid-template-columns:1fr}.agent-work-panel{padding:12px}}
+
 </style>
 </head>
 <body>
@@ -412,7 +434,7 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
 </div></div>
 <div class="footer">SENRAI NEXUS · v0.6 PIXEL COMMAND CENTER · CLOUD TASKS + AI ON DEMAND</div>
 </div></div>
-<nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Approvals</button></nav>
+<nav class="nav" id="bottomNav"><button class="active" data-view="home"><span>⌂</span>Overview</button><button data-view="agents"><span>▦</span>Agents</button><button data-view="missions"><span>☷</span>Missions</button><button data-view="business"><span>◇</span>Business</button></nav>
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -522,6 +544,50 @@ $('etsyGenerate').addEventListener('click',async()=>{if(!currentUser)return;cons
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const id=b.dataset.scroll;if(id==='top')window.scrollTo({top:0,behavior:'smooth'});else $(id).scrollIntoView({behavior:'smooth',block:'start'})}));
 async function init(){if(!window.supabase){$('systemStatus').textContent='LIBRARY ERROR';message('Could not load Supabase client. Check your connection and reload.',true);return}sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data:{session},error}=await sb.auth.getSession();if(error){showAuth();message(error.message,true)}else if(session)showApp(session.user);else showAuth();sb.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{currentUser=null;showAuth()}})}
 init();
+})();
+</script>
+
+
+<script>
+(function(){
+ const app=document.getElementById('appView');if(!app)return;
+ const panelFor=id=>{const el=document.getElementById(id);return el?el.closest('section.panel'):null};
+ const findPanel=t=>[...app.querySelectorAll('.layout section.panel')].find(s=>(s.querySelector('h3')?.textContent||'').trim().toUpperCase().includes(t));
+ const network=findPanel('AGENT NETWORK');if(network)network.setAttribute('data-nexus-page','agents');
+ const ai=findPanel('SENRAI INTELLIGENCE');if(ai)ai.setAttribute('data-nexus-page','home');
+ const terminal=findPanel('MISSION TERMINAL');if(terminal)terminal.setAttribute('data-nexus-page','missions');
+ const taskPanel=panelFor('taskList');if(taskPanel)taskPanel.setAttribute('data-nexus-page','missions');
+ const portfolio=panelFor('projectList');if(portfolio)portfolio.setAttribute('data-nexus-page','business');
+ const approvals=panelFor('approvalList');if(approvals)approvals.setAttribute('data-nexus-page','business');
+ const activity=panelFor('activityList');if(activity)activity.setAttribute('data-nexus-page','business');
+ const etsy=panelFor('etsyBridge');if(etsy)etsy.setAttribute('data-nexus-page','business');
+ app.querySelectorAll('.layout section.panel').forEach(s=>{if(!s.hasAttribute('data-nexus-page'))s.setAttribute('data-nexus-page','business')});
+ const hub=document.getElementById('agentHub');
+ const board=document.createElement('section');board.className='agent-work-panel';board.innerHTML='<div class="agent-work-head"><div><h3>AGENT WORKLOAD</h3><p>Specialist roles and suggested mission ownership, based on the tasks in your account.</p></div><span class="pill" id="agentWorkCount">Loading missions</span></div><div class="agent-work-grid" id="agentWorkGrid"></div><div class="agent-work-note">Assignments are suggestions inferred from mission wording; your task records do not yet store an assigned agent. Queued does not mean actively executing. SENRAI only calls the AI when you press “Run with SENRAI.”</div>';
+ if(hub)hub.insertAdjacentElement('afterend',board);
+ const defs=[
+ {name:'SENRAI CORE',role:'Coordination · plans and prioritizes missions',keys:['plan','coordinate','strategy','goal','mission','workflow','priorit','roadmap']},
+ {name:'SCOUT',role:'Research · markets, competitors and demand',keys:['research','market','competitor','audience','demand','find','validate','trend','keyword']},
+ {name:'FORGE',role:'Build · tools, products and prototypes',keys:['build','create','code','tool','product','prototype','website','app','design','thumbnail','asset']},
+ {name:'SCRIBE',role:'Content · copy, scripts and launch material',keys:['write','content','copy','caption','script','listing','sales page','post','email','fiverr','video']},
+ {name:'ANALYST',role:'Quality · verification, risk and performance',keys:['review','check','test','quality','measure','analyze','analyse','metrics','verify','audit','compare']}
+ ];
+ const esc=s=>String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+ function render(){
+  const grid=document.getElementById('agentWorkGrid');if(!grid)return;
+  const rows=[...document.querySelectorAll('#taskList .task')].map(n=>{const text=n.innerText||n.textContent||'';return {title:n.querySelector('strong')?.textContent?.trim()||text.split('\n')[0]||'Untitled mission',status:n.querySelector('.pill')?.textContent?.trim()||'queued',text}});
+  grid.innerHTML=defs.map(a=>{
+   const own=rows.map(t=>({...t,score:a.keys.reduce((n,k)=>n+(t.text.toLowerCase().includes(k)?1:0),0)})).filter(t=>t.score>0).sort((x,y)=>y.score-x.score).slice(0,2);
+   const active=own.some(t=>/in progress|working|active/i.test(t.status));
+   const desc=own.length?own.map(t=>'<div class="agent-assignment"><b>'+esc(t.title)+'</b><br><span style="color:var(--muted)">'+esc(t.status)+' · suggested match</span></div>').join('<div style="height:8px"></div>'):'<div class="agent-assignment">No matching mission yet. Add a clearly described task in Missions.</div>';
+   return '<article class="agent-work-card"><strong>'+a.name+'</strong><div class="agent-role">'+a.role+'</div>'+desc+'<span class="agent-state">'+(active?'In progress':own.length?'Suggested workload':'Standby')+'</span></article>';
+  }).join('');
+  const count=document.getElementById('agentWorkCount');if(count)count.textContent=rows.length+' missions scanned';
+ }
+ function activate(view){if(!['home','agents','missions','business'].includes(view))view='home';app.setAttribute('data-nexus-view',view);document.querySelectorAll('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));if(view==='agents')render();window.scrollTo({top:0,behavior:'smooth'})}
+ document.querySelectorAll('#bottomNav button[data-view]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();activate(b.dataset.view)},true));
+ const list=document.getElementById('taskList');if(list)new MutationObserver(()=>{if(app.getAttribute('data-nexus-view')==='agents')render()}).observe(list,{childList:true,subtree:true,characterData:true});
+ app.setAttribute('data-nexus-view','home');
 })();
 </script>
 
