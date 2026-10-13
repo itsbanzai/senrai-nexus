@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080c0b">
+<title>SENRAI Nexus — Mission Control</title>
+<style>
+:root{--bg:#080c0b;--panel:#101715;--line:#263a31;--text:#edf6f0;--muted:#91a69a;--green:#55f0ad;--green2:#19bd7a;--amber:#ffc86a;--red:#ff7979;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#103023 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--green);outline-offset:2px}.shell{max-width:1400px;margin:auto;padding:18px 18px 90px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0 22px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border:1px solid #367b5b;border-radius:14px;display:grid;place-items:center;color:var(--green);font-weight:900;font-size:20px;box-shadow:0 0 25px #24d88b18}.brand h1{font-size:17px;letter-spacing:.18em;margin:0}.brand p{font-size:11px;color:var(--muted);margin:2px 0 0;letter-spacing:.12em}.status{display:flex;align-items:center;gap:8px;border:1px solid var(--line);padding:8px 11px;border-radius:999px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green)}.hero{padding:28px 0 20px;display:flex;justify-content:space-between;align-items:end;gap:20px}.eyebrow{font-size:11px;color:var(--green);letter-spacing:.2em;font-weight:700}.hero h2{font-size:clamp(28px,5vw,44px);letter-spacing:-.04em;line-height:1.08;margin:8px 0}.hero p{color:var(--muted);margin:0;max-width:650px}.core-stage{position:relative;display:grid;place-items:center;min-height:240px;margin:2px 0 16px;overflow:hidden;border:1px solid #20372d;border-radius:22px;background:radial-gradient(ellipse at center,#10271c 0%,#0a100d 48%,#080c0b 78%)}.core-stage:before,.core-stage:after{content:"";position:absolute;width:min(70vw,440px);aspect-ratio:1;border:1px solid #2c6048;border-radius:50%;animation:coreOrbit 18s linear infinite;opacity:.42}.core-stage:after{width:min(52vw,320px);border-style:dashed;animation-direction:reverse;animation-duration:28s;opacity:.35}.core-halo{position:absolute;width:150px;height:150px;border-radius:50%;background:#37e89a12;filter:blur(18px);animation:coreBreathe 4s ease-in-out infinite}.core-orb{position:relative;width:106px;height:106px;display:grid;place-items:center;border:1px solid #58f4b0a8;border-radius:50%;background:radial-gradient(circle at 50% 40%,#1c4b35 0%,#10291e 48%,#08110c 76%);box-shadow:0 0 25px #29e89026,inset 0 0 22px #4dffad16;animation:coreBreathe 4s ease-in-out infinite}.core-orb:before,.core-orb:after{content:"";position:absolute;inset:-10px;border:1px solid #3c956a77;border-radius:50%;transform:rotateX(68deg) rotateZ(15deg)}.core-orb:after{inset:-17px;transform:rotateX(68deg) rotateZ(-35deg);border-color:#3c956a45}.core-diamond{width:26px;height:26px;border:1px solid #b9ffdb;background:linear-gradient(135deg,#b9ffdb,#35d98f 55%,#124b32);transform:rotate(45deg);box-shadow:0 0 22px #55f0ad99;animation:diamondTurn 12s linear infinite}.core-label{position:absolute;bottom:19px;text-align:center;z-index:1}.core-label strong{display:block;font-size:10px;letter-spacing:.3em;color:var(--green)}.core-label span{display:block;margin-top:4px;font-size:9px;letter-spacing:.16em;color:var(--muted)}@keyframes coreBreathe{0%,100%{transform:scale(.96);opacity:.76}50%{transform:scale(1.045);opacity:1}}@keyframes coreOrbit{to{transform:rotate(360deg)}}@keyframes diamondTurn{to{transform:rotate(405deg)}}@media(prefers-reduced-motion:reduce){.core-stage *, .core-stage:before,.core-stage:after{animation:none!important}}@media(max-width:600px){.core-stage{min-height:210px}.core-orb{width:88px;height:88px}.core-diamond{width:22px;height:22px}}.btn{border:1px solid #367b5b;background:#153728;color:var(--green);border-radius:12px;padding:11px 15px;font-weight:700}.btn.primary{background:var(--green);border-color:var(--green);color:#062015}.btn.subtle{background:transparent;border-color:var(--line);color:var(--text)}.btn.danger{color:var(--red);border-color:#613636;background:#241313}.btn.small{padding:7px 10px;font-size:12px;border-radius:9px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:10px 0 22px}.stat,.panel{background:linear-gradient(145deg,#121a16,#0e1412);border:1px solid var(--line);border-radius:var(--radius)}.stat{padding:17px}.stat label{color:var(--muted);font-size:10px;letter-spacing:.12em}.stat strong{display:block;font-size:28px;letter-spacing:-.04em;margin:6px 0 0}.stat small{color:var(--muted);font-size:11px}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:14px}.stack{display:grid;gap:14px;align-content:start}.panel{padding:18px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panel h3{font-size:14px;letter-spacing:.04em;margin:0}.sub{font-size:12px;color:var(--muted)}.agentgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.agent{background:#111b16;border:1px solid #253a30;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:start}.agenticon{height:36px;width:36px;flex:none;display:grid;place-items:center;background:#183729;color:var(--green);border-radius:11px;font-size:17px}.agent strong{font-size:13px;display:block}.agent p{font-size:12px;color:var(--muted);margin:3px 0 8px}.pill{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:3px 8px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.pill.good{color:var(--green);border-color:#285940}.pill.wait{color:var(--amber);border-color:#65512b}.command{display:flex;gap:9px;margin-top:12px}.command input,.field,textarea{width:100%;min-width:0;background:#090f0c;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:12px}.command input::placeholder,textarea::placeholder{color:#607368}.tasklist,.projectlist,.approval-list{display:grid;gap:9px}.task,.project,.approval{padding:12px;border:1px solid var(--line);border-radius:12px;background:#0c1310}.tasktop,.projecttop{display:flex;justify-content:space-between;align-items:start;gap:10px}.task strong,.project strong,.approval strong{font-size:13px}.task p,.project p,.approval p{font-size:12px;color:var(--muted);margin:4px 0 0;overflow-wrap:anywhere}.taskactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.empty{padding:22px 10px;text-align:center;color:var(--muted);font-size:13px}.progress{height:5px;border-radius:8px;background:#26352d;margin-top:12px;overflow:hidden}.progress span{height:100%;display:block;width:0;background:var(--green)}.activity{display:grid;gap:13px}.event{display:grid;grid-template-columns:9px 1fr;gap:10px}.event .dot{margin-top:6px}.event strong{font-size:12px}.event p{font-size:11px;color:var(--muted);margin:2px 0 0}.footer{color:#5e7267;font-size:11px;text-align:center;margin:24px 0}.nav{display:none}.authbox{max-width:500px;margin:28px auto;background:linear-gradient(145deg,#121a16,#0e1412);border:1px solid var(--line);border-radius:20px;padding:22px}.authbox h2{margin:0 0 5px}.authbox p{color:var(--muted);font-size:13px}.authbox label{display:block;color:var(--muted);font-size:12px;margin:13px 0 6px}.authbox input{width:100%;background:#090f0c;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:12px}.authactions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}.notice{border:1px solid var(--line);border-radius:11px;padding:10px;color:var(--muted);font-size:12px;margin-top:12px}.hidden{display:none!important}
+@media(max-width:800px){.shell{padding:12px 12px 90px}.hero{align-items:start;flex-direction:column}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{padding:13px}.stat strong{font-size:24px}.layout{grid-template-columns:1fr}.agentgrid{grid-template-columns:1fr}.topbar{padding-bottom:15px}.status{font-size:10px}.brand h1{font-size:14px}.panel{padding:14px}.nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#0b110ff2;border-top:1px solid var(--line);backdrop-filter:blur(18px);justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:var(--muted);font-size:10px;display:grid;gap:3px;justify-items:center}.nav button span{font-size:18px}.nav button.active{color:var(--green)}}
+
+/* COMMAND-DECK REWORK inspired by the user's reference mockup */
+:root{--bg:#111211;--panel:#171817;--line:#555852;--text:#e8e9e4;--muted:#a0a29a;--green:#c7f36a;--green2:#8ba83d;--amber:#e8c66b;--red:#e47e76;--radius:5px}
+body{background:radial-gradient(ellipse at 50% -15%,#30332a 0,transparent 45%),#111211;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:-.015em}
+.shell{max-width:1500px;padding-top:12px}.topbar{border-bottom:2px solid #686a62;padding-bottom:14px}.logo{border-radius:3px;border-color:#9da78a;box-shadow:none;color:var(--green)}.brand h1{letter-spacing:.12em;font-size:15px}.brand p,.eyebrow,.stat label,.panel h3,.core-label strong{font-family:ui-monospace,monospace;letter-spacing:.12em}.status{border-radius:3px;border-color:#686a62}.dot{border-radius:0;box-shadow:none}
+.hero{padding:20px 0 15px;align-items:center}.hero h2{font-family:ui-monospace,monospace;font-size:clamp(23px,4vw,34px);letter-spacing:-.08em;text-transform:uppercase}.hero p{font-size:12px;max-width:600px}
+.btn{border-radius:3px;background:#252820;border-color:#707568;color:var(--green);font-family:ui-monospace,monospace;text-transform:uppercase;font-size:11px;letter-spacing:.035em}.btn.primary{background:var(--green);border-color:var(--green);color:#171910}.btn.subtle{background:transparent;border-color:#555852;color:var(--text)}
+.core-stage{min-height:170px;margin:2px 0 12px;border-radius:3px;border:1px solid #686a62;background:radial-gradient(ellipse at center,#282b22 0%,#171817 50%,#111211 80%)}.core-stage:before,.core-stage:after{border-color:#929781;opacity:.2}.core-halo{background:#c7f36a10}.core-orb{width:80px;height:80px;border-radius:3px;border-color:#c7f36a;background:radial-gradient(circle at 50% 40%,#414932,#20231b 70%);box-shadow:0 0 28px #c7f36a1c;transform:rotate(45deg)}.core-orb:before,.core-orb:after{border-color:#c7f36a65;border-radius:3px}.core-diamond{width:21px;height:21px;background:linear-gradient(135deg,#f1ffd1,#c7f36a 55%,#5d722e);border-color:#e7ffad}.core-label{bottom:12px}
+.stats{gap:0;margin:10px 0 16px;border:1px solid #686a62;background:#171817}.stat{border:0;border-right:1px solid #555852;border-radius:0;background:transparent;padding:13px 15px}.stat:last-child{border-right:0}.stat label{font-size:9px}.stat strong{font-family:ui-monospace,monospace;font-size:24px;letter-spacing:-.07em}.stat small{font-size:10px}
+.layout{gap:12px}.stack{gap:12px}.panel{border-radius:3px;border:1px solid #686a62;background:#171817;padding:15px;box-shadow:inset 0 0 0 1px #ffffff03}.panelhead{padding-bottom:9px;margin-bottom:12px;border-bottom:1px solid #42443e}.panel h3{font-size:11px;text-transform:uppercase}.sub{font-size:10px}
+.agentgrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.agent{display:block;min-width:0;border:1px solid #62655b;border-radius:2px;padding:9px;background:#1c1d1a}.agenticon{width:25px;height:25px;border-radius:2px;background:#303329;color:var(--green);margin-bottom:8px;font-size:13px}.agent strong{font-size:10px;letter-spacing:.02em}.agent p{font-size:10px;line-height:1.35;min-height:38px}.pill{border-radius:2px;padding:2px 5px;font-size:8px;letter-spacing:.03em}.pill.good{color:var(--green);border-color:#697c42}.pill.wait{color:var(--amber);border-color:#7a683b}
+.command{margin-top:10px}.command input,.field,textarea,.authbox input{border-radius:2px;background:#111211;border-color:#555852;font-family:ui-monospace,monospace;font-size:12px}.task,.project,.approval{border-radius:2px;background:#1b1c19;border-color:#4e5049}.task strong,.project strong,.approval strong{font-size:11px}.task p,.project p,.approval p{font-size:10px}.progress{border-radius:0;background:#383a33}.progress span{background:repeating-linear-gradient(90deg,var(--green) 0 7px,#879b50 7px 9px)}.event{gap:8px}.event .dot{width:6px;height:6px;background:var(--green);margin-top:5px}.event strong{font-size:10px}.event p{font-size:9px}.empty{font-size:11px}.authbox{border-radius:3px;border-color:#686a62;background:#171817}.authbox h2{font-family:ui-monospace,monospace;text-transform:uppercase}.notice{border-radius:2px;border-color:#555852}.footer{font-family:ui-monospace,monospace;letter-spacing:.08em}
+#etsyBridge .formgrid{display:grid;grid-template-columns:1fr 150px;gap:10px}#etsyBridge label{display:grid;gap:5px;font-size:10px;color:var(--muted)}#etsyBridge input{width:100%;min-width:0;background:#111211;border:1px solid #555852;border-radius:2px;padding:10px;color:var(--text);font:12px ui-monospace,monospace}
+@media(max-width:800px){.shell{padding:9px 9px 88px}.hero{gap:12px}.hero h2{font-size:24px}.core-stage{min-height:160px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{border-right:1px solid #555852;border-bottom:1px solid #555852;padding:10px}.stat:nth-child(2){border-right:0}.stat:nth-child(3),.stat:nth-child(4){border-bottom:0}.stat strong{font-size:21px}.agentgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:5px}.agent{flex:0 0 118px;scroll-snap-align:start}.agent p{min-height:48px}.panel{padding:11px}#etsyBridge .formgrid{grid-template-columns:1fr}.nav{background:#111211f5;border-top:1px solid #686a62}.nav button{font-family:ui-monospace,monospace}}
+
+
+/* v0.2 operations board — connected to real cloud tasks, no simulated telemetry */
+.ops-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:12px;margin:0 0 14px}
+.mission-board,.queue-board{min-width:0}
+.mission-focus{border:1px solid #62655b;background:#1c1d1a;padding:12px}
+.mission-code{font-size:9px;letter-spacing:.1em;color:var(--green);margin-bottom:7px}
+.mission-focus h4{font-size:15px;line-height:1.35;margin:0 0 6px;overflow-wrap:anywhere}
+.mission-focus p{font-size:11px;color:var(--muted);margin:0;overflow-wrap:anywhere}
+.mission-meter{height:8px;margin:12px 0 7px;border:1px solid #697c42;padding:1px;background:#080a08}
+.mission-meter i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 5px,#8ba83d 5px 7px)}
+.mission-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em}
+.queue-item{display:flex;gap:9px;align-items:start;border-bottom:1px solid #42443e;padding:9px 0}
+.queue-item:last-child{border-bottom:0}
+.queue-priority{flex:none;border:1px solid #697c42;color:var(--green);padding:3px 5px;font-size:8px}
+.queue-item strong{display:block;font-size:11px;overflow-wrap:anywhere}
+.queue-item small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.ops-foot{font-size:9px;line-height:1.5;color:var(--muted);margin-top:10px}
+@media(max-width:800px){.ops-grid{grid-template-columns:1fr}.mission-focus h4{font-size:13px}}
+
+/* Dedicated pixel-art rooms for each specialist agent */
+.agent-hub{margin:14px 0 18px;padding:14px;border:1px solid #686a62;background:#171817;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+.agent-hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #42443e}
+.hub-eyebrow{font-size:9px;color:#a0a29a;letter-spacing:.12em}.agent-hub-head h3{margin:4px 0 0;font-size:14px;letter-spacing:.09em}
+.hub-live{font-size:9px;color:#c7f36a}.hub-live i{display:inline-block;width:6px;height:6px;background:#c7f36a;margin-right:4px;box-shadow:0 0 7px #c7f36a}
+.hub-intro{font-size:10px;line-height:1.5;color:#a0a29a;margin:10px 0 12px}
+.habitat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.habitat{border:1px solid #62655b;background:#1c1d1a;min-width:0}
+.habitat-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 9px;border-bottom:1px solid #45483e;font-size:9px;letter-spacing:.04em}
+.habitat-head b{font-size:8px;color:#a1a395;font-weight:500}.habitat.is-working .habitat-head b{color:#c7f36a}
+.pixel-room{height:160px;position:relative;overflow:hidden;background:#20271f;image-rendering:pixelated}
+.room-floor{position:absolute;left:0;right:0;bottom:0;height:31px;background:repeating-linear-gradient(90deg,#30362a 0 25px,#272d23 25px 27px);border-top:3px solid #444b35}
+.room-floor:after{content:"";position:absolute;inset:5px 0 0;background:repeating-linear-gradient(0deg,transparent 0 13px,#11150f33 13px 14px)}
+.room-window{position:absolute;left:10px;top:12px;width:72px;height:48px;border:4px solid #525d4b;background:#192b2b;box-shadow:inset 0 0 0 2px #283e3b}
+.room-window>i{position:relative;display:inline-block;width:4px;height:4px;background:#c7f36a;margin:4px 3px 0}
+.window-chart{position:absolute;left:7px;right:7px;bottom:5px;height:19px;border-bottom:2px solid #719c61;display:flex;align-items:end;gap:4px}
+.window-chart span{display:block;width:7px;background:#89b85b}.window-chart span:nth-child(1){height:7px}.window-chart span:nth-child(2){height:13px}.window-chart span:nth-child(3){height:9px}.window-chart span:nth-child(4){height:17px}.window-chart span:nth-child(5){height:12px}
+.window-lines{position:absolute;left:7px;right:7px;bottom:6px;display:grid;gap:4px}.window-lines span{height:2px;background:#86b9a6;width:100%}.window-lines span:nth-child(2){width:65%}.window-lines span:nth-child(3){width:82%}.window-lines span:nth-child(4){width:48%}
+.room-shelf{position:absolute;right:9px;top:17px;width:38px;height:30px;border-top:3px solid #6c7358;border-bottom:3px solid #6c7358;display:flex;align-items:end;gap:4px}
+.room-shelf i{display:block;width:7px;height:17px;background:#7c8f58}.room-shelf i:nth-child(2){height:22px;background:#b1a16b}.room-shelf i:nth-child(3){height:13px;background:#5d8068}
+.room-desk{position:absolute;left:21%;right:13%;top:78px;height:8px;background:#9a8057;border:2px solid #c0a26b;z-index:2}
+.desk-leg{position:absolute;left:8px;right:8px;top:6px;height:31px;border-left:4px solid #806744;border-right:4px solid #806744}
+.screen{position:absolute;left:35%;top:-31px;width:35px;height:28px;background:#111814;border:3px solid #718164;box-shadow:inset 0 0 0 2px #27382b}
+.screen i{display:block;height:2px;margin:4px 3px;background:#c7f36a}.screen i:nth-child(2){width:60%}.screen i:nth-child(3){width:78%}
+.pixel-person{position:absolute;z-index:4;left:43%;top:72px;width:24px;height:57px;animation:agentIdle .8s steps(2,end) infinite alternate}
+.person-hair{position:absolute;top:0;left:6px;width:13px;height:5px;background:var(--hair,#b7ce8a);box-shadow:-3px 4px 0 var(--hair,#b7ce8a),10px 4px 0 var(--hair,#b7ce8a)}
+.person-head{position:absolute;top:5px;left:4px;width:17px;height:16px;background:var(--skin,#d8bd91);border:2px solid #20241b;image-rendering:pixelated}
+.person-head i{position:absolute;top:5px;width:3px;height:3px;background:#20241b}.person-head i:first-child{left:2px}.person-head i:last-child{right:2px}
+.person-body{position:absolute;top:21px;left:2px;width:21px;height:20px;background:var(--coat,#718e4d);border:2px solid #20241b}
+.person-arm{position:absolute;top:24px;left:20px;width:8px;height:16px;background:var(--coat,#718e4d);border:2px solid #20241b;transform-origin:top;animation:agentWork .4s steps(2,end) infinite alternate}
+.person-leg{position:absolute;top:39px;width:8px;height:14px;background:var(--pants,#424b37);border:2px solid #20241b}.person-leg.left{left:3px}.person-leg.right{right:1px}
+.scout-person{--hair:#d1dfab;--coat:#78984b;--pants:#485239}.forge-person{--hair:#a6ddd0;--coat:#438b7b;--pants:#344d48;left:50%}.scribe-person{--hair:#dfb7ef;--coat:#9364a8;--pants:#55405f;left:50%}.analyst-person{--hair:#f0d7a3;--coat:#a27d42;--pants:#56482d;left:51%}.core-person{--hair:#e4ff9d;--coat:#9abd43;--pants:#3e4b25;left:47%;top:85px}
+.room-task{position:absolute;left:8px;bottom:7px;z-index:5;font-size:8px;letter-spacing:.08em;color:#d5d9c9;background:#171b14;border:1px solid #4c5640;padding:3px 5px}
+.room-research{background:linear-gradient(#263b31 0 68%,#20271f 68%)}.room-workshop{background:linear-gradient(#344038 0 68%,#252b22 68%)}.room-publishing{background:linear-gradient(#342e3b 0 68%,#26232d 68%)}.room-analytics{background:linear-gradient(#2c3940 0 68%,#232a2b 68%)}.room-command{background:linear-gradient(#333a25 0 68%,#23291b 68%)}
+.workshop-rack{position:absolute;top:15px;left:12px;width:50px;height:43px;border:3px solid #666f59;border-bottom:5px solid #7f895d}.workshop-rack i{display:inline-block;width:7px;height:13px;margin:4px 2px;background:#a5b87a}.workshop-rack i:nth-child(2){height:20px;background:#8ab8a6}
+.blueprint{position:absolute;right:12px;top:15px;width:39px;height:31px;background:#b4cbb4;border:3px solid #718b78;transform:rotate(-4deg)}.blueprint span{display:block;height:2px;margin:4px;background:#5b8070}.blueprint span:nth-child(2){width:60%}
+.forge-desk{left:16%;right:17%;top:82px}
+.paper-stack{position:absolute;right:15px;top:18px;width:30px;height:26px;background:#c8b8d0;border:2px solid #887294;box-shadow:-4px 3px 0 #a18bab,-7px 6px 0 #75647e}
+.scribe-desk{left:19%;right:15%;top:82px}
+.monitor-wall{position:absolute;left:10px;right:10px;top:12px;display:flex;gap:5px;justify-content:center}
+.monitor{width:43%;height:40px;border:3px solid #78868a;background:#101a1c;padding:4px;display:flex;align-items:end;gap:3px}
+.monitor i{display:block;width:6px;background:#8bc4b0;height:13px}.monitor i:nth-child(2){height:22px}.monitor i:nth-child(3){height:16px}.monitor i:nth-child(4){height:26px}
+.analyst-desk{left:17%;right:15%;top:82px}
+.core-rings{position:absolute;top:9px;left:50%;width:78px;height:48px;transform:translateX(-50%);border:1px solid #718747;border-radius:50%;box-shadow:0 0 0 6px #71874712,0 0 0 12px #71874710}.core-rings i{position:absolute;inset:9px 18px;border:1px solid #c7f36a;border-radius:50%}.core-rings i:nth-child(2){transform:rotate(60deg)}.core-rings i:nth-child(3){transform:rotate(-60deg)}
+.core-console{position:absolute;left:20%;right:20%;top:66px;height:22px;border:3px solid #7c8e4b;background:#1b2415;text-align:center;font-size:7px;color:#c7f36a;padding-top:4px}.core-console i{display:inline-block;width:4px;height:4px;margin-left:5px;background:#c7f36a}
+.habitat-foot{padding:9px;display:grid;gap:4px}.habitat-foot strong{font-size:10px}.habitat-foot span{font-size:9px;color:#9da092;overflow-wrap:anywhere}.habitat.is-working .pixel-person{animation:agentWork .25s steps(2,end) infinite alternate}.habitat.is-working .person-arm{animation-duration:.18s}.habitat.is-working .room-task{color:#c7f36a;border-color:#c7f36a}
+@keyframes agentIdle{from{transform:translateY(0)}to{transform:translateY(-2px)}}@keyframes agentWork{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.habitat-legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-top:1px solid #42443e;padding-top:10px;margin-top:10px;font-size:8px;color:#a0a29a}.habitat-legend i{display:inline-block;width:6px;height:6px;margin-right:4px}.legend-idle{background:#777b6d}.legend-working{background:#c7f36a}
+@media(max-width:600px){.agent-hub{padding:10px}.habitat-grid{grid-template-columns:1fr}.pixel-room{height:155px}.habitat-head{font-size:10px}.hub-live{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.pixel-person,.person-arm,.habitat.is-working .pixel-person{animation:none!important}}
+
+
+/* FULL v0.2 visual pass: pixel operations console rather than the old dashboard */
+:root{--bg:#080b09;--panel:#101510;--line:#303b2b;--text:#e4eadb;--muted:#8c9982;--green:#a3e635;--green2:#6a9e24;--amber:#f5b942;--red:#ef7474;--radius:2px}
+body{background:#080b09;color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;letter-spacing:0}
+.shell{max-width:1120px;padding:10px 10px 88px}
+.topbar{padding:9px 10px 12px;border:1px solid #384331;background:#101510;box-shadow:inset 0 0 0 2px #000}
+.logo{width:38px;height:38px;border:1px solid #a3e635;border-radius:0;box-shadow:none;font-size:16px;color:#a3e635}
+.brand h1{font-size:13px;letter-spacing:.1em}.brand p{font-size:9px;letter-spacing:.07em}
+.status{border-radius:0;border-color:#46523a;font:9px ui-monospace,monospace;letter-spacing:.04em;padding:7px}.dot{border-radius:0;background:#a3e635;box-shadow:0 0 7px #a3e635}
+.hero{padding:13px 2px 12px;align-items:center}.hero .eyebrow{font-size:9px;color:#a3e635;letter-spacing:.13em}.hero h2{font-size:clamp(21px,4vw,30px);line-height:1.2;letter-spacing:-.06em;text-transform:uppercase;margin:5px 0}.hero p{font-size:10px;line-height:1.6;color:#8c9982;max-width:580px}.hero .btn{flex:none}
+.core-stage{display:none}
+.agent-hub{margin:0 0 10px;padding:10px;border:1px solid #3b4632;background:#0e120e;box-shadow:inset 0 0 0 2px #000}
+.agent-hub-head{border-bottom:1px solid #303b2b;padding:0 0 8px}.hub-eyebrow{font-size:8px;letter-spacing:.1em}.agent-hub-head h3{font-size:13px;letter-spacing:.08em;color:#a3e635}.hub-live{font-size:8px;letter-spacing:.04em}
+.hub-intro{font-size:9px;margin:8px 0;color:#8c9982}
+.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.habitat{border:1px solid #37412f;background:#111610;box-shadow:inset 0 0 0 1px #000}
+.habitat-head{background:#151b13;padding:7px;font-size:8px;border-bottom:1px solid #303b2b}.habitat-head b{font-size:8px;letter-spacing:.06em}
+.pixel-room{height:142px;background-color:#0b120d;background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);background-size:8px 8px}
+.room-floor{height:25px;background:repeating-linear-gradient(90deg,#293324 0 8px,#20281c 8px 16px);border-top:2px solid #586747}
+.room-window{border-radius:0;border-color:#586747;background:#101c1b;box-shadow:inset 0 0 0 2px #243a2b}
+.room-desk{background:#8a7149;border-color:#b49a68}
+.room-task{font-size:7px;background:#080b09;border-color:#49583b;color:#a3e635}
+.habitat-foot{padding:7px 8px;display:grid;gap:3px;background:#111610}.habitat-foot strong{font-size:9px;color:#dce7cf}.habitat-foot span{font-size:8px;color:#8c9982;overflow-wrap:anywhere}
+.habitat.is-selected{outline:2px solid #a3e635;outline-offset:-2px;box-shadow:0 0 14px #a3e6321c}
+.habitat.is-working{border-color:#a3e635}.habitat.is-working .pixel-room:after{content:"EXECUTING";position:absolute;right:6px;top:6px;z-index:7;color:#a3e635;background:#070b09;border:1px solid #526a34;padding:3px 4px;font-size:7px;letter-spacing:.05em}
+.habitat-legend{font-size:8px;color:#8c9982;padding-top:8px;flex-wrap:wrap}
+.legend-idle,.legend-working{border-radius:0}
+.ops-grid{grid-template-columns:minmax(0,1fr);gap:8px;margin:0 0 10px}
+.panel,.stat{border-radius:0;border-color:#303b2b;background:#101510;box-shadow:inset 0 0 0 1px #000}
+.panel{padding:11px}.panelhead{border-bottom:1px solid #303b2b;padding-bottom:7px;margin-bottom:9px}.panel h3{font-size:9px;letter-spacing:.09em;color:#a3e635}.sub{font-size:9px;color:#8c9982}
+.btn{border-radius:0;border:1px solid #586b40;background:#171f13;color:#a3e635;font:9px ui-monospace,monospace;letter-spacing:.03em;padding:9px 10px}.btn.primary{background:#a3e635;color:#10150b;border-color:#a3e635}.btn.subtle{background:transparent;color:#dce7cf;border-color:#46523a}.btn.small{font-size:8px;padding:6px 7px}
+.command input,.field,textarea,.authbox input{border-radius:0;border-color:#303b2b;background:#070b08;font:11px ui-monospace,monospace}
+.stats{margin:0 0 10px;border:1px solid #303b2b;background:#101510;grid-template-columns:repeat(2,minmax(0,1fr))}
+.stat{border:0;border-right:1px solid #303b2b;border-bottom:1px solid #303b2b;padding:10px}.stat:nth-child(2n){border-right:0}.stat:nth-last-child(-n+2){border-bottom:0}.stat label{font-size:8px;color:#8c9982}.stat strong{font-size:21px;color:#e4eadb}.stat small{font-size:8px}
+.layout{grid-template-columns:minmax(0,1fr);gap:8px}.stack{gap:8px}
+.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.agent{border-radius:0;border-color:#303b2b;background:#111610;padding:8px}.agenticon{border-radius:0;background:#1c2916;color:#a3e635}.agent strong{font-size:9px}.agent p{font-size:9px;min-height:0}
+.task,.project,.approval{border-radius:0;background:#0b100b;border-color:#303b2b}.task strong,.project strong,.approval strong{font-size:10px}.task p,.project p,.approval p{font-size:9px}
+.mission-focus{border-color:#3d4d2f;background:#0b100b}.mission-code{font-size:8px}.mission-focus h4{font-size:13px}.mission-focus p{font-size:10px}.mission-meter{border-radius:0}.queue-item{border-color:#303b2b}.queue-priority{border-radius:0}
+.event{border-bottom:1px solid #202a1d;padding-bottom:7px}.event strong{font-size:9px}.event p{font-size:8px}.event .dot{border-radius:0;width:5px;height:5px}
+#etsyBridge input{border-radius:0;background:#070b08;border-color:#303b2b;font:10px ui-monospace,monospace}
+.footer{font-size:8px;letter-spacing:.1em;color:#65725b}
+.authbox{border-radius:0;border-color:#303b2b;background:#101510}.authbox h2{font-size:17px;color:#a3e635}.authbox p,.authbox label{font-size:10px}
+.nav{background:#080b09f5;border-top:1px solid #303b2b}.nav button{font:8px ui-monospace,monospace;text-transform:uppercase}.nav button.active{color:#a3e635}
+@media(min-width:760px){.habitat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ops-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.stat{border-right:1px solid #303b2b!important;border-bottom:0!important}.stat:last-child{border-right:0!important}.layout{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}.agentgrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:400px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:150px}.brand p{font-size:8px}.hero .btn{padding:7px;font-size:8px}}
+
+
+/* v0.6 Claude reference — pixel command-center presentation */
+:root{--bg:#07090a;--panel:#0c110f;--line:#1a2a21;--green:#a3e635;--green2:#4d7a1c;--muted:#6b7f72;--text:#d7e2da;--amber:#f5b942;--red:#ef5350;--radius:0}
+body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background-image:linear-gradient(rgba(163,230,53,.025) 1px,transparent 1px);background-size:100% 4px}
+.shell{max-width:540px;padding:10px 10px 84px}
+.topbar,.panel,.stat,.habitat,.agent-hub,.mission-focus,.task,.project,.approval{border-radius:0!important;box-shadow:0 0 0 2px #000,inset 0 0 0 1px #000}
+.topbar{border:2px solid #4a5a50;background:#0c110f;padding:10px}
+.logo{border-radius:0;background:#101a13;color:#a3e635;box-shadow:none}
+.brand h1{font:10px ui-monospace,monospace;letter-spacing:.12em}.brand p{font-size:9px;letter-spacing:.05em}
+.status,.pill{border-radius:0;font-size:8px;letter-spacing:0}
+.hero{padding:12px 2px;gap:10px;align-items:center}.hero .eyebrow{font-size:8px;letter-spacing:.1em;color:#a3e635}.hero h2{font-size:clamp(19px,5vw,25px);line-height:1.25;text-transform:uppercase;letter-spacing:-.05em}.hero p{font-size:10px;line-height:1.55;color:#8c9982}.hero .btn{max-width:112px;flex:none}
+.core-stage{display:none}
+.agent-hub{padding:8px;background:#0c110f;border:2px solid #4a5a50;margin-bottom:10px}
+.agent-hub-head{padding-bottom:7px;border-bottom:1px solid #1a2a21}.hub-eyebrow{font-size:7px;letter-spacing:.08em}.agent-hub-head h3{font-size:10px;letter-spacing:.04em;color:#a3e635}.hub-live{font-size:7px}.hub-intro{font-size:9px;margin:8px 0;color:#8c9982}
+.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.habitat{border:2px solid #303b2b;background:#0c110f}
+.habitat-head{font-size:7px;padding:6px;background:#111811}.habitat-head b{font-size:7px}.pixel-room{height:115px;background-color:#070b09;background-size:8px 8px}
+.room-floor{height:22px}.room-task{font-size:6px;background:#07090a;color:#a3e635;border-color:#4d7a1c}
+.habitat-foot{padding:6px;background:#0c110f;gap:3px}.habitat-foot strong{font-size:8px}.habitat-foot span{font-size:8px}
+.habitat.is-selected{outline:2px solid #a3e635;outline-offset:-2px}.habitat.is-working .pixel-room:after{font-size:6px;padding:2px 3px}
+.habitat-legend{font-size:7px;gap:8px;padding-top:7px}
+.panel{padding:9px;border:2px solid #4a5a50;background:#0c110f}.panelhead{padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid #1a2a21}.panel h3{font-size:8px;letter-spacing:.04em;color:#a3e635}
+.btn{border-radius:0;background:#0c110f;border:1px solid #4d7a1c;color:#a3e635;font:8px ui-monospace,monospace;padding:7px}.btn.primary{background:#a3e635;color:#07090a;border-color:#a3e635}.btn.subtle{background:transparent;color:#d7e2da;border-color:#303b2b}
+.ops-grid{grid-template-columns:minmax(0,1fr);gap:8px}.mission-focus{background:#070b09;border-color:#303b2b}.mission-code{font-size:7px}.mission-focus h4{font-size:11px}.mission-focus p,.ops-foot{font-size:9px}.mission-meta{font-size:7px}.mission-meter{border-radius:0}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#1a2a21;border:2px solid #4a5a50}.stat{padding:8px;border:0;border-radius:0;background:#0c110f}.stat label{font-size:7px}.stat strong{font-size:19px}.stat small{font-size:8px}
+.layout{grid-template-columns:minmax(0,1fr);gap:8px}.stack{gap:8px}.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.agent{border-radius:0;padding:7px;background:#0c110f;border-color:#1a2a21}.agenticon{border-radius:0;background:#101a13;color:#a3e635}.agent strong{font-size:8px}.agent p{font-size:8px}
+.task,.project,.approval{padding:8px;background:#070b09;border-color:#1a2a21}.task strong,.project strong,.approval strong{font-size:9px}.task p,.project p,.approval p{font-size:9px}
+.event{padding-bottom:6px;border-bottom:1px solid #1a2a21}.event strong{font-size:8px}.event p{font-size:8px}
+.command input,textarea,.authbox input{border-radius:0;background:#07090a;border-color:#303b2b;font:10px ui-monospace,monospace}
+.authbox{border-radius:0;background:#0c110f;border-color:#4a5a50}.authbox h2{font-size:15px;color:#a3e635}
+.nav{background:#07090af5;border-top:2px solid #303b2b}.nav button{font:7px ui-monospace,monospace}.nav button.active{color:#a3e635}
+.v06-dialog{position:relative;margin:10px 0 0;padding:12px 9px 18px;background:#060a14;border:3px solid #fff;outline:2px solid #000;min-height:58px;color:#fff;font:11px/1.5 ui-monospace,monospace}
+.v06-dialog strong{position:absolute;top:-9px;left:7px;padding:3px 5px;background:#a3e635;color:#07090a;border:2px solid #000;font-size:7px}
+.v06-dialog small{position:absolute;right:6px;bottom:3px;font-size:7px;color:#f5b942}
+@media(min-width:760px){.shell{max-width:540px}.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout,.ops-grid{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
+
+
+/* The Atlas is the primary agent view; hide the older duplicate workstation-card grid. */
+.habitat-grid{display:none!important}
+/* NEXUS ATLAS character sprites: tiny agents physically inhabit the floor map. */
+.atlas-room{background-image:linear-gradient(145deg,#172b3aeF,#0a141df5),repeating-linear-gradient(0deg,transparent 0 18px,#8bdfff08 19px 20px)}
+.atlas-avatar{position:relative;z-index:2;width:30px;height:46px;margin:3px auto 5px;image-rendering:pixelated;filter:drop-shadow(0 0 7px #42dfff55);animation:agentIdle 3s ease-in-out infinite}
+.atlas-avatar i{position:absolute;display:block;font-style:normal}
+.atlas-avatar .av-hair{width:20px;height:7px;left:5px;top:0;background:#202b3b;box-shadow:0 4px #202b3b, -3px 4px #202b3b,3px 4px #202b3b}
+.atlas-avatar .av-head{width:18px;height:15px;left:6px;top:6px;background:#edc4a1;border:2px solid #263342;box-shadow:inset 0 -3px #bd8d70}
+.atlas-avatar .av-head u{position:absolute;top:4px;width:3px;height:3px;background:#0b1921;text-decoration:none}
+.atlas-avatar .av-head u:first-child{left:2px}.atlas-avatar .av-head u:last-child{right:2px}
+.atlas-avatar .av-body{width:18px;height:15px;left:6px;top:21px;background:#4dc7c1;border:2px solid #263342;box-shadow:inset 0 -4px #277a86}
+.atlas-avatar .av-arm{width:26px;height:5px;left:2px;top:24px;background:#edc4a1;box-shadow:0 0 0 2px #263342}
+.atlas-avatar .av-leg{width:6px;height:10px;left:8px;top:35px;background:#35485a;box-shadow:8px 0 #35485a,0 3px #17222e,8px 3px #17222e}
+.avatar-scout{filter:drop-shadow(0 0 7px #47d8ff66)}.avatar-scout .av-body{background:#5abce8;box-shadow:inset 0 -4px #2678a8}
+.avatar-forge{filter:drop-shadow(0 0 7px #ffb45c66)}.avatar-forge .av-body{background:#e4a24f;box-shadow:inset 0 -4px #99612e}
+.avatar-scribe{filter:drop-shadow(0 0 7px #c49aff66)}.avatar-scribe .av-body{background:#b18be8;box-shadow:inset 0 -4px #6c4a9c}
+.avatar-analyst{filter:drop-shadow(0 0 7px #7cffbf66)}.avatar-analyst .av-body{background:#72d6a0;box-shadow:inset 0 -4px #347b5b}
+.avatar-core{transform:scale(1.15);margin:8px auto}
+.atlas-agent-icons{display:flex;gap:7px;align-items:center;justify-content:center;margin:8px auto;height:44px}
+.atlas-agent-icons i{display:block;position:relative;width:14px;height:20px;background:#53c4db;border:2px solid #203748;box-shadow:0 -7px 0 -2px #d9b397,0 3px #182432}
+.atlas-agent-icons i:nth-child(2){background:#b18be8;transform:translateY(-4px)}.atlas-agent-icons i:nth-child(3){background:#e4a24f}
+@keyframes agentIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media(orientation:landscape) and (min-width:700px){.atlas-avatar{transform:scale(1.15);margin:7px auto 8px}.avatar-core{transform:scale(1.3)}.atlas-room{justify-content:space-between}}
+/* NEXUS ATLAS: a top-down sci-fi operations floor, designed for landscape tablet use. */
+.nexus-map{margin:14px 0 18px;padding:12px;background:#05090c;border:1px solid #35556a;box-shadow:inset 0 0 0 3px #0b1419,0 0 30px #26bfff12;color:#d8e9f4}
+.nexus-map-top,.nexus-map-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font:9px/1.4 ui-monospace,monospace;letter-spacing:.1em;color:#7e9caf}
+.nexus-map-top b{color:#9cecff;letter-spacing:.18em}.map-led{display:inline-block;width:6px;height:6px;background:#a3e635;box-shadow:0 0 9px #a3e635;margin-right:5px}
+.atlas-floor{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(125px,1fr));gap:10px;min-height:480px;margin:12px 0;padding:14px;background:radial-gradient(ellipse at 50% 45%,#172d40 0%,#0a1722 48%,#060b10 100%);overflow:hidden}
+.atlas-floor:before{content:"";position:absolute;inset:0;z-index:-3;background-image:linear-gradient(#4ca4cb14 1px,transparent 1px),linear-gradient(90deg,#4ca4cb14 1px,transparent 1px);background-size:16px 16px}
+.atlas-floor:after{content:"";position:absolute;inset:8px;z-index:-2;border:1px solid #294c61;pointer-events:none}
+.atlas-road{position:absolute;z-index:-1;background:#111e2a;border:1px solid #28485b;box-shadow:inset 0 0 0 3px #0c1821,0 0 16px #37cfff16}
+.road-h{left:0;right:0;height:20px}.road-h1{top:33.3%}.road-h2{top:66.6%}.road-v{top:0;bottom:0;width:18px}.road-v1{left:20%}.road-v2{left:50%}.road-v3{left:80%}
+.atlas-room{position:relative;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:5px;padding:11px;background:linear-gradient(145deg,#172b3aeF,#0a141df5);border:1px solid #42677e;box-shadow:inset 0 0 0 4px #0a141c, inset 0 0 0 5px #274153,0 0 18px #20b9ff10}
+.atlas-room:after{content:"";position:absolute;inset:5px;border:1px solid #33556b66;pointer-events:none}
+.atlas-room>*{position:relative;z-index:1}.atlas-room small{font-size:8px;letter-spacing:.12em;color:#82a8bd}.atlas-room b{font-size:clamp(10px,.9vw,14px);letter-spacing:.1em;color:#d3f4ff}.atlas-room span{font-size:10px;color:#b0c7d4;line-height:1.35}.atlas-room em{margin-top:auto;font-style:normal;font-size:8px;letter-spacing:.08em;color:#91b4c8}
+.room-command{grid-area:2/3;background:radial-gradient(circle at 50% 38%,#163c51,#0a1822 72%);border-color:#53dfff;align-items:center;text-align:center;justify-content:center;box-shadow:inset 0 0 0 4px #0a1822,0 0 30px #35cfff2b}
+.room-command b{font-size:clamp(14px,1.4vw,22px);letter-spacing:.16em;color:#a8f2ff;text-shadow:0 0 16px #33ceff66}
+.room-command em{color:#8feaff}.room-scout{grid-area:1/1;border-color:#3acfff}.room-scout b,.room-scout em{color:#74ddff}
+.room-forge{grid-area:1/5;border-color:#ffb15e}.room-forge b,.room-forge em{color:#ffca83}
+.room-scribe{grid-area:3/1;border-color:#ba8bff}.room-scribe b,.room-scribe em{color:#d4b7ff}
+.room-analyst{grid-area:3/5;border-color:#ff966f}.room-analyst b,.room-analyst em{color:#ffb49a}
+.room-business{grid-area:2/5;border-color:#4c9fff}.room-business b,.room-business em{color:#8ac3ff}
+.room-missions{grid-area:2/1;border-color:#e5ae53}.room-missions b,.room-missions em{color:#ffd27f}
+.room-assets{grid-area:1/2;border-color:#b38aff}.room-assets b,.room-assets em{color:#d2b1ff}
+.room-automation{grid-area:1/4;border-color:#47dfb0}.room-automation b,.room-automation em{color:#86ffcf}
+.room-approval{grid-area:3/2;border-color:#ff7f9d}.room-approval b,.room-approval em{color:#ffa7bc}
+.room-data{grid-area:3/4;border-color:#5e9cff}.room-data b,.room-data em{color:#9cc4ff}
+.atlas-reactor{width:62px;height:62px;display:grid;place-items:center;border:1px solid #54dcff;border-radius:50%;margin:5px;background:radial-gradient(circle,#1a6682,#0b1d2b 72%);box-shadow:0 0 0 8px #40d6ff12,0 0 0 16px #40d6ff09,0 0 22px #34cfff42}
+.atlas-reactor i{width:19px;height:19px;display:block;transform:rotate(45deg);background:linear-gradient(135deg,#d7fbff,#37cfff 60%,#164c80);box-shadow:0 0 18px #53dcff;animation:atlasPulse 3.5s ease-in-out infinite}
+.atlas-console{display:flex;align-items:flex-end;gap:4px;width:76%;height:27px;padding:5px;border:1px solid #35627a;background:#091722}
+.atlas-console i{display:block;flex:1;height:35%;background:#36bfff;box-shadow:0 0 6px #36bfff66}.atlas-console i:nth-child(2){height:75%}.atlas-console i:nth-child(3){height:50%}.atlas-console i:nth-child(4){height:90%}.atlas-console i:nth-child(5){height:62%}.atlas-console i:nth-child(6){height:80%}
+.forge-console i{background:#ffb45c;box-shadow:0 0 6px #ffb45c66}.scribe-console i{height:3px!important;background:#bd91ff;box-shadow:none}.analyst-console i{background:#ff9872;box-shadow:0 0 6px #ff987266}
+.atlas-ledger{display:flex;gap:4px;width:80%;height:26px;padding:4px;border:1px solid #3c668c}.atlas-ledger span{flex:1;background:#245e89}.atlas-ledger span:nth-child(2){background:#47c9e8}.atlas-ledger span:nth-child(3){background:#ad80ef}.atlas-ledger span:nth-child(4){background:#e8a24f}
+.atlas-terminal{display:grid;gap:3px;width:85%}.atlas-terminal i{height:4px;background:#e4ad4d;opacity:.8}.atlas-terminal i:nth-child(2){width:72%}.atlas-terminal i:nth-child(3){width:86%}
+.atlas-crates{display:flex;gap:6px}.atlas-crates i{width:17px;height:18px;border:1px solid #aa84e8;background:#493b6c;box-shadow:inset 0 0 0 3px #17162a}
+.atlas-circuit{display:flex;align-items:center;gap:6px;height:22px}.atlas-circuit i{width:18px;height:18px;border:1px solid #54dcb2;transform:rotate(45deg);box-shadow:0 0 8px #54dcb255}
+.atlas-approval-mark{font-size:24px;color:#ff91ae;text-shadow:0 0 10px #ff91ae66}
+.atlas-data-stack{display:grid;gap:3px;width:65%}.atlas-data-stack i{height:5px;border:1px solid #659de8;background:#1a4773}.atlas-data-stack i:nth-child(2){width:80%}.atlas-data-stack i:nth-child(3){width:60%}
+.nexus-map-foot{border-top:1px solid #29485c;padding-top:9px;font-size:8px}
+@keyframes atlasPulse{0%,100%{transform:rotate(45deg) scale(.92);opacity:.8}50%{transform:rotate(135deg) scale(1.08);opacity:1}}
+@media(orientation:landscape) and (min-width:700px){
+ .shell{max-width:1800px;padding:10px 20px 24px}.topbar{padding-bottom:10px}.hero{padding:10px 0}
+ .nexus-map{padding:14px}.atlas-floor{min-height:min(66vh,690px);grid-template-rows:repeat(3,minmax(145px,1fr));gap:12px;padding:18px}
+ .atlas-room{padding:13px}.atlas-room span{font-size:11px}.atlas-room small,.atlas-room em{font-size:9px}
+ .atlas-reactor{width:clamp(65px,7vw,104px);height:clamp(65px,7vw,104px)}
+ .habitat-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.pixel-room{height:clamp(105px,15vh,175px)}.nav{display:none}
+}
+@media(max-width:700px){.atlas-floor{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(105px,1fr));gap:7px;min-height:465px;padding:8px}.room-command{grid-area:2/2}.room-scout{grid-area:1/1}.room-forge{grid-area:1/3}.room-scribe{grid-area:4/1}.room-analyst{grid-area:4/3}.room-business{grid-area:3/3}.room-missions{grid-area:3/1}.room-assets{grid-area:2/1}.room-automation{grid-area:2/3}.room-approval{grid-area:4/2}.room-data{grid-area:3/2}.atlas-room{padding:7px}.atlas-room b{font-size:9px}.atlas-room span{font-size:8px}.atlas-room em,.atlas-room small{font-size:6px}.atlas-console{height:19px}.atlas-reactor{width:35px;height:35px}.atlas-reactor i{width:12px;height:12px}.nexus-map-top,.nexus-map-foot{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.atlas-reactor i{animation:none!important}}
+
+
+
+/* === NEXUS ATLAS redesign: prototype-inspired, landscape-first === */
+:root{--bg:#07090b;--panel:#0b1114;--line:#29404a;--text:#d9e8e7;--muted:#82999a;--green:#a3e635;--green2:#55c96b;--amber:#f5b942;--radius:3px}
+body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,transparent 1px),linear-gradient(90deg,#a3e63508 1px,transparent 1px),radial-gradient(ellipse at 50% 0%,#122c2a 0,transparent 55%);background-size:4px 4px,4px 4px,auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.shell{width:min(100%,1600px);max-width:1600px;margin:0 auto;padding:clamp(10px,1.8vw,26px) clamp(10px,2vw,30px) 100px}
+.topbar{padding:12px 16px 16px;background:#080e10;border:1px solid #40564f;box-shadow:0 0 0 3px #020405,inset 0 0 0 2px #020405}
+.logo{border-radius:0;border-color:var(--green);box-shadow:none}
+.brand h1{font-family:var(--mono);letter-spacing:.18em}
+.status,.panel,.stat,.agent-hub,.nexus-map,.authbox{border-radius:2px!important;box-shadow:0 0 0 2px #020405,inset 0 0 0 1px #020405}
+.btn{border-radius:2px!important;text-transform:uppercase;letter-spacing:.04em}
+.hero{padding:clamp(18px,3vw,42px) 0 18px;align-items:center}
+.hero h2{font-family:var(--mono);text-transform:uppercase;letter-spacing:-.055em}
+.hero p{max-width:780px}
+.agent-hub{background:#080e10;border-color:#40564f;padding:clamp(10px,1.6vw,22px);margin-top:10px}
+.hub-eyebrow,.agent-hub-head h3,.nexus-map-top,.nexus-map-foot,.atlas-room small,.atlas-room em{font-family:var(--mono);letter-spacing:.09em}
+.hub-intro{font-size:12px}
+.nexus-map{padding:clamp(8px,1.2vw,16px);background:#070d10;border-color:#3d6263;box-shadow:0 0 24px #32d7d012,inset 0 0 0 1px #000}
+.nexus-map-top,.nexus-map-foot{font-size:10px;letter-spacing:.08em}
+.atlas-floor{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(140px,1fr));gap:clamp(6px,1vw,14px);min-height:clamp(520px,58vw,780px);padding:clamp(10px,1.5vw,22px);margin:10px 0;background:radial-gradient(ellipse at 50% 45%,#15333c 0%,#0a1820 48%,#05090d 100%)}
+.atlas-room{border-radius:0!important;background-color:#0b171c;box-shadow:inset 0 0 0 2px #020609,0 0 16px #0009;border-width:2px;padding:clamp(7px,1vw,14px)}
+.atlas-room b{font-family:var(--mono);letter-spacing:.04em}
+.atlas-room span{font-size:clamp(10px,.9vw,13px)}
+.atlas-room em{font-size:clamp(7px,.68vw,10px)}
+.atlas-avatar{transform:scale(1.16);transform-origin:center bottom}
+.atlas-reactor{filter:drop-shadow(0 0 12px currentColor)}
+.habitat-grid{display:none!important}
+#appView > .layout .stack > section:has(.agentgrid){display:none!important}
+#appView > .layout{grid-template-columns:minmax(0,1.4fr) minmax(320px,.8fr);gap:16px}
+.panel,.stat{background:#0b1114;border-color:#263e43;border-radius:2px!important}
+.panelhead{border-bottom:1px solid #23363b;padding-bottom:10px}
+.panel h3,.stat label{font-family:var(--mono);letter-spacing:.08em}
+.field,input,textarea{border-radius:2px!important}
+#bottomNav{backdrop-filter:blur(12px);background:#05090bf2;border-top:1px solid #2b4142}
+#bottomNav button{border-radius:0!important;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em}
+@media (orientation:landscape) and (min-width:760px){
+ .shell{padding-left:clamp(18px,2.4vw,38px);padding-right:clamp(18px,2.4vw,38px)}
+ .topbar{position:relative}
+ .hero{display:grid;grid-template-columns:1fr auto}
+ .hero h2{font-size:clamp(34px,4vw,58px)}
+ .nexus-map{width:100%;margin-inline:auto}
+ .atlas-floor{min-height:min(68vh,760px);grid-template-rows:repeat(3,minmax(145px,1fr))}
+ #appView > .layout{grid-template-columns:minmax(0,1.3fr) minmax(340px,.7fr)}
+}
+@media(max-width:760px){
+ .shell{padding:10px 10px 90px}
+ .atlas-floor{min-height:560px;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(140px,1fr));gap:5px;padding:8px}
+ .atlas-room{padding:6px;overflow:hidden}
+ .atlas-room span{font-size:9px}
+ .atlas-room em{font-size:6px}
+ #appView > .layout{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><div class="brand"><div class="logo">N</div><div><h1>SENRAI NEXUS</h1><p>AUTONOMOUS BUSINESS SYSTEM</p></div></div><div class="status"><span class="dot"></span><span id="systemStatus">CONNECTING</span></div></header>
+<section id="authView" class="authbox">
+<h2>Access Nexus</h2><p>Sign in to your private business workspace or create your account.</p>
+<form id="authForm"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required placeholder="you@example.com"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"><div class="authactions"><button class="btn primary" type="submit" id="signInBtn">Sign in</button><button class="btn" type="button" id="signUpBtn">Create account</button></div></form>
+<div id="authMessage" class="notice">Use your own account. If email confirmation is enabled, check your inbox after signing up.</div>
+</section>
+<div id="appView" class="hidden">
+<section class="hero"><div><div class="eyebrow">MISSION CONTROL / 001</div><h2>Turn ideas into<br><span style="color:var(--green)">execution.</span></h2><p>PERSONAL COMMAND CENTER / v0.6. Select an agent, review real task status, and run AI missions on demand.</p></div><button class="btn primary" id="newMission">＋ New mission</button></section>
+
+
+<section class="agent-hub" id="agentHub">
+  <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>AGENT HABITATS</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
+  <p class="hub-intro">Select a specialist workstation to inspect its role. Status reflects saved task records; room animation is visual only.</p>
+  <section class="nexus-map nexus-atlas" aria-label="SENRAI top-down operations base">
+    <div class="nexus-map-top"><span><b>NEXUS ATLAS</b> / OPERATIONS FLOOR 01</span><span><i class="map-led"></i> SYSTEM ONLINE</span></div>
+    <div class="atlas-floor">
+      <div class="atlas-road road-h road-h1"></div><div class="atlas-road road-h road-h2"></div><div class="atlas-road road-v road-v1"></div><div class="atlas-road road-v road-v2"></div><div class="atlas-road road-v road-v3"></div>
+      <div class="atlas-room room-command"><small>00 / COMMAND</small><b>SENRAI CORE</b><div class="atlas-reactor"><i></i></div><div class="atlas-avatar avatar-core" aria-label="SENRAI core character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><span>Orchestration & routing</span><em id="mapCoreState">COORDINATION ONLINE</em></div>
+      <div class="atlas-room room-scout"><small>01 / INTELLIGENCE</small><b>SCOUT</b><div class="atlas-avatar avatar-scout" aria-label="Scout character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console"><i></i><i></i><i></i><i></i><i></i><i></i></div><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
+      <div class="atlas-room room-forge"><small>02 / BUILD LAB</small><b>FORGE</b><div class="atlas-avatar avatar-forge" aria-label="Forge character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console forge-console"><i></i><i></i><i></i><i></i></div><span>Products & systems</span><em id="mapForgeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-scribe"><small>03 / CONTENT</small><b>SCRIBE</b><div class="atlas-avatar avatar-scribe" aria-label="Scribe character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console scribe-console"><i></i><i></i><i></i></div><span>Publishing studio</span><em id="mapScribeState">AWAITING TASK</em></div>
+      <div class="atlas-room room-analyst"><small>04 / QUALITY</small><b>ANALYST</b><div class="atlas-avatar avatar-analyst" aria-label="Analyst character"><i class="av-hair"></i><i class="av-head"><u></u><u></u></i><i class="av-body"></i><i class="av-arm"></i><i class="av-leg"></i></div><div class="atlas-console analyst-console"><i></i><i></i><i></i><i></i></div><span>Metrics & verification</span><em id="mapAnalystState">AWAITING TASK</em></div>
+      <div class="atlas-room room-business"><small>BUSINESS NETWORK</small><b>REVENUE OPS</b><div class="atlas-agent-icons"><i></i><i></i><i></i></div><div class="atlas-ledger"><span></span><span></span><span></span><span></span></div><span>Projects & business goals</span><em id="mapBusinessState">CONNECTED</em></div>
+      <div class="atlas-room room-missions"><small>MISSION CONTROL</small><b>TASK QUEUE</b><div class="atlas-terminal"><i></i><i></i><i></i></div><span>Queued / active / complete</span><em id="mapTaskCount">SYNCING TASKS</em></div>
+      <div class="atlas-room room-assets"><small>ASSET WORKSHOP</small><b>CREATIVE BAY</b><div class="atlas-crates"><i></i><i></i><i></i></div><span>Files & deliverables</span><em>OUTPUT STORAGE</em></div>
+      <div class="atlas-room room-automation"><small>AUTOMATION</small><b>WORKFLOW BAY</b><div class="atlas-circuit"><i></i><i></i><i></i></div><span>Repeatable processes</span><em>READY WHEN CONNECTED</em></div>
+      <div class="atlas-room room-approval"><small>GOVERNANCE</small><b>APPROVAL DESK</b><div class="atlas-approval-mark">✓</div><span>Human review gate</span><em>OWNER CONTROLLED</em></div>
+      <div class="atlas-room room-data"><small>DATA VAULT</small><b>MEMORY BANK</b><div class="atlas-data-stack"><i></i><i></i><i></i></div><span>Saved workspace records</span><em>CLOUD LINK</em></div>
+    </div>
+    <div class="nexus-map-foot"><span><i class="map-led"></i> CLOUD LINK ACTIVE</span><span>ROOMS REPRESENT SYSTEM DEPARTMENTS</span><span>ATLAS EXPANDS WITH REAL WORK</span></div>
+  </section>
+  <div class="habitat-grid">
+    <article class="habitat scout-habitat" id="habitatScout">
+      <div class="habitat-head"><span>01 / SCOUT</span><b id="habitatScoutState">STANDBY</b></div>
+      <div class="pixel-room room-research">
+        <div class="room-window"><i></i><i></i><i></i><div class="window-chart"><span></span><span></span><span></span><span></span><span></span></div></div>
+        <div class="room-shelf"><i></i><i></i><i></i></div><div class="room-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person scout-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">MARKET RECON</span>
+      </div><div class="habitat-foot"><strong>Research & Discovery</strong><span id="habitatScoutTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat forge-habitat" id="habitatForge">
+      <div class="habitat-head"><span>02 / FORGE</span><b id="habitatForgeState">STANDBY</b></div>
+      <div class="pixel-room room-workshop">
+        <div class="workshop-rack"><i></i><i></i><i></i></div><div class="blueprint"><span></span><span></span><span></span><span></span></div>
+        <div class="room-desk forge-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person forge-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">BUILD LAB</span>
+      </div><div class="habitat-foot"><strong>Product Workshop</strong><span id="habitatForgeTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat scribe-habitat" id="habitatScribe">
+      <div class="habitat-head"><span>03 / SCRIBE</span><b id="habitatScribeState">STANDBY</b></div>
+      <div class="pixel-room room-publishing">
+        <div class="room-window"><i></i><i></i><i></i><div class="window-lines"><span></span><span></span><span></span><span></span></div></div><div class="paper-stack"><i></i><i></i><i></i></div>
+        <div class="room-desk scribe-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person scribe-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">CONTENT STUDIO</span>
+      </div><div class="habitat-foot"><strong>Content & Publishing</strong><span id="habitatScribeTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat analyst-habitat" id="habitatAnalyst">
+      <div class="habitat-head"><span>04 / ANALYST</span><b id="habitatAnalystState">STANDBY</b></div>
+      <div class="pixel-room room-analytics">
+        <div class="monitor-wall"><div class="monitor"><i></i><i></i><i></i><i></i></div><div class="monitor"><i></i><i></i><i></i></div></div><div class="room-desk analyst-desk"><div class="screen"><i></i><i></i><i></i></div><div class="desk-leg"></div></div>
+        <div class="pixel-person analyst-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">QUALITY CONTROL</span>
+      </div><div class="habitat-foot"><strong>Analysis & Quality</strong><span id="habitatAnalystTask">Waiting for assignment</span></div>
+    </article>
+    <article class="habitat core-habitat" id="habitatCore">
+      <div class="habitat-head"><span>05 / SENRAI CORE</span><b id="habitatCoreState">ONLINE</b></div>
+      <div class="pixel-room room-command">
+        <div class="core-rings"><i></i><i></i><i></i></div><div class="core-console"><span>MISSION CONTROL</span><i></i><i></i><i></i></div>
+        <div class="pixel-person core-person"><div class="person-hair"></div><div class="person-head"><i></i><i></i></div><div class="person-body"></div><div class="person-arm"></div><div class="person-leg left"></div><div class="person-leg right"></div></div>
+        <div class="room-floor"></div><span class="room-task">COORDINATION</span>
+      </div><div class="habitat-foot"><strong>Command & Coordination</strong><span id="habitatCoreTask">Monitoring workspace</span></div>
+    </article>
+  </div>
+  <div class="habitat-legend"><span><i class="legend-idle"></i> STANDBY</span><span><i class="legend-working"></i> WORKING ANIMATION</span><span id="habitatWorkSummary">0 agents executing tasks</span></div>
+</section>
+<div class="v06-dialog" aria-live="polite"><strong id="v06Speaker">SENRAI CORE</strong><span id="v06Dialogue">Systems nominal. Select a workstation to inspect its current assignment.</span><small>LIVE TASK STATUS</small></div>
+<section class="ops-grid" aria-label="Live operations overview">
+  <section class="panel mission-board"><div class="panelhead"><h3>ACTIVE MISSION</h3><span class="pill good" id="missionLiveState">CLOUD DATA</span></div>
+    <div id="activeMission"><div class="empty">Sign in to load your live mission queue.</div></div>
+  </section>
+  <section class="panel queue-board"><div class="panelhead"><h3>MISSION QUEUE</h3><span class="sub" id="queueCount">0 queued</span></div>
+    <div id="missionQueue" class="tasklist"><div class="empty">Your saved tasks appear here.</div></div>
+    <div class="ops-foot">Queue data comes from your account. SENRAI runs only when you press “Run with SENRAI.”</div>
+  </section>
+</section>
+<section class="stats"><div class="stat"><label>ACTIVE PROJECTS</label><strong id="projectCount">00</strong><small>Cloud-saved projects</small></div><div class="stat"><label>OPEN TASKS</label><strong id="taskCount">00</strong><small>Queued or in progress</small></div><div class="stat"><label>NEEDS APPROVAL</label><strong id="approvalCount">00</strong><small>Human review required</small></div><div class="stat"><label>VERIFIED REVENUE</label><strong>$0.00</strong><small>Sales integration not connected</small></div></section>
+<div class="layout"><div class="stack">
+<section class="panel"><div class="panelhead"><h3>AGENT NETWORK</h3><span class="pill good">5 roles configured</span></div><div class="agentgrid">
+<div class="agent"><div class="agenticon">◈</div><div><strong>SENRAI CORE</strong><p>Coordinates missions and assembles plans.</p><span class="pill">Coordinator</span></div></div>
+<div class="agent"><div class="agenticon">⌕</div><div><strong>SCOUT</strong><p>Researches markets, audiences and demand.</p><span class="pill">Research</span></div></div>
+<div class="agent"><div class="agenticon">⌘</div><div><strong>FORGE</strong><p>Plans and builds digital product assets.</p><span class="pill">Creation</span></div></div>
+<div class="agent"><div class="agenticon">▤</div><div><strong>SCRIBE</strong><p>Drafts sales pages and launch content.</p><span class="pill">Content</span></div></div>
+<div class="agent"><div class="agenticon">⌁</div><div><strong>ANALYST</strong><p>Checks quality, risks and performance.</p><span class="pill">Quality</span></div></div>
+</div></section>
+<section class="panel"><div class="panelhead"><h3>SENRAI INTELLIGENCE</h3><span class="pill good">AI-ready</span></div><p class="sub" style="margin:0 0 12px">Ask SENRAI to plan a business move, research an idea, draft an asset, or break a goal into steps. Responses use a free-tier AI API when configured.</p><form id="aiForm" style="display:grid;gap:9px"><textarea id="aiPrompt" maxlength="2000" rows="3" placeholder="Senrai, find me a realistic digital product idea I can start for $0…" required></textarea><button class="btn primary" type="submit" id="aiSubmit">Ask SENRAI</button></form><div id="aiResult" class="notice" style="margin-top:12px;white-space:pre-wrap;line-height:1.55">Your AI briefing will appear here. Set up the secure backend before using AI.</div></section>
+<section class="panel"><div class="panelhead"><h3>MISSION TERMINAL</h3><span class="sub">Cloud-saved task</span></div><form id="commandForm" class="command"><input id="commandInput" placeholder="e.g. Research a free digital product idea…" maxlength="240" required><button class="btn primary" type="submit">Queue</button></form><div class="sub" style="margin-top:9px">Tasks are saved to your signed-in account. AI suggestions can be turned into missions manually.</div></section>
+<section class="panel"><div class="panelhead"><h3>TASK QUEUE</h3><button class="btn subtle small" id="clearCompleted">Clear completed</button></div><div id="taskList" class="tasklist"><div class="empty">Loading tasks…</div></div></section>
+</div><div class="stack">
+<section class="panel" id="businessPortfolio"><div class="panelhead"><h3>BUSINESS PORTFOLIO</h3><button class="btn subtle small" id="addProject">＋ Add business</button></div><p class="sub" style="margin:0 0 12px">Run multiple revenue experiments from one command center. Each business gets its own goals and tasks; only verified sales count as revenue.</p><div id="businessSummary" class="tel" style="margin-bottom:12px"><div><small>ACTIVE BUSINESSES</small><b id="businessCount">01</b></div><div><small>VERIFIED REVENUE</small><b>$0.00</b></div></div><div id="projectList" class="projectlist"><div class="empty">Loading businesses…</div></div><div class="notice">Business 01 · Gaming thumbnails + Business 02 · AI short-form video. Both are free-first experiments. Account creation, publishing, customer messages, final approval, and delivery remain manual until integrations are built.</div></section>
+<section class="panel"><div class="panelhead"><h3>APPROVAL CENTER</h3><span class="pill wait">Human in the loop</span></div><div id="approvalList" class="approval-list"><div class="empty">Loading approvals…</div></div></section>
+<section class="panel"><div class="panelhead"><h3>SYSTEM ACTIVITY</h3><button class="btn subtle small" id="clearActivity">Clear</button></div><div id="activityList" class="activity"><div class="empty">No activity yet.</div></div></section>
+<section class="panel" id="etsyBridge"><div class="panelhead"><h3>ETSY COMMERCE BRIDGE</h3><span class="pill wait" id="etsyStatus">NOT CONNECTED</span></div><p class="sub">Prepare individual digital-product listings now. Live publishing and order sync require an approved Etsy app, an active shop, and secure OAuth authorization.</p><div class="formgrid"><label>Product idea<input id="etsyProductIdea" value="Japanese-inspired minimalist printable wall art" maxlength="180"></label><label>Target price (USD)<input id="etsyPrice" type="number" min="1" max="500" step="0.50" value="7.50"></label></div><div class="taskactions" style="margin-top:12px"><button class="btn primary" id="etsyGenerate">Generate individual listing draft</button><button class="btn subtle" id="etsyConnectInfo">Connection requirements</button></div><div id="etsyDraftOutput" class="notice" style="margin-top:12px;white-space:pre-wrap">No listing draft generated yet. Drafts are not published to Etsy.</div><div class="sub" style="margin-top:10px">Safety: this panel does not request or store Etsy passwords or API secrets. It will not claim sales or publish until the official connection is configured.</div></section>
+<section class="panel"><div class="panelhead"><h3>WORKSPACE</h3><button class="btn subtle small" id="signOutBtn">Sign out</button></div><div class="sub" id="signedInAs"></div><div class="notice">AI tasks run when requested. Background execution and live Etsy publishing are not yet enabled.</div></section>
+</div></div>
+<div class="footer">SENRAI NEXUS · v0.6 PIXEL COMMAND CENTER · CLOUD TASKS + AI ON DEMAND</div>
+</div></div>
+<nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Approvals</button></nav>
+<div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+const SUPABASE_URL = 'https://gsvyogdydnkknqjueucj.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_zlID3rvy02vlcMtN6OkubQ_InOilWvk';
+const $ = id => document.getElementById(id);
+let sb, currentUser=null, projects=[], tasks=[], approvals=[], activity=[], modalMode='project';
+function message(text, bad=false){const el=$('authMessage');el.textContent=text;el.style.borderColor=bad?'#754040':'var(--line)';el.style.color=bad?'var(--red)':'var(--muted)'}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function time(iso){try{return new Date(iso).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}catch{return ''}}
+async function log(title,detail){if(!currentUser)return;const {error}=await sb.from('nexus_activity').insert({user_id:currentUser.id,title,detail});if(error)console.warn('Activity log failed:',error.message);await loadActivity()}
+async function loadAll(){await Promise.all([loadProjects(),loadTasks(),loadApprovals(),loadActivity()]);renderStats()}
+async function loadProjects(){let {data,error}=await sb.from('nexus_projects').select('*').order('created_at',{ascending:false});if(error){console.error(error);return message('Could not load businesses: '+error.message,true)}projects=data||[];const starters=[{name:'Gaming Thumbnail Studio — Fiverr',description:'Business 01 · Custom gaming YouTube thumbnails. Goal: validate demand with a $0 upfront workflow. Draft gig, portfolio concepts, buyer requirements, and quality checklist are prepared; Fiverr account and publishing still require manual setup.',progress:10},{name:'AI Short-Form Video Studio',description:'Business 02 · Turn one content idea into platform-specific TikTok, Instagram Reels, and YouTube Shorts packages. SENRAI can draft hooks, scripts, captions, shot lists, and editing plans. Use free editing tools and manual posting for validation; AI video generation and automated publishing are not connected yet.',progress:5}];let changed=false;for(const starter of starters){if(!projects.some(p=>(p.name||'').toLowerCase()===starter.name.toLowerCase())){const {error:seedError}=await sb.from('nexus_projects').insert({...starter,user_id:currentUser.id});if(!seedError)changed=true;else console.warn('Could not seed business:',starter.name,seedError.message)}}if(changed){const refreshed=await sb.from('nexus_projects').select('*').order('created_at',{ascending:false});if(!refreshed.error)projects=refreshed.data||[]}renderProjects();const bc=$('businessCount');if(bc)bc.textContent=String(projects.length).padStart(2,'0')}
+async function loadTasks(){const {data,error}=await sb.from('nexus_tasks').select('*').order('created_at',{ascending:false});if(error){console.error(error);return message('Could not load tasks: '+error.message,true)}tasks=data||[];renderTasks()}
+async function loadApprovals(){const {data,error}=await sb.from('nexus_approvals').select('*').eq('status','pending').order('created_at',{ascending:false});if(error){console.error(error);return}approvals=data||[];renderApprovals()}
+async function loadActivity(){const {data,error}=await sb.from('nexus_activity').select('*').order('created_at',{ascending:false}).limit(12);if(error){console.error(error);return}activity=data||[];renderActivity()}
+
+function selectHabitat(name){
+ document.querySelectorAll('.habitat').forEach(h=>h.classList.toggle('is-selected',h.id==='habitat'+name));
+ const target=$('habitat'+name);
+ const title=target?.querySelector('.habitat-head span')?.textContent||'SENRAI CORE';
+ const task=target?.querySelector('.habitat-foot span')?.textContent||'Monitoring workspace';
+ const speaker=$('v06Speaker'),dialog=$('v06Dialogue');
+ if(speaker)speaker.textContent=title.replace(/^\d+\s*\/\s*/,'');
+ if(dialog)dialog.textContent=task==='Waiting for assignment'?'Standing by. Assign a task from Mission Terminal to give this specialist work.':task+'. This status is based on your saved task queue.';
+ if(target && window.matchMedia('(max-width: 600px)').matches)target.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+document.querySelectorAll('.habitat').forEach(h=>h.addEventListener('click',()=>{
+ const key=h.id.replace('habitat','');selectHabitat(key);
+ const state=$(h.id+'State');if(state)state.textContent=state.textContent;
+}));
+function updateAgentHabitats(){
+ const roles=[
+ ['Scout',/research|market|competitor|audience|demand|scout/i],
+ ['Forge',/build|create|product|design|asset|forge|thumbnail|video/i],
+ ['Scribe',/listing|content|copy|description|seo|scribe|etsy/i],
+ ['Analyst',/audit|review|analy|quality|performance|test/i]
+ ];
+ const open=tasks.filter(x=>!['completed','cancelled'].includes(x.status));
+ const assigned=new Set();let working=0;
+ roles.forEach(([name,re])=>{
+   const habitat=$('habitat'+name),state=$('habitat'+name+'State'),taskLabel=$('habitat'+name+'Task');
+   const mapState=$('map'+name+'State');
+   const t=open.find(x=>!assigned.has(x.id)&&re.test(x.title||''));
+   if(t)assigned.add(t.id);
+   const isWorking=!!t&&t.status==='in_progress';
+   if(habitat){habitat.classList.toggle('is-working',isWorking);if(state)state.textContent=isWorking?'WORKING':t?'QUEUED':'STANDBY';if(taskLabel)taskLabel.textContent=t?(t.title.length>52?t.title.slice(0,49)+'…':t.title):'Waiting for assignment';}
+   if(isWorking)working++;
+   if(mapState)mapState.textContent=isWorking?'EXECUTING':t?'QUEUED':'AWAITING TASK';
+ });
+ const coreState=$('habitatCoreState'),coreTask=$('habitatCoreTask'),core=$('habitatCore'),summary=$('habitatWorkSummary');
+ if(coreState)coreState.textContent=working?'COORDINATING':'ONLINE';
+ if(coreTask)coreTask.textContent=working?working+' specialist(s) working':'Monitoring workspace';
+ if(core)core.classList.toggle('is-working',working>0);
+ if(summary)summary.textContent=working+' specialists executing tasks';
+ const mapCore=$('mapCoreState'),mapBiz=$('mapBusinessState'),mapCount=$('mapTaskCount');
+ if(mapCore)mapCore.textContent=working?working+' SPECIALIST(S) ACTIVE':'CORE ONLINE / STANDBY';
+ if(mapBiz)mapBiz.textContent=(projects.length||0)+' BUSINESSES CONNECTED';
+ if(mapCount)mapCount.textContent=open.length+' OPEN / '+tasks.filter(x=>x.status==='completed').length+' COMPLETE';
+}
+function renderMissionBoard(){
+ const open=tasks.filter(t=>!['completed','cancelled'].includes(t.status));
+ const active=open.find(t=>t.status==='in_progress')||open[0]||null;
+ const activeEl=$('activeMission'),queueEl=$('missionQueue'),countEl=$('queueCount'),stateEl=$('missionLiveState');
+ if(!activeEl||!queueEl)return;
+ if(active){
+   const progress=active.status==='in_progress'?68:18;
+   activeEl.innerHTML='<div class="mission-focus"><div class="mission-code">'+(active.status==='in_progress'?'MSN / IN PROGRESS':'MSN / QUEUED')+'</div><h4>'+safe(active.title)+'</h4><p>'+safe((active.description||'No additional details').split('\n\n--- SENRAI RUN ')[0])+'</p><div class="mission-meter"><i style="width:'+progress+'%"></i></div><div class="mission-meta"><span>'+safe(active.status.replace('_',' '))+'</span><span>Progress is a status indicator, not measured completion</span></div><div class="taskactions"><button class="btn small" data-action="focus-task" data-id="'+active.id+'">Open mission</button></div></div>';
+ }else{activeEl.innerHTML='<div class="empty">No open missions. Add a task from Mission Terminal to start the next run.</div>'}
+ const queued=open.filter(t=>t.id!==active?.id).slice(0,4);
+ countEl.textContent=open.length+' open';
+ queueEl.innerHTML=queued.length?queued.map((t,i)=>'<div class="queue-item"><span class="queue-priority">P'+(i===0?'1':i<3?'2':'3')+'</span><div><strong>'+safe(t.title)+'</strong><small>'+safe(t.status.replace('_',' '))+' · cloud-saved task</small><div class="taskactions"><button class="btn subtle small" data-action="focus-task" data-id="'+t.id+'">Open</button></div></div></div>').join(''):'<div class="empty">No other missions waiting in the queue.</div>';
+ stateEl.textContent=tasks.length?'LIVE TASK DATA':'AWAITING TASKS';
+}
+function renderStats(){$('projectCount').textContent=String(projects.length).padStart(2,'0');$('taskCount').textContent=String(tasks.filter(t=>!['completed','cancelled'].includes(t.status)).length).padStart(2,'0');$('approvalCount').textContent=String(approvals.length).padStart(2,'0')}
+function renderProjects(){updateAgentHabitats();$('projectList').innerHTML=projects.length?projects.map((p,i)=>`<div class="project"><div class="projecttop"><strong>${String(i+1).padStart(2,'0')} · ${safe(p.name)}</strong><button class="btn subtle small" data-action="delete-project" data-id="${p.id}">Remove</button></div><p>${safe(p.description||'Business experiment')}</p><div class="progress"><span style="width:${p.progress||0}%"></span></div><p>${p.progress||0}% progress · tracked in Nexus</p><div class="taskactions"><button class="btn small" data-action="business-task" data-id="${p.id}">＋ Add task</button></div></div>`).join(''):'<div class="empty">No businesses yet. Add your first experiment.</div>';const bc=$('businessCount');if(bc)bc.textContent=String(projects.length).padStart(2,'0')}
+function renderTasks(){updateAgentHabitats();$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>';renderMissionBoard()}
+function renderApprovals(){$('approvalList').innerHTML=approvals.length?approvals.map(a=>`<div class="approval"><strong>${safe(a.title)}</strong><p>${safe(a.description||'Review this action before proceeding.')}</p><div class="taskactions"><button class="btn small" data-action="approve" data-id="${a.id}">Approve locally</button><button class="btn subtle small" data-action="reject" data-id="${a.id}">Reject</button></div></div>`).join(''):'<div class="empty">No actions awaiting approval.</div>'}
+function renderActivity(){$('activityList').innerHTML=activity.length?activity.map(a=>`<div class="event"><span class="dot"></span><div><strong>${safe(a.title)}</strong><p>${safe(a.detail)} · ${time(a.created_at)}</p></div></div>`).join(''):'<div class="empty">Nexus is ready for its first mission.</div>'}
+function showApp(user){currentUser=user;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('bottomNav').style.display='';$('systemStatus').textContent='CLOUD CONNECTED';$('signedInAs').textContent='Signed in as '+user.email;loadAll()}
+function showAuth(){$('authView').classList.remove('hidden');$('appView').classList.add('hidden');$('bottomNav').style.display='none';$('systemStatus').textContent='SIGN IN REQUIRED'}
+async function authAction(mode){const email=$('email').value.trim(),password=$('password').value;if(!email||!password)return message('Enter your email and password.',true);$('signInBtn').disabled=true;$('signUpBtn').disabled=true;try{if(mode==='signup'){const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){message('Account created. You are signed in.');}else{message('Account created. Check your email to confirm, then sign in.');return}}else{const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;message('Signed in.')}}catch(e){message(e.message||'Authentication failed.',true)}finally{$('signInBtn').disabled=false;$('signUpBtn').disabled=false}}
+window.authAction=authAction;
+$('authForm').addEventListener('submit',e=>{e.preventDefault();authAction('signin')});$('signUpBtn').addEventListener('click',()=>authAction('signup'));
+$('signOutBtn').addEventListener('click',async()=>{const {error}=await sb.auth.signOut();if(error)message(error.message,true);else showAuth()});
+$('aiForm').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser)return;const prompt=$('aiPrompt').value.trim();if(!prompt)return;const btn=$('aiSubmit'),out=$('aiResult');btn.disabled=true;btn.textContent='Thinking…';out.textContent='SENRAI is working on your request…';try{const {data,error}=await sb.functions.invoke('rapid-task',{body:{prompt}});if(error)throw error;if(!data||!data.reply)throw new Error(data?.error||'The AI backend returned no response.');out.textContent=data.reply;await log('SENRAI briefing generated',prompt.slice(0,180));}catch(err){out.textContent='AI connection unavailable: '+(err.message||String(err))+'\n\nCheck that the rapid-task Edge Function is deployed and GEMINI_API_KEY is saved in Supabase Function Secrets.';}finally{btn.disabled=false;btn.textContent='Ask SENRAI'}});
+$('commandForm').addEventListener('submit',async e=>{e.preventDefault();const title=$('commandInput').value.trim();if(!title||!currentUser)return;const {error}=await sb.from('nexus_tasks').insert({user_id:currentUser.id,title,description:'Created from Mission Terminal. Review and execute this mission manually.',status:'queued'});if(error)return message('Could not save task: '+error.message,true);$('commandInput').value='';await log('Mission queued',title);await loadTasks();renderStats()});
+function openModal(mode){modalMode=mode;$('modalTitle').textContent=mode==='project'?'Add business project':'Create mission';$('modalName').value='';$('modalDesc').value='';$('modalBack').classList.remove('hidden');$('modalBack').style.display='flex'}
+function closeModal(){$('modalBack').classList.add('hidden');$('modalBack').style.display='none'}
+$('addProject').addEventListener('click',()=>openModal('project'));$('newMission').addEventListener('click',()=>{$('commandInput').focus();window.scrollTo({top:document.querySelector('.hero').offsetTop,behavior:'smooth'})});$('modalCancel').addEventListener('click',closeModal);
+$('modalForm').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser)return;const name=$('modalName').value.trim(),description=$('modalDesc').value.trim();if(!name)return;if(modalMode==='project'){const {error}=await sb.from('nexus_projects').insert({user_id:currentUser.id,name,description,progress:0});if(error)return alert('Could not save project: '+error.message);await log('Project created',name);await loadProjects();renderStats()}closeModal()});
+document.addEventListener('click',async e=>{const b=e.target.closest('button[data-action]');if(!b||!currentUser)return;const id=b.dataset.id,a=b.dataset.action;b.disabled=true;try{
+if(a==='focus-task'){const target=$('taskList');if(target){target.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{const row=[...target.querySelectorAll('.task')].find(el=>el.textContent.includes((tasks.find(t=>t.id===id)||{}).title||'\u0000'));if(row){row.style.outline='1px solid var(--green)';setTimeout(()=>row.style.outline='',1800)}},250)}}
+if(a==='business-task'){const p=projects.find(x=>x.id===id);const title=prompt('Task for '+(p?.name||'this business')+':');if(title&&title.trim()){const {error}=await sb.from('nexus_tasks').insert({user_id:currentUser.id,title:title.trim(),description:'Business: '+(p?.name||'Business')+'. Review output before external use.',status:'queued'});if(error)throw error;await log('Business task added',p?.name+': '+title.trim());await loadTasks();renderStats()}}
+if(a==='delete-project'){const p=projects.find(x=>x.id===id);const {error}=await sb.from('nexus_projects').delete().eq('id',id);if(error)throw error;await log('Project removed',p?.name||'Project');await loadProjects()}
+if(a==='run-task'){const t=tasks.find(x=>x.id===id);if(!t)throw new Error('Task not found.');b.textContent='Running…';const prompt='Execute this business task by producing a concrete deliverable in your response. Do not claim to publish listings, contact customers, spend money, or access external accounts. Clearly label assumptions and provide actionable next steps. Task: '+t.title+'\nExisting details: '+(t.description||'None');const {data,error}=await sb.functions.invoke('rapid-task',{body:{prompt}});if(error)throw error;if(!data||!data.reply)throw new Error(data?.error||'SENRAI returned no result.');const base=(t.description||'').split('\n\n--- SENRAI RUN ').slice(0,1)[0];const updatedDescription=base+'\n\n--- SENRAI RUN '+new Date().toLocaleString()+' ---\n'+data.reply;const {error:updateError}=await sb.from('nexus_tasks').update({status:'in_progress',description:updatedDescription,updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;await log('SENRAI task run completed',t.title+' — output saved to task');await loadTasks()}
+if(a==='advance-task'){const t=tasks.find(x=>x.id===id);const status=t.status==='queued'?'in_progress':'completed';const {error}=await sb.from('nexus_tasks').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;await log(status==='completed'?'Mission completed':'Mission started',t.title);await loadTasks()}
+if(a==='delete-task'){const t=tasks.find(x=>x.id===id);const {error}=await sb.from('nexus_tasks').delete().eq('id',id);if(error)throw error;await log('Mission removed',t?.title||'Task');await loadTasks()}
+if(a==='request-approval'){const t=tasks.find(x=>x.id===id);const {error}=await sb.from('nexus_approvals').insert({user_id:currentUser.id,task_id:id,title:t?.title||'Task action',description:'Review this action before proceeding.',status:'pending'});if(error)throw error;await log('Approval requested',t?.title||'Task');await loadApprovals()}
+if(a==='approve'||a==='reject'){const ap=approvals.find(x=>x.id===id);const {error}=await sb.from('nexus_approvals').update({status:a==='approve'?'approved':'rejected',decided_at:new Date().toISOString()}).eq('id',id);if(error)throw error;await log(a==='approve'?'Approval recorded':'Approval rejected',ap?.title||'Action');await loadApprovals()}
+}catch(err){alert('Action failed: '+err.message)}finally{b.disabled=false;renderStats()}});
+$('clearCompleted').addEventListener('click',async()=>{if(!currentUser)return;const ids=tasks.filter(t=>t.status==='completed').map(t=>t.id);if(!ids.length)return;if(!confirm('Delete all completed tasks?'))return;const {error}=await sb.from('nexus_tasks').delete().in('id',ids);if(error)return alert(error.message);await log('Completed tasks cleared',String(ids.length)+' tasks');await loadTasks();renderStats()});
+$('clearActivity').addEventListener('click',async()=>{if(!currentUser)return;if(!confirm('Clear your activity history?'))return;const {error}=await sb.from('nexus_activity').delete().eq('user_id',currentUser.id);if(error)return alert(error.message);activity=[];renderActivity()});
+$('etsyConnectInfo').addEventListener('click',()=>alert('Etsy connection requires an Etsy developer app, API key and secret stored only in Supabase Edge Function secrets, a registered HTTPS OAuth callback, and your approval for requested scopes. Live publishing requires an opened shop. Never paste secrets into this page or chat.'));
+$('etsyGenerate').addEventListener('click',async()=>{if(!currentUser)return;const idea=$('etsyProductIdea').value.trim();const price=Number($('etsyPrice').value);if(!idea||!Number.isFinite(price)||price<=0)return alert('Enter a product idea and a positive price.');const btn=$('etsyGenerate'),out=$('etsyDraftOutput');btn.disabled=true;btn.textContent='Generating…';out.textContent='SENRAI is preparing one listing draft…';try{const prompt='Create ONE Etsy digital-download listing draft for product idea: '+idea+'. Target price: $'+price.toFixed(2)+'. Return a structured SEO-conscious title, buyer-focused description, 13 short relevant tags, files the buyer receives, usage/license note, 5 image/mockup concepts, and pre-publish compliance checklist. Do not invent keyword volume, sales, or market demand. Do not claim this is published or that a sale occurred. Flag if product files are missing. Avoid trademarks and copied artist styles. Draft only.';const result=await sb.functions.invoke('rapid-task',{body:{prompt:prompt}});if(result.error)throw result.error;if(!result.data||!result.data.reply)throw new Error('AI returned no draft.');const reply=result.data.reply;out.textContent=reply;const save=await sb.from('nexus_tasks').insert({user_id:currentUser.id,title:'Etsy listing draft: '+idea.slice(0,90),description:'Draft only — NOT published to Etsy. Target price: $'+price.toFixed(2)+'\n\n'+reply,status:'in_progress'});if(save.error)throw save.error;await log('Etsy listing draft generated',idea+' — saved in task queue; not published');await loadTasks();renderStats();}catch(err){out.textContent='Could not generate listing draft: '+(err.message||String(err));}finally{btn.disabled=false;btn.textContent='Generate individual listing draft';}});
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const id=b.dataset.scroll;if(id==='top')window.scrollTo({top:0,behavior:'smooth'});else $(id).scrollIntoView({behavior:'smooth',block:'start'})}));
+async function init(){if(!window.supabase){$('systemStatus').textContent='LIBRARY ERROR';message('Could not load Supabase client. Check your connection and reload.',true);return}sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data:{session},error}=await sb.auth.getSession();if(error){showAuth();message(error.message,true)}else if(session)showApp(session.user);else showAuth();sb.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{currentUser=null;showAuth()}})}
+init();
+})();
+</script>
+
+<!-- SENRAI pixel operations base (reads real task status from the app; idle walking is visual only) -->
+<script>
+/*! SENRAI Nexus — pixel operations base (drop-in module)
+ *  Replaces the CSS "Nexus Atlas" with a canvas pixel-art base (top-down map + zoomed room view).
+ *  Agent status is READ from your app's saved-task state (#habitat*State / #habitat*Task).
+ *  Nothing here talks to Supabase or the AI function. Idle walking is a visual animation only. */
+(function(){
+'use strict';
+if(window.__nexusBase)return;window.__nexusBase=true;
+const CSS=`
+.nb-wrap{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;background:#000;padding:8px;margin:10px 0 0;border:2px solid #000;box-shadow:0 0 0 1px #29404a}
+.nb-col{line-height:0}.nb-stage{position:relative;display:inline-block;line-height:0}
+.nb-wrap canvas{image-rendering:pixelated;display:block}
+.nb-tag{position:absolute;margin:4px;padding:2px 5px;font:6px/1.4 'Press Start 2P',ui-monospace,monospace;background:#000c;border:2px solid #000;color:#fff;pointer-events:none;white-space:nowrap}
+.nb-tag i{display:inline-block;width:6px;height:6px;margin-right:4px}
+.nb-dlg{position:relative;margin:16px 4px 10px;padding:13px 10px 22px;border:3px solid #fff;outline:3px solid #000;background:#060a14;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:62px;color:#fff}
+.nb-dlg b{position:absolute;top:-10px;left:8px;font:7px 'Press Start 2P',ui-monospace,monospace;padding:4px 6px;color:#000;border:2px solid #000;background:#a3e635}
+.nb-dlg small{position:absolute;right:8px;bottom:5px;font:7px 'Press Start 2P',ui-monospace,monospace;color:#f5b942}
+.nb-roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 10px}
+.nb-ag{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 3px;background:#0b1114;border:2px solid #263e43;color:#d9e8e7;font:8px/1.2 ui-monospace,monospace;cursor:pointer;min-width:0;text-align:center}
+.nb-ag.sel{border-color:#a3e635;background:#101a13}
+.nb-ag canvas{width:36px;height:48px;image-rendering:pixelated;background:#070b09;border:1px solid #263e43}
+.nb-ag em{font:6px 'Press Start 2P',ui-monospace,monospace;font-style:normal;padding:3px 3px;border:1px solid currentColor;white-space:nowrap}
+.nb-ag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+@media(max-width:480px){.nb-ag{font-size:7px}.nb-ag em{font-size:5px}.nb-ag canvas{width:30px;height:40px}}
+`;
+const HTML=`<div class="nexus-map-top"><span><b>NEXUS BASE</b> / ROOM: <span id="zn">CORE</span></span><span><i class="map-led"></i> STATUS FROM YOUR SAVED TASKS</span></div>
+<div class="nb-wrap"><div class="nb-col"><div class="nb-stage" id="stage"><canvas id="cv" width="168" height="232" aria-label="Top-down pixel map of the five agent rooms"></canvas><div id="tags"></div></div></div><div class="nb-col"><canvas id="zv" width="168" height="224" aria-label="Zoomed view of the selected agent room"></canvas></div></div>
+<div class="nb-dlg" aria-live="polite"><b id="dn">SENRAI CORE</b><span id="dt"></span><small>LIVE TASK STATUS</small></div>
+<div class="nb-roster" id="roster"></div>
+<div class="nexus-map-foot"><span>Tap a room or agent to inspect it</span><span>Status and task text come from your Nexus task queue</span><span>Idle walking is a visual animation only</span></div>`;
+function boot(host){
+ host.innerHTML=HTML;
+ const $=s=>host.querySelector(s);
+ const cv=$('#cv'),c=cv.getContext('2d');c.imageSmoothingEnabled=false;
+ let ox=0,oy=0,t=0;
+const R=(x,y,w,h,k)=>{c.fillStyle=k;c.fillRect(ox+(x|0),oy+(y|0),w,h)};
+const circ=(cx,cy,r,k)=>{for(let d=-r;d<=r;d++){const w=Math.floor(Math.sqrt(r*r-d*d+.5));R(cx-w,cy+d,w*2+1,1,k)}};
+const floor=(w,a,b)=>{for(let i=0;i<w/8;i++)for(let j=0;j<5;j++)R(i*8,22+j*8,8,8,(i+j)%2?a:b)};
+const wall=(w,k,tr)=>{R(0,0,w,22,k);R(0,20,w,2,tr)};
+const desk=(x,w,top,side)=>{R(x,33,w,4,top);R(x,33,w,1,'#ffffff18');R(x+2,37,3,9,side);R(x+w-5,37,3,9,side)};
+
+/* ---------- 8-bit sprite (10x14, black outline) ---------- */
+const BODY=["...KKKKKK...","..KHhhhhhK..",".KHhhhhhhhK.",".KhhhhhhhhK.","KhsssssssshK",".KssKssKssK.",".KssssssssK.","..KKssssKK..","KcCcccvvcccK","KsCccvvcccsK","KsccccccccsK",".KcccddcccK.",".KyyyyyyyyK."];
+const LI=[".KpppKKpppK.",".KppK..KppK.","KbbbK..KbbbK"],LA=[".KpppKKpppK.","KppK....KppK","KbbK....KbbK"];
+const dk=h=>{if(h.length<5)h='#'+[...h.slice(1)].map(x=>x+x).join('');return'#'+[1,3,5].map(i=>Math.floor(parseInt(h.substr(i,2),16)*.6).toString(16).padStart(2,'0')).join('')};
+function sp(ctx,rows,x,y,p,dir){for(let r=0;r<rows.length;r++)for(let i=0;i<12;i++){const ch=rows[r][dir<0?11-i:i];if(ch!=='.'){ctx.fillStyle=p[ch];ctx.fillRect(x+i,y+r,1,1)}}}
+const pal=a=>({K:'#000',h:a.hair,H:'#ffffffaa',s:'#fcd8a8',c:a.cloth,C:'#ffffff55',d:dk(a.cloth),v:a.acc,y:'#f8b800',p:'#3c4a6c',b:'#503000'});
+const GEAR={scout:[[2,5,'#3cbcfc'],[3,5,'#3cbcfc'],[4,5,'#bff'],[5,5,'#3cbcfc'],[6,5,'#3cbcfc'],[7,5,'#bff'],[8,5,'#3cbcfc'],[9,5,'#3cbcfc']],
+ forge:[[1,3,'#f8b800'],[2,3,'#f8b800'],[9,3,'#f8b800'],[10,3,'#f8b800'],[3,4,'#bcd8fc'],[4,4,'#bcd8fc'],[7,4,'#bcd8fc'],[8,4,'#bcd8fc']],
+ scribe:[[2,1,'#6844fc'],[3,1,'#6844fc'],[4,1,'#b8b8f8'],[5,1,'#6844fc'],[6,1,'#6844fc'],[7,1,'#6844fc'],[8,1,'#6844fc'],[9,0,'#b8b8f8'],[3,2,'#6844fc'],[8,2,'#6844fc']],
+ analyst:[[3,5,'#fff'],[4,5,'#bcd8fc'],[7,5,'#bcd8fc'],[8,5,'#fff'],[5,5,'#fff'],[6,5,'#fff']],
+ core:[[3,0,'#f8b800'],[5,0,'#f8b800'],[7,0,'#f8b800'],[8,0,'#f8b800'],[3,1,'#f8b800'],[8,1,'#f8b800'],[4,1,'#d82800'],[7,1,'#d82800']]};
+function acc(ctx,a,x,y,dir){(GEAR[a.id]||[]).forEach(g=>{ctx.fillStyle=g[2];ctx.fillRect(x+(dir<0?11-g[0]:g[0]),y+g[1],1,1)})}
+function rowsFor(a){const b=BODY.slice();let l=LI;
+ if(a.mode==='walk')l=(t>>1)%2?LA:LI;
+ if(a.mode==='work'&&(t>>1)%2)b[10]='KccccccccsK.';
+ return b.concat(l)}
+function drawAgent(a){const yo=a.mode==='idle'?((t/6|0)%2):a.mode==='walk'?((t>>1)%2):0,x=ox+a.x,y=oy+a.y+yo;
+ R(a.x+1,a.y+16,10,1,'#000000aa');R(a.x+2,a.y+17,8,1,'#00000055');sp(c,rowsFor(a),x,y,pal(a),a.dir);acc(c,a,x,y,a.dir)}
+
+/* ---------- tile rooms ---------- */
+const ob=(x,y,w,h,f,hi)=>{R(x+1,y+h,w,2,'#00000077');R(x,y,w,h,'#000');R(x+1,y+1,w-2,h-2,f);R(x+1,y+1,w-2,1,hi||f);R(x+1,y+h-2,w-2,1,dk(f));R(x+w-2,y+2,1,h-3,dk(f));R(x+2,y+2,1,1,'#ffffff66')};
+const scr=(x,y,w,h,k,ph)=>{ob(x,y,w,h,'#001418','#00303a');for(let q=0;q<h-3;q+=2)R(x+2,y+2+q,2+((q*3+ph)%(w-5)),1,k)};
+const plant=(x,y)=>{ob(x,y+5,6,5,'#7c5430','#ac7c00');R(x,y+1,6,5,'#000');R(x+1,y+2,4,3,'#58d854');R(x+2,y,2,2,'#000');R(x+2,y+1,2,1,'#00a800')};
+function room(w,h,k,hi,f1,f2,dr){R(0,0,w,h,f1);
+ for(let x=0;x<w;x+=8)for(let y=12;y<h;y+=8){const n=(x*7+y*13+(x*y>>3))%9;if(n<3)R(x+1,y+1,7,7,f2);R(x,y,8,1,'#00000044');R(x,y,1,8,'#00000044');R(x+1,y+1,3,1,'#ffffff12');
+  if(n===5){R(x+2,y+3,3,1,'#0008');R(x+4,y+4,2,1,'#0008');R(x+5,y+5,1,2,'#0008')}if(n===7)R(x+3,y+5,1,1,'#ffffff30')}
+ R(0,0,w,12,'#000');for(let r=0;r<3;r++)for(let x=(r%2?-4:0);x<w;x+=8){R(x+1,1+r*4,6,3,(x+r)%3?k:dk(k));R(x+1,1+r*4,6,1,hi)}
+ R(0,12,4,h-12,'#000');R(1,12,2,h-12,k);R(w-4,12,4,h-12,'#000');R(w-3,12,2,h-12,k);R(0,h-4,w,4,'#000');R(0,h-3,w,2,k);
+ R(4,12,w-8,3,'#00000066');R(4,15,w-8,2,'#00000033');R(4,12,2,h-16,'#00000044');R(w-6,12,2,h-16,'#00000044');
+ (dr.t||[]).forEach(x=>R(x,0,8,12,f1));(dr.b||[]).forEach(x=>R(x,h-4,8,4,f1));(dr.l||[]).forEach(y=>R(0,y,4,8,f1));(dr.r||[]).forEach(y=>R(w-4,y,4,8,f1))}
+function ex(a){const w=a.r[2],h=a.r[3],g=c.globalAlpha;
+ (a.id==='core'?[14,56,100,146]:[10,w-14]).forEach((x,i)=>{R(x,4,3,6,'#000');R(x+1,5,1,4,'#7c5430');R(x,1+((t>>1)+i)%2,3,3,'#f8b800');R(x+1,2,1,2,'#fc7460');c.globalAlpha=.13;circ(x+1,17,9,'#f8b800');c.globalAlpha=.07;circ(x+1,17,15,'#f8b800');c.globalAlpha=g});
+ c.globalAlpha=.55+.35*Math.sin(t*.2);[[10,h-14],[w-18,h-14]].forEach(q=>{[[1,0],[0,1],[1,1],[2,1],[1,2]].forEach(d=>R(q[0]+d[0],q[1]+d[1],1,1,'#58d854'))});c.globalAlpha=g;
+ for(let i=0;i<6;i++){const x=(i*37+(t>>1)*(1+i%2))%(w-8)+4,y=h-8-((t+i*11)%(h-26));R(x,y,1,1,'#ffffff44')}}
+const RINGS={scout:[[28,62]],forge:[[44,62],[16,66]],scribe:[[38,55]],analyst:[[24,42]],core:[[28,50],[132,50],[80,58]]};
+const MOSS=['#17572a','#2f9a45','#58d854','#9af08a'];
+function vine(x,y,n,sd){for(let i=0;i<n;i++){const u=(i*53+sd*17+x*7)%9,v=(i*29+sd*11+y*5)%7;R(x+u-3,y+v-2,1+(i%2),1,MOSS[(i+sd)%4]);if(i%4===0)R(x+u-2,y+v-1,1,2,MOSS[1])}}
+function deco(a){const w=a.r[2],h=a.r[3],k=a.col,g=c.globalAlpha,p=.65+.3*Math.sin(t*.15);
+ R(0,11,w,1,k);c.globalAlpha=.25;R(0,12,w,2,k);R(3,12,1,h-16,k);R(w-4,12,1,h-16,k);c.globalAlpha=.7;R(4,h-5,w-8,1,k);c.globalAlpha=.06;
+ for(let x=24;x<w-4;x+=24)R(x,14,1,h-18,k);c.globalAlpha=g;
+ (RINGS[a.id]||[]).forEach(q=>{c.globalAlpha=.1+.06*Math.sin(t*.15);circ(q[0],q[1],6,k);c.globalAlpha=p;for(let d=0;d<6.28;d+=.28)if(((d*10)|0)%4)R(q[0]+Math.cos(d)*7,q[1]+Math.sin(d)*7,1,1,k);R(q[0]-1,q[1],3,1,k);R(q[0],q[1]-1,1,3,k);c.globalAlpha=g});
+ [[6,16],[w-8,16],[6,h-8],[w-8,h-8],[w>100?40:30,h-7],[w>100?120:50,14]].forEach((q,i)=>vine(q[0],q[1],9,i+a.r[0]));
+ if(a.id==='core'){for(let i=0;i<8;i++){const g2=i*.785+t*.02;R(80+Math.cos(g2)*25,38+Math.sin(g2)*18,4,3,i%2?'#d82800':'#f8b800')}
+  c.globalAlpha=.7;R(44,38,14,1,k);R(102,38,14,1,k);R(44,38,1,10,k);R(116,38,1,10,k);c.globalAlpha=g;
+  [58,98].forEach(x=>{ob(x,34,5,12,'#3c3c3c','#7c7c7c');R(x+1,36,3,8,(t>>2)%2?'#fc7460':'#d82800')})}
+ if(a.id==='scribe'){for(let i=0;i<3;i++)R(45+((t>>1)+i*9)%18,52+i%2*4,2,1,'#9bd0ff')}
+ if(a.id==='forge'){R(14,60,3,1,'#58d854');for(let i=0;i<3;i++)R(52+(i*2),30-((t+i*4)%12),1,1,'#ffffff66')}
+ if(a.id==='scout'&&a.mode==='work'){c.globalAlpha=.14;for(let r=0;r<3;r++)R(55-r*4,24+r*3,2+r*8,1,'#2ad4e8');c.globalAlpha=g}
+ if(a.id==='analyst'){c.globalAlpha=.5;R(30,15+((t>>1)%10),22,1,'#4a7bff');c.globalAlpha=g}}
+const cab=(x1,y1,x2,y2,k)=>{const lx=Math.min(x1,x2),ly=Math.min(y1,y2);R(lx,y1,Math.abs(x2-x1)+1,2,'#000');R(lx,y1,Math.abs(x2-x1)+1,1,k);R(x2,ly,2,Math.abs(y2-y1)+1,'#000');R(x2,ly,1,Math.abs(y2-y1)+1,k)};
+const led=(x,y,i)=>R(x,y,2,1,((t>>2)+i)%3?'#58d854':'#d82800');
+const jar=(x,y,k)=>{R(x,y,3,5,'#000');R(x+1,y+1,1,3,k);R(x+1,y,1,1,'#ffffffaa')};
+const vent=(x,y)=>{ob(x,y,8,6,'#1a1f26','#2c323c');for(let i=0;i<3;i++)R(x+2,y+2+i,4,1,'#000')};
+function deco2(a){const w=a.r[2],h=a.r[3],k=a.col,g=c.globalAlpha;
+ for(let i=0;i<12;i++){const x=(i*41+a.r[0])%(w-12)+6,y=14+(i*23)%(h-22);R(x,y,3,1,'#ffffff12');R(x+1,y+1,2,1,'#00000033')}
+ if(a.id!=='core')[18,50].forEach((x,i)=>{R(x,2,9,8,'#000');R(x+1,3,7,6,dk(k));R(x+2,4,5,1,k);R(x+2,6,3,1,'#ffffff55');R(x+6,7,1,1,((t>>3)+i)%2?k:'#000')});
+ if(a.id==='scout'){ob(36,14,10,14,'#3c3c3c','#7c7c7c');for(let i=0;i<4;i++){led(38,17+i*3,i);R(41,17+i*3,3,1,'#000')}
+  cab(46,24,56,24,k);cab(33,20,36,20,k);vent(6,32);R(44,34,3,3,'#f8b800');R(30,34,3,3,'#fc7460');ob(62,14,8,8,'#7c7c7c','#bcbcbc');circ(66,18,3,'#3c3c3c');R(66,14,1,4,'#000');
+  R(10,26,4,2,'#000');R(11,26,2,1,'#fff')}
+ if(a.id==='forge'){R(30,24,16,3,'#000');R(30,24,16,1,'#7c7c7c');R(30,25,16,1,'#3c3c3c');R(37,22,3,2,'#d82800');R(36,27,5,1,'#000');
+  for(let i=0;i<16;i++)R(31+(i*5)%11,58+(i*3)%7,2,2,'#1c1c1c');R(35,60,1,1,(t>>1)%2?'#fc7460':'#d82800');R(38,63,1,1,'#f8b800');
+  ob(32,13,13,8,'#503000','#7c5430');jar(34,15,'#58d854');jar(38,15,'#f8b800');jar(42,15,'#fc7460');R(10,47,8,1,'#bcbcbc');R(12,51,3,2,'#f8b800');R(20,50,4,3,'#000');R(21,51,2,1,'#58d854')}
+ if(a.id==='scribe'){ob(58,13,10,14,'#6844fc','#b8b8f8');R(61,17,4,1,'#f8b800');R(62,18,2,5,'#f8b800');R(60,25,6,1,'#f8b800');
+  R(60,26,2,3,'#fff');R(60,24,2,2,(t>>1)%2?'#f8b800':'#fc7460');c.globalAlpha=.15;circ(61,25,7,'#f8b800');c.globalAlpha=g;
+  R(40,31,3,3,'#000');R(41,31,1,1,'#6844fc');R(26,52,22,1,'#b8b8f8');R(30,57,14,1,'#b8b8f8');R(36,53,2,4,'#f8b800')}
+ if(a.id==='analyst'){ob(6,28,16,10,'#e8e8e8','#fff');R(8,31,9,1,'#0078f8');R(8,33,6,1,'#d82800');R(8,35,11,1,'#00a800');
+  ob(66,48,6,9,'#3c3c3c','#7c7c7c');cab(62,40,62,56,'#4a7bff');R(26,54,3,3,'#e8e2cf');vent(40,30);
+  for(let i=0;i<4;i++)R(60+(i%2)*4,19+i*5,3,2,((t>>2)+i)%3?'#3c3c3c':'#58d854')}
+ if(a.id==='core'){ob(10,30,20,10,'#3c3c3c','#7c7c7c');R(12,32,16,6,'#0b3a58');R(14,34,5,1,'#3cbcfc');R(22,35,4,1,'#f8b800');
+  ob(130,28,20,10,'#3c3c3c','#7c7c7c');R(132,30,16,6,'#0b3a58');R(134,32,7,1,'#3cbcfc');vent(70,52);vent(86,52)}}
+function plate(a){if(!(a.mode==='work'||a.real==='queued'))return;const x=a.x-2,y=a.y-6;R(x,y,16,5,'#000c');R(x,y,16,1,a.col);for(let i=0;i<5;i++)R(x+2+i*3,y+2,2,1,a.mode==='work'&&((t>>2)+i)%4===0?'#fff':'#9fb8a8')}
+function vig(a){const w=a.r[2],h=a.r[3];c.strokeStyle='#000';c.lineWidth=2;for(let k=0;k<4;k++){c.globalAlpha=.2-k*.045;c.strokeRect(ox+1+k*2,oy+1+k*2,w-2-k*4,h-2-k*4)}c.globalAlpha=1}
+const D={
+scout(t,a){room(76,72,'#0058f8','#3cbcfc','#1c2430','#2c3848',{t:[34],b:[34],l:[32]});const w=a.mode==='work';
+ ob(6,16,26,9,'#7c5430','#ac7c00');scr(9,10,9,8,'#3cbcfc',t>>2);scr(21,10,9,8,'#3cbcfc',(t>>2)+3);
+ ob(50,16,10,8,'#7c7c7c','#bcbcbc');R(54,11,2,5,'#000');R(55+Math.cos(t*.4)*4,10+Math.sin(t*.4)*2,1,1,'#58d854');
+ ob(16,30,36,16,'#0058a8','#3cbcfc');R(18,33,32,11,'#003c58');for(let i=1;i<4;i++){R(18+i*8,33,1,11,'#0058a8')}
+ R(24,37,2,2,'#f8b800');R(40,40,2,2,'#fc7460');if(w)R(20+(t*2)%28,35+((t>>2)%3)*3,2,2,'#58d854');
+ ob(60,28,8,20,'#7c5430','#ac7c00');R(62,31,4,2,'#fff');R(62,36,4,2,'#fff');R(62,41,4,2,'#fff');
+ plant(8,54);ob(56,54,10,10,'#7c5430','#ac7c00');R(57,58,8,1,'#000')},
+forge(t,a){room(76,72,'#00a800','#58d854','#242424','#383838',{t:[34],b:[34],r:[32]});const w=a.mode==='work';
+ ob(6,14,24,18,'#3c3c3c','#7c7c7c');scr(9,17,11,7,'#58d854',t>>2);if(w)R(22,18,2,10,'#fff');R(8,28,20,2,'#7c7c7c');
+ ob(46,14,20,20,'#7c7c7c','#bcbcbc');R(50,22,12,10,'#000');R(52,25,8,6,(t>>1)%2?'#fc7460':'#f8b800');
+ for(let k=0;k<3;k++)R(54+(k%2)*2,12-k*3-((t>>1)%3),2,2,'#bcbcbc');
+ ob(34,42,16,6,'#7c7c7c','#bcbcbc');ob(38,48,8,4,'#3c3c3c','#7c7c7c');
+ if(w)for(let k=0;k<3;k++)R(36+((t*3+k*5)%12),40-((t+k*2)%6),1,1,'#f8b800');
+ ob(6,44,22,14,'#7c5430','#ac7c00');R(8,46,18,10,'#0058f8');R(10,49,14,1,'#bcd8fc');R(10,52,9,1,'#bcd8fc');
+ ob(58,50,10,12,'#503000','#7c5430');plant(66,56)},
+scribe(t,a){room(76,72,'#6844fc','#b8b8f8','#1c1830','#2c2848',{t:[34],r:[32]});const w=a.mode==='work';
+ ob(8,14,28,10,'#7c5430','#ac7c00');['#d82800','#0058f8','#f8b800','#00a800','#6844fc'].forEach((k,i)=>{R(10+i*5,16,3,7,k);R(10+i*5,16,3,1,'#fff')});
+ ob(38,28,32,10,'#503000','#7c5430');scr(44,20,10,8,'#b8b8f8',t>>2);R(58,30,7,5,'#fff');R(59,32,5,1,'#7c7c7c');
+ ob(6,34,10,16,'#d82800','#fc7460');R(8,38,6,3,'#000');R(16,w?34:38,3,5,'#f8b800');
+ if(w){const px=(t*2)%34;ob(18+px,44-(px>>2),7,5,'#fff','#bcbcbc')}
+ ob(24,48,28,14,'#6844fc','#b8b8f8');R(26,50,24,10,'#3c2ca8');plant(62,54);ob(60,44,5,6,'#f8b800','#fff')},
+analyst(t,a){room(76,72,'#ac7c00','#f8b800','#201c10','#342c18',{t:[34],l:[32]});
+ scr(6,14,24,12,'#f8b800',0);for(let i=0;i<20;i++){const y=22+Math.sin((i+t*.5)/3)*2;R(8+i,Math.round(y),1,1,'#58d854')}
+ scr(34,14,20,12,'#3cbcfc',0);for(let i=0;i<5;i++){const h=2+((i*5+(t>>3)*2)%7);R(37+i*3,24-h,2,h,i==3?'#fc7460':'#3cbcfc')}
+ ob(58,14,10,26,'#3c3c3c','#7c7c7c');for(let k=0;k<5;k++)R(60,17+k*5,2,2,((t>>2)+k)%3?'#58d854':'#d82800');R(63,17,3,1,'#7c7c7c');R(63,22,3,1,'#7c7c7c');
+ ob(8,52,28,9,'#7c5430','#ac7c00');scr(14,44,10,8,'#58d854',t>>2);R(30,54,3,3,(t>>2)%2?'#d82800':'#400000');
+ ob(44,48,12,10,'#3c3c3c','#7c7c7c');R(46,51,8,1,'#58d854');R(46,54,5,1,'#3cbcfc');plant(62,56)},
+core(t,a){room(160,64,'#d82800','#fc7460','#241c1c','#382c2c',{b:[34,118]});
+ circ(80,38,15,'#000');circ(80,38,14,'#7c7c7c');circ(80,38,11,'#d82800');circ(80,38,7+((t>>2)%2),'#fc7460');circ(80,38,4,'#f8b800');circ(80,38,2,'#fff');
+ for(let k=0;k<4;k++){const g=t*.2+k*1.57;R(80+Math.cos(g)*20,38+Math.sin(g)*14,2,2,'#f8b800')}
+ [8,116].forEach(x=>{ob(x,16,36,10,'#3c3c3c','#7c7c7c');for(let i=0;i<6;i++)R(x+4+i*5,19,3,3,((t>>2)+i)%3?'#7c7c7c':'#fc7460')});
+ [50,102].forEach(x=>{ob(x,2,8,8,'#d82800','#fc7460');R(x+3,4,2,4,'#f8b800')});
+ ob(136,40,14,14,'#d82800','#fc7460');R(138,42,10,3,'#f8b800');plant(10,54);plant(140,16);plant(12,16)}
+};
+
+/* ---------- agents (state comes from the app's real task status) ---------- */
+const AG=[
+{id:'core',n:'SENRAI CORE',role:'Command',r:[4,4,160,64],col:'#ff7a2a',sx:36,ax:116,y:36,hair:'#e8ecef',cloth:'#4f8a1f',acc:'#a3e635',work:'COORDINATING',key:'Core'},
+{id:'scout',n:'SCOUT',role:'Research',r:[88,76,76,72],col:'#2ad4e8',sx:30,ax:56,y:50,hair:'#6b4426',cloth:'#2f8a55',acc:'#a3e635',work:'WORKING',key:'Scout'},
+{id:'forge',n:'FORGE',role:'Product build',r:[4,76,76,72],col:'#4ade5a',sx:34,ax:54,y:46,hair:'#2b2118',cloth:'#c46a24',acc:'#ffd27a',work:'WORKING',key:'Forge'},
+{id:'scribe',n:'SCRIBE',role:'Writing',r:[4,156,76,72],col:'#b05cff',sx:36,ax:54,y:38,hair:'#d9b24c',cloth:'#7a5bd0',acc:'#d6c8ff',work:'WORKING',key:'Scribe'},
+{id:'analyst',n:'ANALYST',role:'Monitoring',r:[88,156,76,72],col:'#4a7bff',sx:12,ax:38,y:34,hair:'#8a8f99',cloth:'#2f7fc4',acc:'#9bd0ff',work:'WORKING',key:'Analyst'}];
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COL={work:'#a3e635',queued:'#f5b942',idle:'#6b7f72'},LBL=a=>a.real==='work'?a.work:a.real==='queued'?'QUEUED':'STANDBY';
+const tagsEl=$('#tags'),rosterEl=$('#roster');let sel=AG[0];
+AG.forEach(a=>{a.x=a.sx;a.dir=1;a.mode='idle';a.real='idle';a.task='';a.tx=a.sx;a.next='idle';a.until=Date.now()+rnd(2000,8000);
+ const tg=document.createElement('div');tg.className='nb-tag';tg.style.left=(a.r[0]/1.68)+'%';tg.style.top=(a.r[1]/2.32)+'%';tagsEl.appendChild(tg);a.tg=tg;
+ const el=document.createElement('button');el.type='button';el.className='nb-ag';el.innerHTML='<canvas width="12" height="16"></canvas><span></span><em></em>';
+ el.querySelector('span').textContent=a.n==='SENRAI CORE'?'CORE':a.n;el.onclick=()=>select(a);rosterEl.appendChild(el);a.el=el;a.pc=el.querySelector('canvas').getContext('2d')});
+function paint(a){const col=COL[a.real],tx=LBL(a);a.tg.innerHTML='<i style="background:'+col+'"></i>';a.tg.appendChild(document.createTextNode(a.n+' · '+tx));
+ const p=a.el.querySelector('em');p.textContent=tx;p.style.color=col}
+let tw;
+function say(a,m){const n=$('#dn'),d=$('#dt');n.textContent=a.n;n.style.background=a.col;d.textContent='';clearInterval(tw);let i=0;tw=setInterval(()=>{d.textContent=m.slice(0,++i);if(i>=m.length)clearInterval(tw)},reduce?0:22)}
+const line=a=>a.real==='idle'?'Standing by. No task is assigned to this agent right now.':(a.real==='queued'?'Queued: ':'Working on: ')+(a.task||'saved task')
+function select(a){sel=a;zA=a;AG.forEach(x=>x.el.classList.toggle('sel',x===a));say(a,line(a))}
+$('#cv').addEventListener('click',e=>{const b=e.currentTarget.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*168,y=(e.clientY-b.top)/b.height*232;
+ const a=AG.find(a=>x>=a.r[0]&&x<a.r[0]+a.r[2]&&y>=a.r[1]&&y<a.r[1]+a.r[3]);if(a)select(a)});
+function readReal(a){const g=i=>{const e=document.getElementById(i);return e?e.textContent.trim():''};const st=g('habitat'+a.key+'State'),tk=g('habitat'+a.key+'Task');
+ return{real:/WORKING|COORDINATING/i.test(st)?'work':/QUEUED/i.test(st)?'queued':'idle',task:/^Waiting for|^Monitoring/i.test(tk)?'':tk}}
+function sync(){AG.forEach(a=>{const r=readReal(a);if(r.real===a.real&&r.task===a.task&&a.tg.textContent)return;const was=a.real;a.real=r.real;a.task=r.task;
+ if(r.real==='work'){if(a.mode!=='work'){a.tx=a.sx;a.next='work';a.mode=Math.abs(a.x-a.sx)<1?'work':'walk';if(a.mode==='work')a.dir=1}}
+ else if(was==='work'||a.mode==='work'){a.mode='idle';a.until=Date.now()+rnd(3000,6000)}
+ paint(a);if(a===sel)say(a,line(a))})}
+function step(a){const now=Date.now();
+ if(a.mode==='walk'){const d=a.tx-a.x;if(Math.abs(d)<1){a.x=a.tx;a.mode=a.next;if(a.mode==='work')a.dir=1;a.until=now+rnd(6000,12000)}else{a.dir=d>0?1:-1;a.x+=a.dir}}
+ else if(a.mode==='idle'&&!reduce&&now>a.until){a.tx=Math.abs(a.x-a.sx)<2?a.ax:a.sx;a.next='idle';a.mode='walk'}}
+function frame(){c.fillStyle='#000';c.fillRect(0,0,168,232);
+ [[38,68],[122,68],[80,108],[38,148],[122,148],[80,188]].forEach(q2=>{const x=q2[0],y=q2[1];c.fillStyle='#503000';c.fillRect(x,y,8,8);c.fillStyle='#7c5430';for(let i=0;i<8;i+=2)for(let j=0;j<8;j+=2)if((i+j)%4==0)c.fillRect(x+i,y+j,2,2)});
+ AG.forEach(a=>{ox=a.r[0];oy=a.r[1];c.save();c.beginPath();c.rect(ox,oy,a.r[2],a.r[3]);c.clip();D[a.id](t,a);deco(a);deco2(a);ex(a);drawAgent(a);plate(a);vig(a);c.restore();
+  if(a===sel&&(t>>2)%2){c.strokeStyle='#f8b800';c.lineWidth=2;c.strokeRect(ox+1,oy+1,a.r[2]-2,a.r[3]-2)}
+  a.pc.clearRect(0,0,12,16);sp(a.pc,BODY.concat(LI),0,0,pal(a),1);acc(a.pc,a,0,0,1)})}
+/* ================= ROOM VIEW (hi-res, 168x224) ================= */
+var zv=$('#zv'),q=zv.getContext('2d'),zA=AG[0];const W=168,H=224;
+const F=(x,y,w,h,k)=>{q.fillStyle=k;q.fillRect(x|0,y|0,w,h)};
+const GL=(al,fn)=>{q.globalAlpha=al;fn();q.globalAlpha=1};
+const hs=(a,b)=>(((a+7)*73856093)^((b+3)*19349663))>>>0;
+const GR=['#17572a','#2f9a45','#58d854','#9af08a'];
+function zfloor(c1,c2,sm){F(0,22,W,H-22,c1);for(let tx=0;tx<W/16;tx++)for(let ty=0;ty<(H-22)/16+1;ty++){const x=tx*16,y=22+ty*16,n=hs(tx,ty)%8;if(n<2)F(x,y,16,16,c2);F(x,y,16,1,sm);F(x,y,1,16,sm);F(x+1,y+1,14,1,'#ffffff0d');
+ if(n===4){F(x+4,y+6,6,1,'#0007');F(x+8,y+7,3,1,'#0007')}if(n===5)zvine(x+8,y+8,4,tx+ty);if(n===6)F(x+10,y+10,1,1,'#ffffff30');F(x+1,y+1,1,1,'#0006');F(x+14,y+14,1,1,'#0006')}}
+function zvine(x,y,n,sd){for(let i=0;i<n;i++){const u=hs(i,sd)%14-7,v=hs(sd,i)%9-4;F(x+u,y+v,2,2,GR[(i+sd)%4]);if(i%3===0)F(x+u+1,y+v-1,1,2,GR[2])}}
+function zwall(col,door){F(0,0,W,22,'#10141b');for(let x=0;x<W;x+=24){F(x+1,3,22,11,'#1a202a');F(x+1,3,22,1,'#2c3644');F(x+3,6,6,1,'#0008');F(x+14,9,5,3,'#0a0d12')}
+ GL(.3,()=>F(0,15,W,7,col));F(0,16,W,2,col);F(0,19,W,1,col+'99');
+ if(door){F(door-14,0,7,24,'#7b8494');F(door+7,0,7,24,'#7b8494');F(door-12,2,3,18,col);F(door+9,2,3,18,col);F(door-7,6,14,16,'#0a0d12');GL(.5,()=>F(door-6,8,12,12,col));F(door-6,19,12,2,col)}
+ GL(.25,()=>{F(2,22,3,H-26,col);F(W-5,22,3,H-26,col)});F(0,22,2,H-22,col);F(W-2,22,2,H-22,col);F(0,H-3,W,3,col)}
+function leaf(x,y,s){for(let i=0;i<10;i++){const a=i*.63;for(let r=1;r<=s;r++)F(x+Math.cos(a)*r,y+Math.sin(a)*r*.85,2,2,r>s*.65?GR[3]:r>s*.3?GR[2]:GR[1])}F(x-2,y-2,4,4,GR[0])}
+function planter(x,y,w,h,col){F(x,y,w,h,'#000');F(x+1,y+1,w-2,h-2,'#4b5362');F(x+1,y+1,w-2,1,'#8a92a4');F(x+2,y+3,w-4,h-5,'#142a18');for(let i=0;i<w/5;i++)leaf(x+4+i*5,y+h/2,4);F(x+1,y+h-2,w-2,1,col)}
+function ring(x,y,r,col,t){GL(.1+.05*Math.sin(t*.15),()=>{for(let d=-r;d<=r;d++){const w=Math.floor(Math.sqrt(r*r-d*d));F(x-w,y+d,w*2,1,col)}});GL(.9,()=>{for(let d=0;d<6.28;d+=.16)if(((d*8)|0)%5)F(x+Math.cos(d)*r,y+Math.sin(d)*r,2,2,col);for(let d=0;d<6.28;d+=.2)F(x+Math.cos(d)*(r-3),y+Math.sin(d)*(r-3),1,1,col)})}
+function cap(x,y,h,col,t){F(x-1,y,12,h,'#000');F(x,y+1,10,h-2,'#5a6070');F(x+1,y+3,8,h-6,'#1a1030');GL(.8+.15*Math.sin(t*.2),()=>F(x+2,y+4,6,h-8,col));for(let i=0;i<5;i++)F(x+3+(i%3)*2,y+h-6-((t+i*7)%(h-10)),1,1,'#ffffffcc');F(x-1,y-3,12,4,'#8a92a4');F(x-1,y+h-1,12,5,'#6a7080');F(x+3,y+h+1,4,1,col)}
+function mw(x,y,cols,rows,col,t){F(x,y,cols*22+3,rows*16+4,'#000');F(x+1,y+1,cols*22+1,rows*16+2,'#7b8494');for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){const sx=x+2+i*22,sy=y+2+j*16;F(sx,sy,20,14,'#05070a');F(sx,sy,20,1,'#2c3644');if((i+j+(t>>4))%3===0){for(let k=0;k<3;k++)F(sx+2,sy+3+k*3,4+hs(i*3+k,j)%11,1,col)}if((i*5+j+(t>>3))%7===0)F(sx+14,sy+9,4,3,col)}F(x,y+rows*16+4,cols*22+3,6,'#4b5362');for(let i=0;i<cols*3;i++)F(x+3+i*7,y+rows*16+6,5,2,((t>>3)+i)%4?'#222a36':col);F(x,y+rows*16+4,cols*22+3,1,'#aab')}
+function con(x,y,w,h,col,t){F(x,y,w,h,'#000');F(x+1,y+1,w-2,h-2,'#4b5362');F(x+1,y+1,w-2,2,'#9aa2b4');F(x+3,y+4,w-6,(h*.45)|0,'#05100f');for(let k=0;k<3;k++)F(x+5,y+6+k*3,3+hs(k+x,y)%(w-14),1,col);for(let i=0;i<w/4-1;i++)F(x+3+i*4,y+h-8,3,2,((t>>3)+i)%5?'#222a36':col);GL(.9,()=>F(x+1,y+h-2,w-2,1,col));F(x+w-5,y+4,2,2,((t>>2)%2)?col:'#400')}
+function pool(x,y,w,h,t){F(x,y,w,h,'#000');F(x+1,y+1,w-2,h-2,'#8a92a4');F(x+4,y+4,w-8,h-8,'#0a7aa0');F(x+4,y+4,w-8,h-8,'#0bb0d8');for(let i=0;i<10;i++)F(x+6+hs(i,2)%(w-14),y+6+((t>>1)+i*5)%(h-12),2,1,'#fff');F(x+6,y+4,10,h-8,'#6fe6ff');for(let i=0;i<5;i++)F(x+7+i*2,y+4+((t+i*4)%(h-8)),1,4,'#fff')}
+function shelf(x,y,w,n){F(x,y,w,16,'#000');F(x+1,y+1,w-2,14,'#3a2f26');F(x+1,y+8,w-2,1,'#1a1410');const ks=['#e8e2cf','#58d854','#58d854','#f8a040','#fc7460','#f8d070','#b8b8f8'];for(let i=0;i<n;i++){const jx=x+3+i*6;F(jx,y+2,4,6,ks[i%7]);F(jx,y+2,1,6,'#ffffff77');F(jx+1,y+1,2,1,'#888');F(jx,y+10,4,5,ks[(i+3)%7])}}
+function mach(x,y,w,h,col,t){F(x,y,w,h,'#000');F(x+1,y+1,w-2,h-2,'#4b5362');F(x+1,y+1,w-2,2,'#9aa2b4');F(x+w/2-4,y-8,8,16,'#3a4252');F(x+w/2-3,y-8,2,16,'#8a92a4');const px=x+8,py=y+18,pw=w-16,ph=h-26;F(px-1,py-1,pw+2,ph+2,'#000');F(px,py,pw,ph,'#4ade5a');GL(.4+.2*Math.sin(t*.2),()=>F(px,py,pw,ph,'#d8ffe0'));for(let i=0;i<3;i++)F(x+4+i*8,y+5,5,2,((t>>2)+i)%3?col:'#2a2');F(x+w-8,y+4,4,10,col)}
+function furn(x,y,t){F(x,y,38,32,'#000');F(x+1,y+1,36,30,'#4b5362');F(x+1,y+1,36,2,'#9aa2b4');F(x+10,y-10,14,14,'#000');F(x+11,y-9,12,12,'#6a7080');F(x+14,y-6,6,6,'#1a1a1c');for(let i=0;i<5;i++)GL(.4-i*.06,()=>circ2(x+17+Math.sin((t+i*5)*.3)*2,y-12-i*5-((t>>1)%4),3+i,'#e8eaf0'));F(x+6,y+14,26,12,'#0b0b0c');F(x+8,y+17,22,8,(t>>1)%2?'#ff8a2a':'#f8b800');F(x+14,y+19,10,4,'#fff4d0');for(let i=0;i<4;i++)F(x+30+((t*3+i*7)%14),y+22-((t+i*3)%12),1,1,'#ffd27a')}
+function circ2(cx,cy,r,k){for(let d=-r;d<=r;d++){const w=Math.floor(Math.sqrt(r*r-d*d));F(cx-w,cy+d,w*2,1,k)}}
+function react(x,y,t){circ2(x,y,34,'#0a0d12');for(let d=0;d<6.28;d+=.08){F(x+Math.cos(d)*31,y+Math.sin(d)*31,2,2,'#4b5362')}for(let d=0;d<6.28;d+=.45){F(x+Math.cos(d)*30,y+Math.sin(d)*30,3,3,'#ff7a2a')}
+ for(let i=0;i<8;i++){const d=i*.785+.39;leaf(x+Math.cos(d)*27,y+Math.sin(d)*27,3)}circ2(x,y,22,'#1a1210');circ2(x,y,19,'#ff7a2a');GL(.5+.3*Math.sin(t*.15),()=>circ2(x,y,17,'#ffd27a'));circ2(x,y,9,'#fff4d0');for(let d=0;d<6.28;d+=.52)F(x+Math.cos(d+t*.05)*14,y+Math.sin(d+t*.05)*14,2,2,'#fff');F(x,y-19,1,38,'#ff7a2a99');F(x-19,y,38,1,'#ff7a2a99');
+ [[-40,0],[38,0]].forEach(o=>{F(x+o[0]-4,y-12,8,24,'#000');F(x+o[0]-3,y-11,6,22,'#4b5362');F(x+o[0]-2,y-9,4,18,(t>>2)%2?'#ff7a2a':'#c05010')});F(x-58,y,16,2,'#ff7a2a');F(x+42,y,16,2,'#ff7a2a')}
+function dish(x,y,t){circ2(x,y,16,'#000');circ2(x,y,15,'#7b8494');circ2(x,y,11,'#2a3340');circ2(x,y,7,'#0a3a44');F(x-1,y-16,2,32,'#000');F(x+Math.cos(t*.15)*11,y+Math.sin(t*.15)*11,2,2,'#aff');F(x,y,2,2,'#2ad4e8')}
+function holo(x,y,r,col,t){circ2(x,y,r+3,'#000');circ2(x,y,r+2,'#6a7080');circ2(x,y,r,'#0e1a26');for(let i=0;i<7;i++){const h=5+((i*7+(t>>3)*3)%16);F(x-r+6+i*((r*2-12)/7),y+6-h,3,h,i==3?'#f5b942':col)}GL(.5,()=>circ2(x,y,r-4,col));ring(x,y,r+10,col,t)}
+function hex(x,y,col){q.fillStyle=col;[[0,-8,12,2],[-8,-4,2,8],[6,-4,2,8],[-6,6,12,2]].forEach(o=>F(x+o[0],y+o[1],o[2],o[3],col))}
+const ZS={core:[34,126,150],scout:[40,110,144],forge:[36,100,170],scribe:[40,100,120],analyst:[38,112,130]};
+const ZR={
+core(t){zfloor('#2b3544','#303b4c','#3a4656');zwall('#ff7a2a',84);const c='#ff7a2a';
+ [[22,36],[146,32],[22,118],[148,112],[56,136],[112,134]].forEach(r=>ring(r[0],r[1],8,c,t));react(84,78,t);
+ GL(.8,()=>{F(18,50,1,70,c);F(150,48,1,70,c);F(46,60,2,26,c);F(120,60,2,26,c);F(60,126,24,1,c);F(96,126,24,1,c)});
+ planter(8,86,22,22,c);planter(140,50,22,16,c);planter(140,92,22,16,c);leaf(150,30,10);leaf(24,170,10);
+ con(34,152,40,22,c,t);con(94,152,40,22,c,t);con(10,128,24,16,c,t);con(134,128,24,16,c,t);
+ F(30,178,50,5,'#142a18');for(let i=0;i<10;i++)leaf(33+i*5,180,4);F(98,178,50,5,'#142a18');for(let i=0;i<10;i++)leaf(101+i*5,180,4);
+ q.fillStyle='#ff9a50';q.font='7px monospace';q.fillText('THE BRIDGE',6,H-8)},
+scribe(t){zfloor('#2a3040','#2f3648','#3a4456');zwall('#c050ff',84);const c='#c050ff';
+ leaf(22,40,10);F(34,34,14,16,'#000');F(35,35,12,14,'#8a92a4');F(37,37,8,6,'#0a0d12');
+ cap(92,30,32,c,t);mw(108,24,3,2,c,t);zvine(130,26,16,3);zvine(104,64,6,5);
+ [[16,96],[150,98]].forEach(r=>ring(r[0],r[1],14,c,t));
+ pool(0,180,46,44,t);leaf(40,200,12);leaf(14,218,12);
+ con(122,148,46,34,c,t);F(124,150,10,12,'#05070a');
+ planter(96,194,28,18,c);leaf(104,170,10);ring(150,200,12,c,t);
+ F(60,206,60,3,'#4b5362');F(60,206,60,1,'#aab');zvine(60,160,10,9);zvine(60,40,8,2);
+ q.fillStyle='#e8d8ff';q.font='6px monospace';q.fillText('PUBLISH QUEUE',50,H-8)},
+forge(t){zfloor('#5f6468','#686d72','#4a4e52');zwall('#4ade5a',84);const c='#4ade5a';
+ shelf(14,26,62,9);F(100,24,18,16,'#000');F(101,25,16,14,'#4b5362');cap(150,26,26,c,t);
+ for(let i=0;i<5;i++){F(8,50+i*14,12,12,'#000');F(9,51+i*14,10,10,'#4b5362');F(11,53+i*14,6,3,i%2?'#f8a040':c)}
+ mach(36,70,48,48,c,t);F(30,66,4,60,'#2f9a45');planter(20,100,12,18,c);
+ F(100,70,52,22,'#000');F(101,71,50,20,'#a89070');F(101,71,50,2,'#d8c8a0');mw(104,58,3,1,c,t);
+ hex(52,142,c);hex(124,122,c);zvine(160,100,12,4);F(158,70,6,50,'#0bb0d8');for(let i=0;i<6;i++)F(159+(i%2),72+((t+i*9)%46),1,3,'#fff');
+ furn(34,166,t);F(104,172,46,26,'#000');F(105,173,44,24,'#4b5362');F(108,178,38,12,'#2a3340');F(108,192,38,2,c);planter(146,160,18,14,c);leaf(100,166,8)
+ ,zvine(10,170,14,6);for(let i=0;i<4;i++)F(4,150+i*0,3,0,c);F(0,140,3,60,c)},
+scout(t){zfloor('#26363f','#2b3d47','#34505c');zwall('#2ad4e8',84);const c='#2ad4e8';
+ mw(10,24,3,2,c,t);dish(138,46,t);shelf(86,26,40,6);F(20,100,90,40,'#000');F(21,101,88,38,'#6a7080');F(24,104,82,32,'#0a3a44');
+ for(let i=1;i<5;i++){F(24+i*16,104,1,32,'#0b5a68')}for(let j=1;j<3;j++)F(24,104+j*10,82,1,'#0b5a68');F(46,114,3,3,'#f8b800');F(80,120,3,3,'#fc7460');F(60,108,3,3,c);
+ GL(.7,()=>F(24+((t*2)%80),104,1,32,c));[[18,92],[128,132]].forEach(r=>ring(r[0],r[1],10,c,t));
+ con(14,160,44,24,c,t);for(let i=0;i<3;i++){F(120,70+i*20,18,16,'#000');F(121,71+i*20,16,14,'#4b5362');for(let k=0;k<4;k++)F(123,73+i*20+k*3,2,1,((t>>2)+k+i)%3?'#58d854':'#d82800')}
+ planter(74,176,32,18,c);leaf(14,130,10);leaf(150,180,10);zvine(130,100,10,2);cap(138,150,28,c,t)},
+analyst(t){zfloor('#252e44','#2a344c','#34405a');zwall('#4a7bff',84);const c='#4a7bff';
+ mw(8,24,3,2,c,t);mw(88,24,3,2,c,t);
+ for(let i=0;i<2;i++){F(8+i*136,76,20,50,'#000');F(9+i*136,77,18,48,'#4b5362');for(let k=0;k<7;k++){F(11+i*136,80+k*6,10,3,'#222a36');F(23+i*136,81+k*6,2,1,((t>>2)+k+i)%3?'#58d854':'#d82800')}}
+ holo(84,120,22,c,t);[[44,96],[124,96]].forEach(r=>ring(r[0],r[1],8,c,t));
+ con(14,170,44,24,c,t);con(110,170,44,24,c,t);cap(76,174,26,c,t);planter(60,198,50,14,c);leaf(36,150,9);leaf(134,150,9);zvine(30,70,12,4)}
+};
+function zframe(){const a=zA,id=a.id,st=ZS[id],f=Math.min(1,Math.max(0,(a.x-Math.min(a.sx,a.ax))/(Math.abs(a.ax-a.sx)||1))),x=Math.round(st[0]+(st[1]-st[0])*(a.sx<a.ax?f:1-f)),y=st[2];
+ q.clearRect(0,0,W,H);ZR[id](t);
+ for(let i=0;i<10;i++){q.globalAlpha=.35;F((i*47+t)%W,60+((i*31+t*.7)%150),1,1,'#bff');q.globalAlpha=1}
+ const yo=a.mode==='idle'?((t/6|0)%2):a.mode==='walk'?((t>>1)%2):0;F(x+1,y+16,10,2,'#00000099');sp(q,rowsFor(a),x,y+yo,pal(a),a.dir);acc(q,a,x,y+yo,a.dir);
+ if(a.mode==='work'||a.real==='queued'){const tx=a.mode==='work'?a.work.toLowerCase():'queued';F(x-12,y-11,36,9,'#000c');F(x-12,y-11,36,1,a.col);q.fillStyle='#dfeee4';q.font='6px monospace';q.fillText(tx,x-10,y-4)}
+ q.strokeStyle='#000';q.lineWidth=2;for(let k=0;k<4;k++){q.globalAlpha=.22-k*.05;q.strokeRect(1+k*2,1+k*2,W-2-k*4,H-2-k*4)}q.globalAlpha=1;
+ $('#zn').textContent=a.n}
+
+let lastW=0;
+function fit(){const cw=host.clientWidth-16;if(cw<=0)return;lastW=host.clientWidth;const wide=cw>=2*168*2+12;let k=wide?Math.floor((cw-12)/336):Math.floor(cw/168);k=Math.min(4,k);
+ const w=k>=2?168*k+'px':Math.min(cw,380)+'px';cv.style.width=w;zv.style.width=w}
+let timer=null;
+function tick(){const app=document.getElementById('appView');if(document.hidden||(app&&app.classList.contains('hidden')))return;if(host.clientWidth!==lastW)fit();sync();t++;AG.forEach(step);frame();zframe()}
+function start(){stop();timer=setInterval(tick,reduce?400:100)}function stop(){clearInterval(timer);timer=null}
+document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+addEventListener('resize',fit);
+try{new MutationObserver(sync).observe(document.getElementById('agentHub')||document.body,{subtree:true,childList:true,characterData:true})}catch(e){}
+sync();AG.forEach(paint);select(AG[0]);fit();frame();zframe();start();
+
+}
+function init(tries){
+ const host=document.querySelector('#agentHub .nexus-atlas');
+ if(!host){if(tries<40)setTimeout(()=>init(tries+1),250);return}
+ const st=document.createElement('style');st.textContent=CSS;document.head.appendChild(st);
+ const fl=document.createElement('link');fl.rel='stylesheet';fl.href='https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';document.head.appendChild(fl);
+ boot(host);
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>init(0));else init(0);
+})();
+
+</script>
+
+</body>
+</html>
