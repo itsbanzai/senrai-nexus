@@ -780,6 +780,18 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #nexusWorld .nw-desc{display:none}
 }
 
+
+/* HOTFIX: this app selects views with classes/JS, not the assumed data-nexus-view attribute. */
+#appView #nexusWorld{display:grid!important;position:relative;grid-template-rows:auto minmax(0,1fr) auto auto;width:100%;min-height:560px}
+#appView #agentHub{display:none!important}
+@media (orientation:landscape) and (min-width:760px){
+ #appView #nexusWorld{height:calc(100dvh - 190px);min-height:0;margin-bottom:84px}
+ #appView #nexusWorld .nw-layout{min-height:0;grid-template-columns:minmax(0,1fr) 235px}
+ #appView #nexusWorld .nw-scene{min-height:0}
+ #appView #nexusWorld canvas{width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:5/3}
+ #appView #nexusWorld .nw-side{padding:12px;gap:9px}
+}
+
 </style>
 </head>
 <body>
