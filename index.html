@@ -296,7 +296,7 @@ function selectHabitat(name){
  const title=target?.querySelector('.habitat-head span')?.textContent||'SENRAI CORE';
  const task=target?.querySelector('.habitat-foot span')?.textContent||'Monitoring workspace';
  const speaker=$('v06Speaker'),dialog=$('v06Dialogue');
- if(speaker)speaker.textContent=title.replace(/^\\d+\\s*\\/\\s*/,'');
+ if(speaker)speaker.textContent=title.replace(/^\d+\s*\/\s*/,'');
  if(dialog)dialog.textContent=task==='Waiting for assignment'?'Standing by. Assign a task from Mission Terminal to give this specialist work.':task+'. This status is based on your saved task queue.';
  if(target && window.matchMedia('(max-width: 600px)').matches)target.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
