@@ -177,6 +177,8 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 @media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
 
 
+/* The Atlas is the primary agent view; hide the older duplicate workstation-card grid. */
+.habitat-grid{display:none!important}
 /* NEXUS ATLAS character sprites: tiny agents physically inhabit the floor map. */
 .atlas-room{background-image:linear-gradient(145deg,#172b3aeF,#0a141df5),repeating-linear-gradient(0deg,transparent 0 18px,#8bdfff08 19px 20px)}
 .atlas-avatar{position:relative;z-index:2;width:30px;height:46px;margin:3px auto 5px;image-rendering:pixelated;filter:drop-shadow(0 0 7px #42dfff55);animation:agentIdle 3s ease-in-out infinite}
