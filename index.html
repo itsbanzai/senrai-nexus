@@ -457,6 +457,27 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #appView[data-nexus-view="home"]>#agentHub .atlas-room em{font-size:6px!important}
 }
 
+
+/* TAB VISIBILITY FIX: the Atlas and stats are wrapped together by the pixel-station module. */
+#appView[data-nexus-view]>.agent-command-layout{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout,
+#appView[data-nexus-view="agents"]>.agent-command-layout{
+ display:flex!important;flex-direction:column!important;min-width:0!important;
+}
+#appView[data-nexus-view="home"]>.agent-command-layout>.stats{display:none!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub{
+ display:block!important;width:100%!important;max-width:1500px!important;margin:8px auto 28px!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>.stats{display:grid!important}
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub{display:block!important}
+#appView[data-nexus-view="home"]>.agent-command-layout>.agent-work-panel{display:none!important}
+#appView[data-nexus-view="agents"]>.agent-command-layout>.agent-work-panel{display:block!important}
+#appView[data-nexus-view="missions"]>.ops-grid,
+#appView[data-nexus-view="missions"]>.layout,
+#appView[data-nexus-view="business"]>.layout{display:grid!important}
+#appView[data-nexus-view="missions"]>.layout,
+#appView[data-nexus-view="business"]>.layout{width:100%!important}
+
 </style>
 </head>
 <body>
