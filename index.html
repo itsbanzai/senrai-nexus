@@ -321,6 +321,24 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
 .agent-work-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}.nav button{min-width:0}.nav button.active{color:var(--green);border-color:var(--green)}
 @media(max-width:540px){.agent-work-grid{grid-template-columns:1fr}.agent-work-panel{padding:12px}}
 
+
+/* Agent command center responsive layout */
+#appView[data-nexus-view="agents"]>#agentHub{width:min(100%,900px)!important;margin:18px auto 24px!important;box-sizing:border-box}
+#appView[data-nexus-view="agents"] .nexus-map,#appView[data-nexus-view="agents"] .agent-hub-head,#appView[data-nexus-view="agents"] .hub-intro,#appView[data-nexus-view="agents"] .habitat-grid,#appView[data-nexus-view="agents"] .habitat-legend{width:100%;box-sizing:border-box}
+#appView[data-nexus-view="agents"] .atlas-floor{min-height:0;grid-template-rows:repeat(3,minmax(88px,1fr));gap:7px;padding:10px}
+#appView[data-nexus-view="agents"] .atlas-room{padding:7px;gap:4px}
+#appView[data-nexus-view="agents"] .atlas-reactor{width:42px;height:42px}
+#appView[data-nexus-view="agents"] .agent-work-panel{width:min(100%,900px);margin:14px auto 22px;box-sizing:border-box}
+#appView[data-nexus-view="agents"] .v06-dialog{width:min(calc(100% - 28px),876px);margin:0 auto 14px;box-sizing:border-box}
+@media(max-width:600px){#appView[data-nexus-view="agents"]>#agentHub{padding:10px;margin:10px auto 16px!important}#appView[data-nexus-view="agents"] .nexus-map{padding:8px}#appView[data-nexus-view="agents"] .atlas-floor{grid-template-rows:repeat(3,minmax(70px,1fr));gap:4px;padding:6px}#appView[data-nexus-view="agents"] .atlas-room{padding:4px;font-size:9px}#appView[data-nexus-view="agents"] .atlas-room small{font-size:7px}#appView[data-nexus-view="agents"] .atlas-room span{font-size:7px}#appView[data-nexus-view="agents"] .atlas-room em{font-size:6px}#appView[data-nexus-view="agents"] .habitat-grid{gap:7px}#appView[data-nexus-view="agents"] .pixel-room{height:112px}}
+@media (orientation:landscape){
+ #appView[data-nexus-view="agents"]>.stats{display:grid!important;width:min(100%,900px);margin:12px auto;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+ #appView[data-nexus-view="agents"]>.stats .stat{padding:10px}
+ #appView[data-nexus-view="agents"]>.stats .stat strong{font-size:20px}
+ #appView[data-nexus-view="agents"]>.stats .stat label{font-size:8px}
+ #appView[data-nexus-view="agents"]>.stats .stat small{font-size:9px}
+}
+
 </style>
 </head>
 <body>
@@ -562,6 +580,7 @@ init();
  const activity=panelFor('activityList');if(activity)activity.setAttribute('data-nexus-page','business');
  const etsy=panelFor('etsyBridge');if(etsy)etsy.setAttribute('data-nexus-page','business');
  app.querySelectorAll('.layout section.panel').forEach(s=>{if(!s.hasAttribute('data-nexus-page'))s.setAttribute('data-nexus-page','business')});
+ const stats=app.querySelector('.stats');const hubForStats=document.getElementById('agentHub');if(stats&&hubForStats)hubForStats.insertAdjacentElement('beforebegin',stats);
  const hub=document.getElementById('agentHub');
  const board=document.createElement('section');board.className='agent-work-panel';board.innerHTML='<div class="agent-work-head"><div><h3>AGENT WORKLOAD</h3><p>Specialist roles and suggested mission ownership, based on the tasks in your account.</p></div><span class="pill" id="agentWorkCount">Loading missions</span></div><div class="agent-work-grid" id="agentWorkGrid"></div><div class="agent-work-note">Assignments are suggestions inferred from mission wording; your task records do not yet store an assigned agent. Queued does not mean actively executing. SENRAI only calls the AI when you press “Run with SENRAI.”</div>';
  if(hub)hub.insertAdjacentElement('afterend',board);
