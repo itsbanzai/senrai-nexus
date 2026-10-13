@@ -248,6 +248,57 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 @media(prefers-reduced-motion:reduce){.atlas-reactor i{animation:none!important}}
 
 
+
+/* === NEXUS ATLAS redesign: prototype-inspired, landscape-first === */
+:root{--bg:#07090b;--panel:#0b1114;--line:#29404a;--text:#d9e8e7;--muted:#82999a;--green:#a3e635;--green2:#55c96b;--amber:#f5b942;--radius:3px}
+body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,transparent 1px),linear-gradient(90deg,#a3e63508 1px,transparent 1px),radial-gradient(ellipse at 50% 0%,#122c2a 0,transparent 55%);background-size:4px 4px,4px 4px,auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.shell{width:min(100%,1600px);max-width:1600px;margin:0 auto;padding:clamp(10px,1.8vw,26px) clamp(10px,2vw,30px) 100px}
+.topbar{padding:12px 16px 16px;background:#080e10;border:1px solid #40564f;box-shadow:0 0 0 3px #020405,inset 0 0 0 2px #020405}
+.logo{border-radius:0;border-color:var(--green);box-shadow:none}
+.brand h1{font-family:var(--mono);letter-spacing:.18em}
+.status,.panel,.stat,.agent-hub,.nexus-map,.authbox{border-radius:2px!important;box-shadow:0 0 0 2px #020405,inset 0 0 0 1px #020405}
+.btn{border-radius:2px!important;text-transform:uppercase;letter-spacing:.04em}
+.hero{padding:clamp(18px,3vw,42px) 0 18px;align-items:center}
+.hero h2{font-family:var(--mono);text-transform:uppercase;letter-spacing:-.055em}
+.hero p{max-width:780px}
+.agent-hub{background:#080e10;border-color:#40564f;padding:clamp(10px,1.6vw,22px);margin-top:10px}
+.hub-eyebrow,.agent-hub-head h3,.nexus-map-top,.nexus-map-foot,.atlas-room small,.atlas-room em{font-family:var(--mono);letter-spacing:.09em}
+.hub-intro{font-size:12px}
+.nexus-map{padding:clamp(8px,1.2vw,16px);background:#070d10;border-color:#3d6263;box-shadow:0 0 24px #32d7d012,inset 0 0 0 1px #000}
+.nexus-map-top,.nexus-map-foot{font-size:10px;letter-spacing:.08em}
+.atlas-floor{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(140px,1fr));gap:clamp(6px,1vw,14px);min-height:clamp(520px,58vw,780px);padding:clamp(10px,1.5vw,22px);margin:10px 0;background:radial-gradient(ellipse at 50% 45%,#15333c 0%,#0a1820 48%,#05090d 100%)}
+.atlas-room{border-radius:0!important;background-color:#0b171c;box-shadow:inset 0 0 0 2px #020609,0 0 16px #0009;border-width:2px;padding:clamp(7px,1vw,14px)}
+.atlas-room b{font-family:var(--mono);letter-spacing:.04em}
+.atlas-room span{font-size:clamp(10px,.9vw,13px)}
+.atlas-room em{font-size:clamp(7px,.68vw,10px)}
+.atlas-avatar{transform:scale(1.16);transform-origin:center bottom}
+.atlas-reactor{filter:drop-shadow(0 0 12px currentColor)}
+.habitat-grid{display:none!important}
+#appView > .layout .stack > section:has(.agentgrid){display:none!important}
+#appView > .layout{grid-template-columns:minmax(0,1.4fr) minmax(320px,.8fr);gap:16px}
+.panel,.stat{background:#0b1114;border-color:#263e43;border-radius:2px!important}
+.panelhead{border-bottom:1px solid #23363b;padding-bottom:10px}
+.panel h3,.stat label{font-family:var(--mono);letter-spacing:.08em}
+.field,input,textarea{border-radius:2px!important}
+#bottomNav{backdrop-filter:blur(12px);background:#05090bf2;border-top:1px solid #2b4142}
+#bottomNav button{border-radius:0!important;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em}
+@media (orientation:landscape) and (min-width:760px){
+ .shell{padding-left:clamp(18px,2.4vw,38px);padding-right:clamp(18px,2.4vw,38px)}
+ .topbar{position:relative}
+ .hero{display:grid;grid-template-columns:1fr auto}
+ .hero h2{font-size:clamp(34px,4vw,58px)}
+ .nexus-map{width:100%;margin-inline:auto}
+ .atlas-floor{min-height:min(68vh,760px);grid-template-rows:repeat(3,minmax(145px,1fr))}
+ #appView > .layout{grid-template-columns:minmax(0,1.3fr) minmax(340px,.7fr)}
+}
+@media(max-width:760px){
+ .shell{padding:10px 10px 90px}
+ .atlas-floor{min-height:560px;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(3,minmax(140px,1fr));gap:5px;padding:8px}
+ .atlas-room{padding:6px;overflow:hidden}
+ .atlas-room span{font-size:9px}
+ .atlas-room em{font-size:6px}
+ #appView > .layout{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
