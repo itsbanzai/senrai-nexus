@@ -339,6 +339,15 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #appView[data-nexus-view="agents"]>.stats .stat small{font-size:9px}
 }
 
+
+/* Keep workspace tabs available on iPad, including landscape widths above 800px. */
+@media (min-width:801px) and (max-width:1180px){
+ #bottomNav.nav{display:flex!important;position:fixed;left:50%;right:auto;bottom:12px;transform:translateX(-50%);width:min(620px,calc(100% - 36px));justify-content:space-around;gap:6px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0b110ff2;border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(18px);z-index:50;box-shadow:0 10px 35px #0008}
+ #bottomNav.nav button{flex:1;min-width:0;background:transparent;border:1px solid transparent;border-radius:10px;color:var(--muted);font-size:11px;display:grid;gap:4px;justify-items:center;padding:7px 4px}
+ #bottomNav.nav button span{font-size:18px}
+ #bottomNav.nav button.active{color:var(--green);border-color:var(--green);background:#173225}
+ .shell{padding-bottom:105px}
+}
 </style>
 </head>
 <body>
