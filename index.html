@@ -176,6 +176,42 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 @media(min-width:760px){.shell{max-width:540px}.habitat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout,.ops-grid{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.agentgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:360px){.habitat-grid{grid-template-columns:1fr}.pixel-room{height:130px}.hero .btn{max-width:92px;font-size:7px}}
 
+
+/* Central neon floor map inspired by the user's top-down sci-fi operations-base reference. */
+.nexus-map{margin:14px 0 18px;padding:12px;background:#070c0d;border:1px solid #315c55;box-shadow:inset 0 0 0 3px #0d1717,0 0 22px #25d9c20d;color:#d8f6eb}
+.nexus-map-top,.nexus-map-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font:9px/1.4 ui-monospace,monospace;letter-spacing:.1em;color:#79b5a4}
+.map-led{display:inline-block;width:6px;height:6px;background:#a3e635;box-shadow:0 0 9px #a3e635;margin-right:5px}
+.nexus-map-grid{position:relative;isolation:isolate;display:grid;grid-template-columns:1fr 1.15fr 1fr;grid-template-rows:minmax(90px,1fr) minmax(96px,1fr) minmax(90px,1fr);gap:10px;min-height:320px;margin:12px 0;padding:8px;background:radial-gradient(ellipse at center,#112d2a 0%,#081211 65%,#050909 100%);overflow:hidden}
+.nexus-map-grid:before{content:"";position:absolute;inset:0;z-index:-2;background-image:linear-gradient(#1b51471c 1px,transparent 1px),linear-gradient(90deg,#1b51471c 1px,transparent 1px);background-size:18px 18px}
+.map-corridor{position:absolute;z-index:-1;opacity:.55;box-shadow:0 0 12px #35d9c755;background:linear-gradient(90deg,transparent,#39d9bd,#64baff,#39d9bd,transparent)}
+.map-corridor.horizontal{height:2px;left:0;right:0;top:50%}.map-corridor.vertical{width:2px;top:0;bottom:0;left:50%;background:linear-gradient(transparent,#39d9bd,#64baff,#39d9bd,transparent)}
+.map-node{position:relative;display:flex;flex-direction:column;justify-content:center;gap:6px;min-width:0;padding:10px;background:linear-gradient(145deg,#132520f2,#091210f5);border:1px solid #326e60;box-shadow:inset 0 0 0 3px #091310,0 0 16px #28e0c018}
+.map-node:after{content:"";position:absolute;inset:4px;border:1px solid #1b4a40;pointer-events:none}
+.map-node small,.map-node b,.map-node span,.map-node em{position:relative;z-index:1;overflow-wrap:anywhere}
+.map-node small{font-size:8px;letter-spacing:.12em;color:#80b5a7}.map-node b{font-size:clamp(9px,1.05vw,13px);letter-spacing:.08em;color:#9bffe0}.map-node span{font-size:10px;color:#b4c9c0}.map-node em{font-size:8px;font-style:normal;color:#91a69a;letter-spacing:.08em}
+.node-scout{grid-area:1/1;border-color:#36caff}.node-scout b,.node-scout em{color:#7ee2ff}
+.node-forge{grid-area:1/3;border-color:#ffb45c}.node-forge b,.node-forge em{color:#ffca83}
+.node-scribe{grid-area:3/1;border-color:#b28aff}.node-scribe b,.node-scribe em{color:#d0b0ff}
+.node-analyst{grid-area:3/3;border-color:#ff936b}.node-analyst b,.node-analyst em{color:#ffb29a}
+.node-core{grid-area:2/2;align-items:center;text-align:center;background:radial-gradient(circle,#164b3e,#09130f 72%);border-color:#72ffd0;box-shadow:0 0 26px #31ffbd25,inset 0 0 24px #31ffbd12}
+.node-core strong{font-size:clamp(16px,2vw,25px);letter-spacing:.16em;color:#c3ffe8;text-shadow:0 0 16px #42ffc2}.node-core span{font-size:9px;letter-spacing:.18em;color:#69ddff}.node-core small{font-size:7px;color:#9fffd7}
+.map-ring{position:absolute;width:62%;aspect-ratio:1;border:1px solid #2ad7bb80;border-radius:50%;box-shadow:0 0 0 8px #25d9bb0d,0 0 0 17px #25d9bb08;animation:nexusMapSpin 26s linear infinite}
+.node-business{grid-area:2/3;border-color:#4e9cff}.node-business b,.node-business em{color:#83baff}
+.nexus-map-foot{border-top:1px solid #24473f;padding-top:9px;font-size:8px}
+@keyframes nexusMapSpin{to{transform:rotate(360deg)}}
+@media(orientation:landscape) and (min-width:700px){
+ .shell{max-width:1600px;padding:10px 22px 28px}
+ .topbar{padding-bottom:10px}.hero{padding:12px 0;align-items:center}
+ .nexus-map{padding:14px}.nexus-map-grid{min-height:min(48vh,470px);grid-template-rows:repeat(3,minmax(95px,1fr));gap:14px;padding:12px}
+ .map-node{padding:14px}.map-node span{font-size:12px}.map-node em{font-size:9px}
+ .habitat-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+ .pixel-room{height:clamp(105px,15vh,175px)}
+ .ops-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+ .layout{grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr)}
+ .nav{display:none}
+}
+@media(max-width:500px){.nexus-map{padding:8px}.nexus-map-grid{gap:5px;padding:4px;min-height:285px;grid-template-rows:82px 95px 82px}.map-node{padding:6px}.map-node b{font-size:8px}.map-node span{font-size:8px}.map-node em,.map-node small{font-size:6px}.node-core strong{font-size:12px}.node-core span,.node-core small{font-size:6px}.nexus-map-top,.nexus-map-foot{font-size:7px}}
+
 </style>
 </head>
 <body>
@@ -193,6 +229,19 @@ body{background:#07090a;color:#d7e2da;font:12px/1.45 ui-monospace,SFMono-Regular
 <section class="agent-hub" id="agentHub">
   <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>AGENT HABITATS</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
   <p class="hub-intro">Select a specialist workstation to inspect its role. Status reflects saved task records; room animation is visual only.</p>
+  <section class="nexus-map" aria-label="Nexus operations floor map">
+    <div class="nexus-map-top"><span>OPERATIONS MAP / LIVE WORKSPACE</span><span><i class="map-led"></i> CORE ONLINE</span></div>
+    <div class="nexus-map-grid">
+      <div class="map-corridor horizontal"></div><div class="map-corridor vertical"></div>
+      <div class="map-node node-scout"><small>ZONE 01</small><b>SCOUT</b><span>Research & discovery</span><em id="mapScoutState">AWAITING TASK</em></div>
+      <div class="map-node node-forge"><small>ZONE 02</small><b>FORGE</b><span>Product workshop</span><em id="mapForgeState">AWAITING TASK</em></div>
+      <div class="map-node node-scribe"><small>ZONE 03</small><b>SCRIBE</b><span>Content studio</span><em id="mapScribeState">AWAITING TASK</em></div>
+      <div class="map-node node-analyst"><small>ZONE 04</small><b>ANALYST</b><span>Quality & intelligence</span><em id="mapAnalystState">AWAITING TASK</em></div>
+      <div class="map-node node-core"><div class="map-ring"></div><strong>SENRAI</strong><span>NEXUS CORE</span><small id="mapCoreState">COORDINATION ONLINE</small></div>
+      <div class="map-node node-business"><small>OPERATIONS</small><b>BUSINESS NETWORK</b><span>Projects • tasks • approvals</span><em id="mapBusinessState">CONNECTED</em></div>
+    </div>
+    <div class="nexus-map-foot"><span><i class="map-led"></i> CLOUD LINK ACTIVE</span><span id="mapTaskCount">TASKS SYNCED TO NEXUS</span><span>LANDSCAPE COMMAND VIEW</span></div>
+  </section>
   <div class="habitat-grid">
     <article class="habitat scout-habitat" id="habitatScout">
       <div class="habitat-head"><span>01 / SCOUT</span><b id="habitatScoutState">STANDBY</b></div>
