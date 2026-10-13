@@ -395,6 +395,68 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #appView[data-nexus-view="agents"] .agent-command-layout>#agentHub .pixel-room{height:clamp(58px,10vh,82px)!important}
  #appView[data-nexus-view="agents"] .agent-command-layout>#agentHub .atlas-floor{height:clamp(145px,28vh,205px)!important}
 }
+
+/* STAR-STATION HOME — make the pixel station the landing screen while retaining the existing workspaces. */
+#appView[data-nexus-view="home"]>.hero,
+#appView[data-nexus-view="home"]>.ops-grid,
+#appView[data-nexus-view="home"]>.stats,
+#appView[data-nexus-view="home"]>.layout,
+#appView[data-nexus-view="home"]>.footer,
+#appView[data-nexus-view="home"]>.v06-dialog,
+#appView[data-nexus-view="home"]>.agent-work-panel{display:none!important}
+#appView[data-nexus-view="home"]>#agentHub{
+ display:block!important;width:100%!important;max-width:1500px!important;
+ margin:8px auto 28px!important;padding:clamp(10px,1.5vw,22px)!important;
+ border:1px solid #294c61!important;border-radius:3px!important;
+ background:linear-gradient(180deg,#0b1924 0%,#060b10 100%)!important;
+ box-shadow:0 0 0 3px #091018,0 0 42px #25b9f51a!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .agent-hub-head{
+ padding:5px 0 14px!important;border-color:#294c61!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .agent-hub-head h3{
+ color:#d9f5ff!important;font-size:clamp(18px,2vw,26px)!important;letter-spacing:.15em!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .hub-eyebrow{color:#80b6ca!important;font-size:10px!important}
+#appView[data-nexus-view="home"]>#agentHub .hub-live{color:#b6f36a!important}
+#appView[data-nexus-view="home"]>#agentHub .hub-intro{
+ color:#91adba!important;font-size:12px!important;margin:12px 0!important;max-width:900px!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .nexus-map{
+ padding:clamp(7px,1vw,14px)!important;border:1px solid #294c61!important;border-radius:2px!important;
+ background:#060b10!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .nexus-map-top{
+ padding:5px 2px 10px!important;color:#7e9caf!important;font-size:10px!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .atlas-floor{
+ height:clamp(430px,65vh,790px)!important;min-height:0!important;
+ grid-template-rows:repeat(3,minmax(0,1fr))!important;
+ gap:clamp(5px,.9vw,12px)!important;margin:0!important;padding:clamp(8px,1.3vw,18px)!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .atlas-room{
+ border-radius:2px!important;border-color:#326078!important;
+ box-shadow:inset 0 0 0 2px #09131b,0 0 14px #32b8f40b!important;
+}
+#appView[data-nexus-view="home"]>#agentHub .atlas-room b{color:#d8f5ff!important}
+#appView[data-nexus-view="home"]>#agentHub .atlas-room small{color:#86bfd4!important}
+#appView[data-nexus-view="home"]>#agentHub .atlas-room em{color:#b7e7a2!important}
+#appView[data-nexus-view="home"]>#agentHub .atlas-room span{color:#a0b9c4!important}
+@media (orientation:landscape) and (min-width:760px){
+ #appView[data-nexus-view="home"]>#agentHub .atlas-floor{height:clamp(380px,68vh,760px)!important}
+}
+@media(max-width:760px){
+ #appView[data-nexus-view="home"]>#agentHub{margin:4px auto 18px!important;padding:8px!important}
+ #appView[data-nexus-view="home"]>#agentHub .atlas-floor{
+  height:clamp(390px,60vh,620px)!important;gap:4px!important;padding:6px!important;
+ }
+ #appView[data-nexus-view="home"]>#agentHub .atlas-room{padding:4px!important}
+ #appView[data-nexus-view="home"]>#agentHub .atlas-room small{font-size:6px!important}
+ #appView[data-nexus-view="home"]>#agentHub .atlas-room b{font-size:9px!important}
+ #appView[data-nexus-view="home"]>#agentHub .atlas-room span{font-size:7px!important}
+ #appView[data-nexus-view="home"]>#agentHub .atlas-room em{font-size:6px!important}
+}
+
 </style>
 </head>
 <body>
@@ -410,8 +472,8 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
 
 
 <section class="agent-hub" id="agentHub">
-  <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>AGENT HABITATS</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
-  <p class="hub-intro">Select a specialist workstation to inspect its role. Status reflects saved task records; room animation is visual only.</p>
+  <header class="agent-hub-head"><div><span class="hub-eyebrow">SENRAI NEXUS / AUTONOMOUS WORKSPACE</span><h3>NEXUS STATION</h3></div><span class="hub-live"><i></i> 5 AGENTS REGISTERED</span></header>
+  <p class="hub-intro">Your AI headquarters. Select a room to inspect its specialist and open the related workspace. Task status comes from saved records; character movement is visual.</p>
   <section class="nexus-map nexus-atlas" aria-label="SENRAI top-down operations base">
     <div class="nexus-map-top"><span><b>NEXUS ATLAS</b> / OPERATIONS FLOOR 01</span><span><i class="map-led"></i> SYSTEM ONLINE</span></div>
     <div class="atlas-floor">
@@ -663,7 +725,7 @@ init();
  function activate(view){if(!['home','agents','missions','business'].includes(view))view='home';app.setAttribute('data-nexus-view',view);document.querySelectorAll('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));if(view==='agents')render();window.scrollTo({top:0,behavior:'smooth'})}
  document.querySelectorAll('#bottomNav button[data-view]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();activate(b.dataset.view)},true));
  const list=document.getElementById('taskList');if(list)new MutationObserver(()=>{if(app.getAttribute('data-nexus-view')==='agents')render()}).observe(list,{childList:true,subtree:true,characterData:true});
- app.setAttribute('data-nexus-view','agents');
+ app.setAttribute('data-nexus-view','home');
 })();
 </script>
 
