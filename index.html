@@ -552,6 +552,36 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
  #appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nb-roster{grid-template-columns:repeat(5,minmax(0,1fr))}
 }
 
+
+/* IMMERSIVE LANDSCAPE MODE — the station is the main event, not a stack of dashboard cards. */
+@media (orientation:landscape) and (min-width:760px){
+ #appView[data-nexus-view="home"]{padding:8px 14px 76px!important;overflow-x:hidden!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub{width:100%!important;max-width:none!important;margin:0 auto!important;padding:10px!important;border:1px solid #352b58!important;background:#070812!important;box-shadow:0 0 35px #694cff16!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .agent-hub-head{padding:2px 0 7px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .hub-intro{display:none!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{padding:6px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-top{padding:2px 4px 6px!important;font-size:8px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap{display:grid!important;grid-template-columns:minmax(0,2.3fr) minmax(220px,.8fr)!important;gap:8px!important;padding:5px!important;margin:0!important;align-items:stretch!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:first-child{justify-content:center!important;min-width:0!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #cv{width:100%!important;height:auto!important;max-height:calc(100vh - 190px)!important;object-fit:contain!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child{max-height:calc(100vh - 190px)!important;overflow:hidden!important;display:flex!important;justify-content:center!important;padding:5px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child:before{padding:0 0 4px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub #zv{max-height:calc(100vh - 245px)!important;width:auto!important;max-width:100%!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-roster,
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-dlg,
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map-foot{display:none!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .atlas-floor{display:none!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-tag{font-size:clamp(6px,.65vw,9px)!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{border-color:#292143!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .agent-hub-head h3{font-size:clamp(15px,1.5vw,21px)!important}
+}
+@media (orientation:landscape) and (min-width:760px) and (max-height:500px){
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-wrap{grid-template-columns:minmax(0,2.6fr) minmax(180px,.7fr)!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nexus-map{padding:3px!important}
+ #appView[data-nexus-view="home"]>.agent-command-layout>#agentHub .nb-col:last-child{display:none!important}
+}
+
 </style>
 </head>
 <body>
