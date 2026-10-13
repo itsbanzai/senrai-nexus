@@ -478,6 +478,43 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
 #appView[data-nexus-view="missions"]>.layout,
 #appView[data-nexus-view="business"]>.layout{width:100%!important}
 
+
+/* Separate Home (station overview) from Agents (full AI workspace). */
+#appView[data-nexus-view="home"]>.agent-command-layout{
+ display:flex!important;flex-direction:column!important;gap:0!important;
+}
+#appView[data-nexus-view="home"]>.agent-command-layout>#agentHub{
+ display:block!important;
+}
+#appView[data-nexus-view="home"]>.agent-command-layout>.stats,
+#appView[data-nexus-view="home"]>.agent-command-layout>.agent-work-panel{
+ display:none!important;
+}
+#appView[data-nexus-view="home"]>.agent-command-layout .nexus-map-foot{
+ display:none!important;
+}
+#appView[data-nexus-view="home"]>.agent-command-layout .hub-intro{
+ max-width:760px!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout{
+ display:flex!important;flex-direction:column!important;gap:10px!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>.stats{
+ display:grid!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub{
+ display:block!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>.agent-work-panel{
+ display:block!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .hub-intro{
+ display:block!important;
+}
+#appView[data-nexus-view="agents"]>.agent-command-layout>#agentHub .nexus-map-foot{
+ display:flex!important;
+}
+
 </style>
 </head>
 <body>
