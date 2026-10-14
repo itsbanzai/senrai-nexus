@@ -128,7 +128,15 @@ function crewStatus(name){
  if(name==='KAI')return 'CREW SUPPORT';
  return 'ON PATROL';
 }
-function person(p){let q=(frame*p.speed+p.off)%1000/1000,idx=Math.floor(q*(p.path.length-1)),u=q*(p.path.length-1)-idx,A=p.path[idx],B=p.path[Math.min(idx+1,p.path.length-1)],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,b=Math.sin(frame*.12+p.off)*2;rect(x-7,y+10,15,4,'#070b17');rect(x-5,y+1+b,4,9,'#25243e');rect(x+1,y+1+b,4,9,'#25243e');rect(x-8,y-10+b,16,12,p.color);rect(x-5,y-17+b,11,9,'#d7b49e');rect(x-7,y-19+b,14,5,'#29223f');rect(x-5,y-12+b,3,2,'#111426');rect(x+2,y-12+b,3,2,'#111426');rect(x-10,y-8+b,3,8,p.color);rect(x+7,y-8+b,3,8,p.color);rect(x-4,y-1+b,8,5,'#f2e6ff');if(Math.floor((frame+p.off)/95)%2===0){const status=crewStatus(p.name);rect(x-36,y-39,73,20,'#090d1b');rect(x-36,y-39,73,2,p.color);rect(x-34,y-35,69,14,'#19172b');g.fillStyle='#f3edff';g.font='bold 8px monospace';g.fillText(p.name,Math.round(x-32),Math.round(y-27));g.fillStyle=p.color;g.font='6px monospace';g.fillText(status.slice(0,16),Math.round(x-32),Math.round(y-20))}}
+function crewRoute(name,fallback){
+ const active=(liveNexus.tasks||[]).some(t=>t.status==='in_progress'),queued=(liveNexus.tasks||[]).some(t=>t.status==='queued'),review=(liveNexus.approvals||[]).length>0,projects=(liveNexus.projects||[]).length>0;
+ if(name==='NEX'&&review)return [[850,410],[800,430],[720,450],[650,425],[600,398],[710,365],[800,390],[850,410]];
+ if(name==='FORGE'&&(active||queued))return [[825,665],[850,640],[890,620],[910,660],[870,700],[825,665]];
+ if(name==='MIRA'&&projects)return [[395,175],[435,205],[470,250],[445,290],[400,260],[395,175]];
+ if(name==='RIN'&&review)return [[850,200],[880,255],[900,310],[850,345],[815,380],[850,200]];
+ return fallback;
+}
+function person(p){const route=crewRoute(p.name,p.path);let q=(frame*p.speed+p.off)%1000/1000,idx=Math.floor(q*(route.length-1)),u=q*(route.length-1)-idx,A=route[idx],B=route[Math.min(idx+1,route.length-1)],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,b=Math.sin(frame*.12+p.off)*2;rect(x-7,y+10,15,4,'#070b17');rect(x-5,y+1+b,4,9,'#25243e');rect(x+1,y+1+b,4,9,'#25243e');rect(x-8,y-10+b,16,12,p.color);rect(x-5,y-17+b,11,9,'#d7b49e');rect(x-7,y-19+b,14,5,'#29223f');rect(x-5,y-12+b,3,2,'#111426');rect(x+2,y-12+b,3,2,'#111426');rect(x-10,y-8+b,3,8,p.color);rect(x+7,y-8+b,3,8,p.color);rect(x-4,y-1+b,8,5,'#f2e6ff');if(Math.floor((frame+p.off)/95)%2===0){const status=crewStatus(p.name);rect(x-36,y-39,73,20,'#090d1b');rect(x-36,y-39,73,2,p.color);rect(x-34,y-35,69,14,'#19172b');g.fillStyle='#f3edff';g.font='bold 8px monospace';g.fillText(p.name,Math.round(x-32),Math.round(y-27));g.fillStyle=p.color;g.font='6px monospace';g.fillText(status.slice(0,16),Math.round(x-32),Math.round(y-20))}}
 function backdrop(){rect(0,0,1200,800,C.void);
  // starfield, distant moon and floating land silhouettes
  for(let i=0;i<150;i++){let x=seed(i)*1200,y=seed(i+900)*800;rect(x,y,i%11===0?3:1,i%11===0?3:1,i%3===0?'#a18fd3':'#41415f')}
