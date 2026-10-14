@@ -60,18 +60,18 @@ function room(r,i){let x=r.x,y=r.y,w=r.w,h=r.h,a=r.color;
  if(i===selected){rect(x-3,y-3,w+6,2,C.violet);rect(x-3,y+h+1,w+6,2,C.violet);rect(x-3,y-3,2,h+6,C.violet);rect(x+w+1,y-3,2,h+6,C.violet);glow(x+w/2,y+h/2,75,a,.045)}
 }
 function bridge(x1,y1,x2,y2){line(x1,y1,x2,y2,'#0b1120',18);line(x1,y1,x2,y2,'#6b6682',12);line(x1,y1,x2,y2,'#b3a5ce',2);let n=Math.ceil(Math.hypot(x2-x1,y2-y1)/18);for(let i=0;i<=n;i++){let t=i/n;rect(x1+(x2-x1)*t-2,y1+(y2-y1)*t-2,4,4,i%2?C.cyan:C.gold)}}
-function core(){const x=600,y=398;glow(x,y,170,C.purple,.12);glow(x,y,118,C.purple,.18);glow(x,y,76,C.violet,.22);
+function core(){const x=600,y=398;glow(x,y,220,C.purple,.12);glow(x,y,165,C.purple,.20);glow(x,y,112,C.violet,.27);glow(x,y,72,C.hot,.14);
  // concentric containment plinths with segmented mechanical armor
  g.save();g.translate(x,y);g.rotate(frame*.002);g.strokeStyle='#393652';g.lineWidth=18;g.beginPath();g.ellipse(0,0,126,82,0,0,Math.PI*2);g.stroke();g.strokeStyle='#8b66c4';g.lineWidth=4;g.setLineDash([18,9,5,8]);g.beginPath();g.ellipse(0,0,126,82,0,0,Math.PI*2);g.stroke();g.setLineDash([]);g.strokeStyle='#d0a2ff';g.lineWidth=2;g.beginPath();g.ellipse(0,0,102,66,0,-.5,Math.PI*1.2);g.stroke();g.restore();
  g.save();g.translate(x,y);g.rotate(-frame*.004);g.strokeStyle='#585576';g.lineWidth=12;g.beginPath();g.ellipse(0,0,85,121,-.3,0,Math.PI*2);g.stroke();g.strokeStyle=C.cyan;g.lineWidth=2;g.beginPath();g.ellipse(0,0,85,121,-.3,.3,1.8);g.stroke();g.restore();
  for(let i=0;i<12;i++){let a=i*Math.PI/6+frame*.002,xx=x+Math.cos(a)*125,yy=y+Math.sin(a)*82;rect(xx-8,yy-7,16,14,'#25243e');rect(xx-5,yy-4,10,8,i%3?C.purple:C.cyan);rect(xx-2,yy-2,4,4,C.hot)}
  // plasma core: pixel-noise facets, lightning branches and bright heart
- g.save();g.beginPath();g.arc(x,y,64,0,Math.PI*2);g.clip();g.fillStyle='#32175c';g.fillRect(x-70,y-70,140,140);for(let i=0;i<120;i++){let a=seed(i+frame*.03)*Math.PI*2,r=Math.sqrt(seed(i*3+frame*.018))*60,xx=x+Math.cos(a)*r,yy=y+Math.sin(a)*r;rect(xx,yy,2+(i%4),2+(i%3),['#5e2bc2','#8b4aff','#bd8cff','#e5c8ff','#3e8cf7'][i%5])}
+ g.save();g.beginPath();g.arc(x,y,72,0,Math.PI*2);g.clip();g.fillStyle='#32175c';g.fillRect(x-76,y-76,152,152);for(let i=0;i<120;i++){let a=seed(i+frame*.03)*Math.PI*2,r=Math.sqrt(seed(i*3+frame*.018))*69,xx=x+Math.cos(a)*r,yy=y+Math.sin(a)*r;rect(xx,yy,2+(i%4),2+(i%3),['#5e2bc2','#8b4aff','#bd8cff','#e5c8ff','#3e8cf7'][i%5])}
  for(let i=0;i<7;i++){let a=i*2.4+frame*.012,xx=x+Math.cos(a)*56,yy=y+Math.sin(a)*56;g.strokeStyle=i%2?C.hot:C.cyan;g.lineWidth=i%3===0?3:2;g.beginPath();g.moveTo(x,y);let px=x,py=y;for(let j=0;j<5;j++){px+=(xx-px)*(.25+seed(i*11+j)*.25);py+=(yy-py)*(.25+seed(i*19+j)*.25);g.lineTo(Math.round(px/3)*3,Math.round(py/3)*3)}g.lineTo(xx,yy);g.stroke()}
- const pulse=.8+.2*Math.sin(frame*.09);glow(x,y,30,C.violet,.6*pulse);glow(x,y,15,C.hot,.9);rect(x-6,y-6,12,12,'#fff8ff');rect(x-3,y-11,6,22,'#e5d5ff');rect(x-11,y-3,22,6,'#e5d5ff');g.restore();
+ const pulse=.8+.2*Math.sin(frame*.09);glow(x,y,43,C.violet,.72*pulse);glow(x,y,25,C.hot,.92);glow(x,y,11,'#ffffff',.75);rect(x-8,y-8,16,16,'#fff8ff');rect(x-3,y-11,6,22,'#e5d5ff');rect(x-11,y-3,22,6,'#e5d5ff');g.restore();
  // containment pylons and conduit energy
  for(let i=0;i<4;i++){let a=i*Math.PI/2+Math.PI/4,xx=x+Math.cos(a)*104,yy=y+Math.sin(a)*72;rect(xx-10,yy-17,20,34,'#11172b');rect(xx-7,yy-13,14,26,'#44405f');rect(xx-4,yy-9,8,18,C.purple);rect(xx-2,yy-5,4,10,C.hot);glow(xx,yy,22,C.purple,.2)}
- for(let i=0;i<30;i++){let a=seed(i+5)*Math.PI*2,r=68+seed(i+30)*60+Math.sin(frame*.04+i)*4,xx=x+Math.cos(a+frame*.001)*r,yy=y+Math.sin(a+frame*.001)*r;rect(xx,yy,2+(i%3),2,i%3?C.violet:C.cyan)}
+ for(let i=0;i<58;i++){let a=seed(i+5)*Math.PI*2,r=76+seed(i+30)*82+Math.sin(frame*.04+i)*6,xx=x+Math.cos(a+frame*.001)*r,yy=y+Math.sin(a+frame*.001)*r;rect(xx,yy,2+(i%3),2,i%3?C.violet:C.cyan);if(i%5===0){rect(xx-3,yy+3,2,2,C.hot);line(xx,yy,xx+Math.cos(a)*8,yy+Math.sin(a)*8,'#9362ff',1)}}
 }
 const crew=[{name:'MIRA',color:C.pink,path:[[395,175],[425,196],[505,265],[465,310],[408,260]],speed:.14,off:0},{name:'RIN',color:C.cyan,path:[[850,200],[890,260],[790,300],[770,260]],speed:.12,off:75},{name:'ASTRA',color:C.gold,path:[[230,300],[280,330],[310,400],[245,420]],speed:.13,off:155},{name:'KAI',color:C.green,path:[[220,510],[275,530],[310,580],[265,600]],speed:.16,off:220},{name:'FORGE',color:C.gold,path:[[825,665],[875,660],[920,690],[855,715]],speed:.11,off:320},{name:'NEX',color:C.violet,path:[[570,690],[600,650],[660,675],[650,725]],speed:.15,off:410}];
 function person(p){let q=(frame*p.speed+p.off)%1000/1000,idx=Math.floor(q*(p.path.length-1)),u=q*(p.path.length-1)-idx,A=p.path[idx],B=p.path[Math.min(idx+1,p.path.length-1)],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,b=Math.sin(frame*.12+p.off)*2;rect(x-7,y+10,15,4,'#070b17');rect(x-5,y+1+b,4,9,'#25243e');rect(x+1,y+1+b,4,9,'#25243e');rect(x-8,y-10+b,16,12,p.color);rect(x-5,y-17+b,11,9,'#d7b49e');rect(x-7,y-19+b,14,5,'#29223f');rect(x-5,y-12+b,3,2,'#111426');rect(x+2,y-12+b,3,2,'#111426');rect(x-10,y-8+b,3,8,p.color);rect(x+7,y-8+b,3,8,p.color);rect(x-4,y-1+b,8,5,'#f2e6ff');if(Math.floor((frame+p.off)/95)%3===0){rect(x-13,y-33,27,10,'#111426');rect(x-13,y-33,27,1,p.color);g.fillStyle='#f3edff';g.font='bold 8px monospace';g.fillText(p.name,Math.round(x-11),Math.round(y-26))}}
@@ -98,10 +98,18 @@ function backdrop(){rect(0,0,1200,800,C.void);
  for(let i=0;i<45;i++){let x=125+seed(i+211)*930,y=120+seed(i+411)*570;let central=Math.hypot(x-600,y-400);if(central>155&&((i%3===0)||x<250||x>950)){plant(x,y,.55+(i%4)*.15,i%7===0)}}
  for(let i=0;i<23;i++){let x=130+seed(i+515)*950,y=130+seed(i+715)*580;if(Math.hypot(x-600,y-400)>190)tree(x,y,.55+(i%3)*.13,i%8===0)}
 }
+function ambientArchitecture(){
+ const braces=[[[345,260],[420,286],[468,325]],[[755,285],[790,260],[835,245]],[[330,390],[390,398],[466,406]],[[730,415],[775,425],[814,433]],[[430,570],[466,544],[493,510]],[[714,515],[746,554],[772,590]]];
+ braces.forEach((p,j)=>{path(p,7);for(let k=0;k<p.length;k++){let [x,y]=p[k];rect(x-5,y-5,10,10,'#171b30');rect(x-2,y-2,4,4,j%2?C.cyan:C.purple)}});
+ const beds=[[360,260,48,18],[785,257,56,19],[355,395,42,17],[758,470,42,19],[430,580,46,17],[735,585,48,17],[205,390,42,17],[970,290,38,17]];
+ beds.forEach((b,i)=>{rect(b[0]-3,b[1]-3,b[2]+6,b[3]+6,'#171a2c');rect(b[0],b[1],b[2],b[3],'#344050');rect(b[0]+3,b[1]+3,b[2]-6,b[3]-6,'#1c443a');for(let n=0;n<5;n++)plant(b[0]+6+n*(b[2]-12)/4,b[1]+b[3]/2,.42+(n%2)*.12,i%4===0)});
+ for(let i=0;i<16;i++){let x=245+(i*47)%700,y=180+(i*71)%460;if(Math.hypot(x-600,y-398)>150){rect(x,y,12,8,'#11172a');rect(x+2,y+2,8,4,'#41435e');rect(x+4,y+3,4,2,i%2?C.cyan:C.gold)}}
+}
+
 function draw(){if(!c.isConnected)return;frame++;backdrop();
  // elevated bridges and lit walkways weave between actual rooms
  path([[430,210],[465,260],[520,285]],15);path([[760,235],[730,276],[680,298]],15);path([[338,295],[400,310],[470,342]],15);path([[328,475],[395,460],[475,445]],15);path([[720,430],[770,425],[820,425]],16);path([[405,615],[445,570],[500,520]],15);path([[790,600],[755,555],[700,520]],15);path([[590,510],[590,580],[600,650]],15);path([[600,670],[600,655]],15);
- rooms.forEach(room);core();
+ rooms.forEach(room);ambientArchitecture();core();
  // vegetation intentionally overlaps building edges like a living installation
  for(let i=0;i<32;i++){let x=120+seed(i+811)*960,y=130+seed(i+911)*570;if(Math.hypot(x-600,y-400)>170&&(x<350||x>830||y>550)){if(i%4===0)tree(x,y,.55+(i%3)*.12,i%7===0);else plant(x,y,.65+(i%4)*.12,i%6===0)}}
  // bridge rail lamps, flower pixels, and moving fireflies
