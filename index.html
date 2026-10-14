@@ -1760,26 +1760,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #appView[data-nexus-view="home"] #senraiOverview { display:block !important; }
 </style>
 
-<!-- SENRAI STATION SINGLE-SURFACE FIX -->
-<style id="senrai-station-single-surface">
-/* On Station, render one surface only: the living pixel facility. Hide the legacy dashboard stack. */
-#appView[data-nexus-view="agents"] > :not(#nexusWorld){display:none!important}
-#appView[data-nexus-view="agents"] #nexusWorld{display:grid!important;visibility:visible!important;opacity:1!important;width:100%!important;min-height:0!important;margin:0!important}
-#appView[data-nexus-view="agents"] #nexusWorld .nw-layout{display:grid!important;grid-template-columns:minmax(0,1fr) 230px!important;min-height:0!important}
-#appView[data-nexus-view="agents"] #nexusWorld .nw-scene{display:flex!important;min-width:0!important;min-height:0!important;padding:8px!important}
-#appView[data-nexus-view="agents"] #nexusWorld #nwCanvas{display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:3/2!important;object-fit:contain!important}
-#appView[data-nexus-view="agents"] #nexusWorld .nw-side{display:flex!important}
-#appView[data-nexus-view="agents"] #nexusWorld .nw-room-list{display:grid!important}
-@media(max-width:760px){
- #appView[data-nexus-view="agents"] #nexusWorld .nw-layout{grid-template-columns:1fr!important}
- #appView[data-nexus-view="agents"] #nexusWorld .nw-side{display:grid!important;grid-template-columns:1fr 1fr!important}
- #appView[data-nexus-view="agents"] #nexusWorld .nw-side .nw-kicker,
- #appView[data-nexus-view="agents"] #nexusWorld .nw-side .nw-room,
- #appView[data-nexus-view="agents"] #nexusWorld .nw-side .nw-description,
- #appView[data-nexus-view="agents"] #nexusWorld .nw-side-note{grid-column:1/-1}
- #appView[data-nexus-view="agents"] #nexusWorld .nw-room-list{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-}
-</style>
+
 
 <script id="senrai-force-living-world-init">
 (function(){
