@@ -219,10 +219,42 @@ function reactorSpill(){
  }
 }
 
+
+function heroSetPieces(){
+ // Major landmarks create an intentional composition around the reactor.
+ const falls=[{x:105,y:390,w:31,h:170},{x:1045,y:390,w:32,h:176},{x:430,y:702,w:36,h:55},{x:780,y:705,w:38,h:48}];
+ falls.forEach((f,i)=>{rect(f.x-7,f.y-5,f.w+14,f.h+10,'#151c30');rect(f.x-3,f.y,f.w+6,f.h,'#0c2d4a');rect(f.x,f.y+3,f.w,f.h-6,'#17628b');for(let k=0;k<8;k++){let xx=f.x+3+(k*7)%(f.w-5),yy=f.y+((frame*1.7+k*19)%(f.h-8));rect(xx,yy,2,12,C.ice);rect(xx+3,yy+5,2,8,'#62c9ed')}rect(f.x-5,f.y-5,f.w+10,4,'#6e7893');rect(f.x-5,f.y+f.h,f.w+10,5,'#5c6680');glow(f.x+f.w/2,f.y+f.h*.5,24,C.cyan,.11)});
+ // Large botanical conservatory with a layered glowing canopy.
+ poly([[90,238],[111,216],[173,213],[197,231],[191,277],[166,294],[112,284]],'#192b36');poly([[101,240],[118,225],[169,223],[185,236],[180,270],[161,282],[117,275]],'#285144');
+ for(let i=0;i<18;i++){const x=110+seed(i+370)*70,y=229+seed(i+470)*47;tree(x,y,.55+(i%3)*.12,i%6===0)}rect(124,284,43,5,'#10182a');rect(129,286,33,2,C.cyan);glow(147,266,43,C.green,.13);
+ // Hydroponics pond, stepping stones and reeds.
+ poly([[1000,565],[1022,548],[1060,553],[1083,576],[1073,617],[1045,632],[1008,615]],'#111c31');poly([[1007,570],[1027,557],[1057,562],[1075,579],[1066,610],[1045,622],[1014,608]],'#176084');
+ for(let i=0;i<12;i++){const x=1015+seed(i+580)*50,y=567+seed(i+680)*44;rect(x,y,7+(i%3)*3,2,i%3?C.cyan:C.ice)}for(let i=0;i<8;i++){plant(1008+i*9,566+(i%3)*4,.48,i%3===0);rect(1018+i*8,620+(i%2)*5,7,4,'#77738f')}
+ // Heavy energy conduits link the four surrounding districts to the core.
+ const pipes=[[[490,330],[448,313],[422,292],[400,292]],[[710,330],[750,312],[778,289],[810,289]],[[492,468],[453,487],[423,510],[390,510]],[[708,468],[747,489],[776,510],[810,510]]];
+ pipes.forEach((pts,i)=>{path(pts,9);pts.forEach((p,j)=>{rect(p[0]-5,p[1]-5,10,10,'#17192d');rect(p[0]-2,p[1]-2,4,4,j%2?C.cyan:C.purple)})});
+ // Lab sample carousel.
+ for(let i=0;i<8;i++){const a=i*Math.PI/4+frame*.003,x=445+Math.cos(a)*23,y=134+Math.sin(a)*17;rect(x-4,y-6,8,12,'#15192a');rect(x-2,y-4,4,8,i%2?C.cyan:C.pink);rect(x-3,y-7,6,2,'#a7a4bf')}
+ // Observation window mullions and telescope.
+ for(let i=0;i<6;i++){rect(798+i*34,132,3,43,'#8593b0');rect(799+i*34,135,1,37,C.cyan)}rect(954,189,34,7,'#12192c');rect(966,182,8,20,'#535875');rect(972,178,3,24,C.cyan);
+ // Studio mixing console and sound baffles.
+ for(let i=0;i<8;i++){rect(151+i*15,305,9,21,'#11182b');rect(153+i*15,308,5,15,'#343b53');rect(154+i*15,311+(i%4)*2,3,3,i%3?C.pink:C.cyan)}
+ // Fitness treadmills and displays.
+ for(let i=0;i<3;i++){rect(150+i*48,490,34,62,'#12182a');rect(154+i*48,494,26,51,'#404960');rect(158+i*48,498,18,39,'#17263a');rect(160+i*48,501,14,3,C.cyan);rect(160+i*48,532,14,3,C.green)}
+ // Command holographic table.
+ poly([[854,408],[955,408],[977,424],[875,424]],'#15192e');poly([[854,405],[955,405],[977,421],[875,421]],'#54516f');for(let i=0;i<4;i++){rect(872+i*23,409,16,7,i%2?C.purple:C.cyan);rect(874+i*23,410,11,2,C.hot)}
+ // Fabrication robotic arm and prototype pad.
+ rect(808,646,54,34,'#151a2d');rect(812,650,46,26,'#3b425b');rect(833,638,8,16,'#9c8eaf');rect(835,628,5,14,'#73728e');rect(831,624,13,7,C.gold);rect(833,626,9,3,C.hot);rect(882,650,55,31,'#11182a');rect(886,654,47,23,'#2a3c51');rect(892,660,35,11,C.cyan);glow(910,665,22,C.cyan,.16);
+ // Warm living quarters and planted balcony.
+ rect(313,660,73,34,'#101629');rect(318,665,63,24,'#3d5268');rect(321,668,57,17,'#f5c78c');rect(321,677,57,8,'#b87d9a');glow(350,678,34,C.gold,.17);for(let i=0;i<5;i++)plant(296+i*22,714,.55,i%2===0);
+ // Dock guidance rings and a little shuttle silhouette.
+ g.strokeStyle='#7b819e';g.lineWidth=2;g.beginPath();g.ellipse(600,718,69,20,0,0,Math.PI*2);g.stroke();g.strokeStyle=C.cyan;g.beginPath();g.ellipse(600,718,48,13,0,0,Math.PI*2);g.stroke();poly([[579,716],[592,708],[613,708],[626,716],[614,722],[591,722]],'#9a9bb6');poly([[594,714],[600,700],[606,714]],'#d7e7ff');rect(596,716,8,3,C.cyan);glow(600,716,20,C.cyan,.16);
+}
+
 function draw(){if(!c.isConnected)return;frame++;backdrop();
  // elevated bridges and lit walkways weave between actual rooms
  path([[430,210],[465,260],[520,285]],15);path([[760,235],[730,276],[680,298]],15);path([[338,295],[400,310],[470,342]],15);path([[328,475],[395,460],[475,445]],15);path([[720,430],[770,425],[820,425]],16);path([[405,615],[445,570],[500,520]],15);path([[790,600],[755,555],[700,520]],15);path([[590,510],[590,580],[600,650]],15);path([[600,670],[600,655]],15);
- rooms.forEach(room);ambientArchitecture();terrainDetail();core();reactorSpill();
+ rooms.forEach(room);ambientArchitecture();terrainDetail();heroSetPieces();core();reactorSpill();
  // vegetation intentionally overlaps building edges like a living installation
  for(let i=0;i<32;i++){let x=120+seed(i+811)*960,y=130+seed(i+911)*570;if(Math.hypot(x-600,y-400)>170&&(x<350||x>830||y>550)){if(i%4===0)tree(x,y,.55+(i%3)*.12,i%7===0);else plant(x,y,.65+(i%4)*.12,i%6===0)}}
  // bridge rail lamps, flower pixels, and moving fireflies
