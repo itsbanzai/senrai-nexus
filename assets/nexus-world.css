@@ -51,3 +51,14 @@
  #senraiPixelFacility .pf-rooms button{min-height:42px;font-size:9px!important}
  #senraiPixelFacility .pf-foot{font-size:8px;line-height:1.6}
 }
+
+
+/* Ecosystem-first layout: keep the living world at the top of the signed-in Nexus. */
+#appView:not(.hidden){display:flex!important;flex-direction:column!important;align-items:stretch!important}
+#appView #senraiPixelFacility{order:-2!important;margin-top:8px!important;margin-bottom:24px!important}
+#appView #nexusBriefing{order:-1!important}
+#appView > .station,
+#appView > .station-title,
+#appView > .stats,
+#appView > .layout,
+#appView > .footer{order:0}
