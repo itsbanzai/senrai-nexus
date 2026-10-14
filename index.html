@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* Keep preview sessions from being mistaken for production sessions. */
+(function(){
+  var host=location.hostname;
+  if((host==='localhost'||host==='127.0.0.1') && location.port==='3000'){
+    location.replace('https://itsbanzai.github.io/senrai-nexus/'+location.search+location.hash);
+  }
+})();
+</script>
+
 <meta name="theme-color" content="#080511">
 <title>SENRAI Nexus — Living Command Center</title>
 <style>
