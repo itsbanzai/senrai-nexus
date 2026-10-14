@@ -1642,5 +1642,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+<style id="senrai-overview-panel-placement-fix">
+/* Keep the owner dashboard exclusively on Overview so it never displaces Nexus Station. */
+#appView[data-nexus-view="agents"] #senraiOverview,
+#appView[data-nexus-view="missions"] #senraiOverview,
+#appView[data-nexus-view="business"] #senraiOverview { display:none !important; }
+#appView[data-nexus-view="home"] #senraiOverview { display:block !important; }
+</style>
 </body>
 </html>
