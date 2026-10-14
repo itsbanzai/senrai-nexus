@@ -986,7 +986,47 @@ function renderProjects(){updateAgentHabitats();$('projectList').innerHTML=proje
 function renderTasks(){updateAgentHabitats();$('taskList').innerHTML=tasks.length?tasks.map(t=>`<div class="task"><div class="tasktop"><div><strong>${safe(t.title)}</strong><p>${safe(t.description||'No additional details')}</p></div><span class="pill ${t.status==='completed'?'good':t.status==='in_progress'?'wait':''}">${safe(t.status.replace('_',' '))}</span></div><div class="taskactions">${t.status!=='completed'&&t.status!=='cancelled'?`<button class="btn small" data-action="run-task" data-id="${t.id}">Run with SENRAI</button><button class="btn subtle small" data-action="advance-task" data-id="${t.id}">${t.status==='queued'?'Start':'Mark complete'}</button>`:''}<button class="btn subtle small" data-action="request-approval" data-id="${t.id}">Request approval</button><button class="btn subtle small" data-action="delete-task" data-id="${t.id}">Delete</button></div></div>`).join(''):'<div class="empty">No missions yet. Queue your first task above.</div>';renderMissionBoard()}
 function renderApprovals(){$('approvalList').innerHTML=approvals.length?approvals.map(a=>`<div class="approval"><strong>${safe(a.title)}</strong><p>${safe(a.description||'Review this action before proceeding.')}</p><div class="taskactions"><button class="btn small" data-action="approve" data-id="${a.id}">Approve locally</button><button class="btn subtle small" data-action="reject" data-id="${a.id}">Reject</button></div></div>`).join(''):'<div class="empty">No actions awaiting approval.</div>'}
 function renderActivity(){$('activityList').innerHTML=activity.length?activity.map(a=>`<div class="event"><span class="dot"></span><div><strong>${safe(a.title)}</strong><p>${safe(a.detail)} · ${time(a.created_at)}</p></div></div>`).join(''):'<div class="empty">Nexus is ready for its first mission.</div>'}
-function showApp(user){currentUser=user;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('bottomNav').style.display='';$('systemStatus').textContent='CLOUD CONNECTED';$('signedInAs').textContent='Signed in as '+user.email;loadAll()}
+
+/* SENRAI QUEUE AUTOMATION: one queued task at a time while this app is open. */
+let nexusAutoRunnerBusy=false;
+let nexusAutoRunnerTimer=null;
+async function runNextQueuedTask(){
+ if(!currentUser||nexusAutoRunnerBusy||document.hidden)return;
+ nexusAutoRunnerBusy=true;
+ try{
+  const {data:queued,error:queueError}=await sb.from('nexus_tasks').select('*').eq('user_id',currentUser.id).eq('status','queued').order('created_at',{ascending:true}).limit(1);
+  if(queueError)throw queueError;
+  const t=queued&&queued[0];if(!t)return;
+  const claim=await sb.from('nexus_tasks').update({status:'in_progress',updated_at:new Date().toISOString()}).eq('id',t.id).eq('user_id',currentUser.id).eq('status','queued').select('id');
+  if(claim.error)throw claim.error;
+  if(!claim.data||!claim.data.length)return;
+  await log('Auto-run started',t.title+' — queued task claimed by Senrai');
+  await loadTasks();renderStats();
+  const prompt='Execute this business task by producing a concrete, useful deliverable. Do not claim to publish, contact customers, spend money, or access external accounts. Clearly label assumptions and provide actionable next steps. Task: '+t.title+'\nExisting details: '+(t.description||'None');
+  const {data,error}=await sb.functions.invoke('rapid-task',{body:{prompt}});
+  if(error)throw error;
+  if(!data||!data.reply)throw new Error(data?.error||'SENRAI returned no result.');
+  const base=(t.description||'').split('\n\n--- SENRAI RUN ').slice(0,1)[0];
+  const updatedDescription=base+'\n\n--- SENRAI AUTO-RUN '+new Date().toLocaleString()+' ---\n'+data.reply;
+  const {error:updateError}=await sb.from('nexus_tasks').update({description:updatedDescription,updated_at:new Date().toISOString()}).eq('id',t.id).eq('user_id',currentUser.id);
+  if(updateError)throw updateError;
+  await log('Auto-run completed',t.title+' — output saved to task');
+ }catch(err){
+  console.error('SENRAI auto-run:',err);
+  try{await log('Auto-run failed',String(err?.message||err).slice(0,220))}catch(_){}
+ }finally{
+  nexusAutoRunnerBusy=false;
+  if(currentUser){await loadTasks();await loadApprovals();renderStats()}
+ }
+}
+function startNexusAutoRunner(){
+ if(nexusAutoRunnerTimer)clearInterval(nexusAutoRunnerTimer);
+ nexusAutoRunnerTimer=setInterval(runNextQueuedTask,60000);
+ setTimeout(runNextQueuedTask,2500);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUser)runNextQueuedTask()});
+
+function showApp(user){currentUser=user;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('bottomNav').style.display='';$('systemStatus').textContent='CLOUD CONNECTED';$('signedInAs').textContent='Signed in as '+user.email;loadAll();startNexusAutoRunner()}
 function showAuth(){$('authView').classList.remove('hidden');$('appView').classList.add('hidden');$('bottomNav').style.display='none';$('systemStatus').textContent='SIGN IN REQUIRED'}
 async function authAction(mode){const email=$('email').value.trim(),password=$('password').value;if(!email||!password)return message('Enter your email and password.',true);$('signInBtn').disabled=true;$('signUpBtn').disabled=true;try{if(mode==='signup'){const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){message('Account created. You are signed in.');}else{message('Account created. Check your email to confirm, then sign in.');return}}else{const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;message('Signed in.')}}catch(e){message(e.message||'Authentication failed.',true)}finally{$('signInBtn').disabled=false;$('signUpBtn').disabled=false}}
 window.authAction=authAction;
