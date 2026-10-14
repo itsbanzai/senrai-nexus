@@ -1782,5 +1782,107 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 new MutationObserver(enforce).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+
+<!-- SENRAI PIXEL FACILITY v2: independent renderer with a unique mount and retry-safe startup -->
+<style id="senrai-pixel-facility-v2-css">
+#appView[data-nexus-view="agents"]>#senraiPixelFacility{display:grid!important}
+#senraiPixelFacility{display:none;position:relative;z-index:1;width:100%;margin:8px 0 88px;background:#080914;color:#eee6ff;border:1px solid #67508f;box-shadow:0 0 36px #9c73ff20;font-family:ui-monospace,Menlo,monospace;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+#senraiPixelFacility *{box-sizing:border-box}
+#senraiPixelFacility .pf-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid #403154;background:linear-gradient(90deg,#17122b,#090a14)}
+#senraiPixelFacility .pf-brand{font-size:14px;letter-spacing:.2em;font-weight:800}.pf-brand em{font-style:normal;color:#c49aff}
+#senraiPixelFacility .pf-sub{font-size:9px;color:#a49abd;letter-spacing:.14em;margin-top:5px}
+#senraiPixelFacility .pf-live{font-size:9px;color:#b5f66c;letter-spacing:.1em}
+#senraiPixelFacility .pf-main{display:grid;grid-template-columns:minmax(0,1fr) 230px;min-height:0}
+#senraiPixelFacility .pf-map{padding:10px;min-width:0;background:#090a14}
+#senraiPixelFacility canvas{display:block;width:100%;height:auto;aspect-ratio:3/2;image-rendering:pixelated;border:1px solid #44345f;background:#111528}
+#senraiPixelFacility .pf-inspector{border-left:1px solid #332744;padding:16px;display:flex;flex-direction:column;gap:13px;background:#0d0d1b}
+#senraiPixelFacility .pf-kicker{font-size:9px;letter-spacing:.14em;color:#a48cd2}
+#senraiPixelFacility .pf-inspector h2{font-size:20px;line-height:1.3;margin:0;color:#f1eaff}
+#senraiPixelFacility .pf-desc{font-size:11px;line-height:1.65;color:#b4abc9}
+#senraiPixelFacility .pf-stat{border-top:1px solid #302641;padding-top:9px}.pf-stat label{display:block;font-size:8px;letter-spacing:.12em;color:#8f83ac;margin-bottom:5px}.pf-stat strong{font-size:11px;color:#e5dcfa}
+#senraiPixelFacility .pf-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto}
+#senraiPixelFacility button{cursor:pointer;border:1px solid #5d477d;background:#19142a;color:#e9dcff;padding:10px 6px;font:9px ui-monospace,monospace}
+#senraiPixelFacility button.pf-primary{background:#c49aff;color:#170f23;border-color:#c49aff;font-weight:800}
+#senraiPixelFacility .pf-rooms{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:8px;background:#090a14;border-top:1px solid #302641}
+#senraiPixelFacility .pf-rooms button.active{border-color:#c49aff;background:#302044;color:#fff;box-shadow:inset 0 -2px #c49aff}
+#senraiPixelFacility .pf-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid #302641;font-size:8px;letter-spacing:.1em;color:#8f83ac}
+#appView[data-nexus-view="agents"]>#senraiPixelFacility~*{display:none!important}
+@media(max-width:760px){#senraiPixelFacility .pf-main{grid-template-columns:1fr}#senraiPixelFacility .pf-inspector{border-left:0;border-top:1px solid #332744;display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px}#senraiPixelFacility .pf-inspector .pf-kicker,#senraiPixelFacility .pf-inspector h2,#senraiPixelFacility .pf-desc,#senraiPixelFacility .pf-actions{grid-column:1/-1}#senraiPixelFacility .pf-rooms{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+<script id="senrai-pixel-facility-v2">
+(function(){
+'use strict';
+var rooms=[
+{name:'SENRAI CORE',short:'CORE',agent:'SENRAI / COORDINATOR',fn:'Mission routing',desc:'Central reactor, mission routing, and facility coordination.',x:415,y:65,w:370,h:235,color:'#c49aff',view:'home'},
+{name:'SCOUT LAB',short:'SCOUT',agent:'ORION / RESEARCH',fn:'Research & discovery',desc:'Research consoles, discovery boards, and market reconnaissance.',x:45,y:75,w:300,h:220,color:'#4bdcff',view:'agents'},
+{name:'FORGE WORKSHOP',short:'FORGE',agent:'KAIRO / CREATION',fn:'Product creation',desc:'A fabrication bay for products, assets, and launch materials.',x:855,y:75,w:300,h:220,color:'#ffb45d',view:'business'},
+{name:'SCRIBE STUDIO',short:'STUDIO',agent:'MIRA / CONTENT',fn:'Writing & publishing',desc:'Creative workstations for content, product copy, and publishing prep.',x:45,y:485,w:320,h:235,color:'#d19aff',view:'business'},
+{name:'ANALYST BAY',short:'ANALYST',agent:'RIN / REVIEW',fn:'Quality & performance',desc:'Quality-control monitors, task review, and performance analysis.',x:835,y:485,w:320,h:235,color:'#7be39e',view:'missions'},
+{name:'MISSION DECK',short:'MISSIONS',agent:'ASTRA / OPERATIONS',fn:'Task execution',desc:'The operations deck for queued work, task status, and completed missions.',x:415,y:505,w:370,h:215,color:'#ff83c7',view:'missions'}
+];
+var crew=[
+{name:'SENRAI',color:'#c49aff',path:[[600,330],[700,345],[810,405],[795,460],[700,475],[600,465],[490,460],[390,420],[390,370],[500,340]],speed:.20,off:0},
+{name:'ORION',color:'#4bdcff',path:[[170,300],[255,315],[330,365],[355,430],[315,470],[230,450],[160,390]],speed:.18,off:80},
+{name:'KAIRO',color:'#ffb45d',path:[[1010,300],[925,325],[850,375],[820,430],[870,470],[980,430]],speed:.21,off:160},
+{name:'MIRA',color:'#d19aff',path:[[160,720],[260,725],[360,690],[390,635],[330,610],[245,655]],speed:.15,off:230},
+{name:'RIN',color:'#7be39e',path:[[1040,720],[940,725],[840,690],[810,635],[870,610],[960,655]],speed:.16,off:310},
+{name:'ASTRA',color:'#ff83c7',path:[[600,720],[565,675],[570,620],[630,610],[650,660]],speed:.14,off:390}
+];
+var root=null,canvas=null,ctx=null,selected=0,tick=0,raf=0,started=false;
+function el(tag,attrs,txt){var n=document.createElement(tag);Object.keys(attrs||{}).forEach(function(k){n.setAttribute(k,attrs[k])});if(txt)n.textContent=txt;return n}
+function mount(){
+ var app=document.getElementById('appView');if(!app)return false;
+ root=document.getElementById('senraiPixelFacility');
+ if(!root){
+  root=el('section',{id:'senraiPixelFacility','aria-label':'SENRAI living pixel facility'});
+  root.innerHTML='<header class="pf-head"><div><div class="pf-brand">SENRAI <em>NEXUS</em></div><div class="pf-sub">LIVING FACILITY / SECTOR 01</div></div><div class="pf-live">● SYSTEM ONLINE / CREW AUTONOMOUS</div></header><div class="pf-main"><div class="pf-map"><canvas id="senraiPixelCanvas" width="1200" height="800" aria-label="Top-down pixel-art facility map"></canvas></div><aside class="pf-inspector"><div class="pf-kicker">FACILITY NAVIGATION / <span id="pfNum">01</span></div><h2 id="pfTitle">SENRAI CORE</h2><div class="pf-desc" id="pfDesc">Central reactor and mission routing.</div><div class="pf-stat"><label>ASSIGNED SPECIALIST</label><strong id="pfAgent">SENRAI / COORDINATOR</strong></div><div class="pf-stat"><label>FACILITY STATUS</label><strong>CREW PATROLLING</strong></div><div class="pf-stat"><label>ROOM FUNCTION</label><strong id="pfFunction">Mission routing</strong></div><div class="pf-actions"><button class="pf-primary" id="pfEnter">ENTER ROOM ↗</button><button id="pfTask">OPEN TASKS</button></div></aside></div><nav class="pf-rooms" id="pfRooms" aria-label="Facility rooms"></nav><footer class="pf-foot"><span>PIXEL FACILITY / LIVE WORLD</span><span>SELECT A ROOM OR CHARACTER</span><span>SENRAI NEXUS</span></footer>';
+  var hub=app.querySelector('#agentHub');app.insertBefore(root,hub||app.firstChild);
+  canvas=root.querySelector('#senraiPixelCanvas');ctx=canvas.getContext('2d');
+  rooms.forEach(function(r,i){var b=el('button',{'data-room':i},r.short);b.addEventListener('click',function(){choose(i)});root.querySelector('#pfRooms').appendChild(b)});
+  canvas.addEventListener('click',function(e){var rect=canvas.getBoundingClientRect(),x=(e.clientX-rect.left)/rect.width*1200,y=(e.clientY-rect.top)/rect.height*800;var i=rooms.findIndex(function(r){return x>=r.x-8&&x<=r.x+r.w+8&&y>=r.y-8&&y<=r.y+r.h+8});if(i>=0)choose(i)});
+  root.querySelector('#pfEnter').addEventListener('click',function(){var v=rooms[selected].view,b=document.querySelector('#bottomNav button[data-view="'+v+'"]');if(b)b.click()});
+  root.querySelector('#pfTask').addEventListener('click',function(){var b=document.querySelector('#bottomNav button[data-view="missions"]');if(b)b.click()});
+ }
+ app.setAttribute('data-nexus-view','agents');
+ root.style.setProperty('display','grid','important');
+ var hub2=document.getElementById('agentHub');if(hub2)hub2.style.setProperty('display','none','important');
+ document.querySelectorAll('#bottomNav button[data-view]').forEach(function(b){b.classList.toggle('active',b.dataset.view==='agents')});
+ choose(selected);
+ if(!started){started=true;draw()}
+ return true;
+}
+function box(x,y,w,h,col){ctx.fillStyle=col;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+function label(t,x,y,size,col){ctx.font='bold '+size+'px monospace';ctx.fillStyle=col;ctx.fillText(t,x,y)}
+function plant(x,y,s){s=s||1;box(x-10*s,y-6*s,20*s,13*s,'#18251f');box(x-7*s,y-9*s,6*s,8*s,'#49b96f');box(x-1*s,y-12*s,7*s,11*s,'#9de17c');box(x+4*s,y-5*s,7*s,8*s,'#277c56');box(x-3*s,y+2*s,5*s,4*s,'#956d4a')}
+function screen(x,y,w,h,col){box(x-3,y-3,w+6,h+6,'#0b0e1a');box(x,y,w,h,'#1b3448');box(x+3,y+3,w-6,h-6,'#235c76');for(var j=0;j<4;j++)box(x+6,y+6+j*4,w-12-(j%2)*7,1,col)}
+function desk(x,y,w,col){box(x,y,w,8,'#596276');box(x+2,y+2,w-4,3,'#202638');screen(x+w/2-16,y-17,32,15,col);box(x+4,y+8,4,9,'#374158');box(x+w-8,y+8,4,9,'#374158')}
+function tank(x,y,col){box(x-4,y-4,28,60,'#141b2b');box(x,y,20,52,'#36334d');box(x+4,y+5,12,42,col);box(x+7,y+10,6,30,'#d5faff');box(x+20,y+14,5,4,col)}
+function drawRoom(r,i){
+ var x=r.x,y=r.y,w=r.w,h=r.h;box(x-9,y-9,w+18,h+18,'#111321');box(x-6,y-6,w+12,h+12,i===selected?'#e7c8ff':'#65517f');box(x-2,y-2,w+4,h+4,'#24283b');box(x,y,w,h,'#30384a');
+ for(var xx=x;xx<x+w;xx+=24)box(xx,y,1,h,'#454b5d');for(var yy=y;yy<y+h;yy+=24)box(x,yy,w,1,'#454b5d');
+ box(x+4,y+4,w-8,22,r.color);box(x+8,y+7,w-16,16,'#141426');label(r.short,x+13,y+19,11,'#f5edff');
+ for(var k=0;k<Math.floor((w-35)/48);k++){box(x+15+k*48,y+32,30,5,'#101523');box(x+18+k*48,y+33,24,2,k%2?'#4bdcff':r.color)}
+ box(x+12,y+h-13,w-24,2,r.color);
+ if(i===0){ctx.save();ctx.globalAlpha=.18;ctx.fillStyle=r.color;ctx.beginPath();ctx.arc(x+w/2,y+105,77,0,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#9777cb';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x+w/2,y+105,65,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='#e2bdff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x+w/2,y+105,51,tick*.012,tick*.012+Math.PI*1.7);ctx.stroke();box(x+w/2-25,y+80,50,50,'#8054c0');box(x+w/2-17,y+88,34,34,'#c49aff');box(x+w/2-8,y+97,16,16,'#f2dcff');desk(x+20,y+h-50,62,r.color);desk(x+w-82,y+h-50,62,r.color)}
+ else{desk(x+18,y+65,66,r.color);desk(x+w-84,y+65,66,r.color);if(i===1||i===2){tank(x+w/2-10,y+80,r.color);plant(x+34,y+h-27);plant(x+w-34,y+h-27)}if(i===3){for(var z=0;z<4;z++){box(x+20+z*23,y+90,16,23,'#28233b');box(x+24+z*23,y+94,8,15,['#4bdcff','#c49aff','#ffb45d','#7be39e'][z])}plant(x+w-35,y+115)}if(i===4){for(var q=0;q<3;q++)screen(x+25+q*78,y+85,52,34,['#7be39e','#4bdcff','#d19aff'][q]);tank(x+w-45,y+130,'#7be39e')}if(i===5){for(var a=0;a<3;a++){box(x+22+a*98,y+74,74,42,'#111627');box(x+27+a*98,y+79,64,30,'#30264f');for(var b=0;b<4;b++)box(x+34+a*98,y+84+b*5,40+b*3,2,b%2?'#4bdcff':'#d19aff')}}plant(x+15,y+h-27,.8);plant(x+w-15,y+h-27,.8)}
+}
+function drawWater(x,y,w,h){box(x,y,w,h,'#10384e');box(x+4,y+4,w-8,h-8,'#197b99');box(x+8,y+8,w-16,h-16,'#1b526c');for(var i=0;i<13;i++){var xx=x+12+((i*31+tick*.55)%(w-24)),yy=y+12+((i*17+tick*.25)%(h-24));box(xx,yy,10+(i%3)*3,2,'#70eaff');box(xx+3,yy-2,2,6,'#b0f8ff')}}
+function drawCrew(a){var p=(tick*a.speed+a.off)%(a.path.length*100)/100,k=Math.floor(p),u=p-k,A=a.path[k],B=a.path[(k+1)%a.path.length],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,bob=Math.sin(tick*.13+a.off)*2;box(x-9,y+8,18,4,'#151a2a');box(x-7,y-13+bob,14,13,'#e9c5b0');box(x-9,y-17+bob,18,6,'#29243a');box(x-7,y-1+bob,14,12,a.color);box(x-7,y+11+bob,5,8,'#303750');box(x+2,y+11+bob,5,8,'#303750');box(x-4,y-8+bob,2,2,'#151626');box(x+2,y-8+bob,2,2,'#151626');if(Math.floor((tick+a.off)/85)%3===0){ctx.font='bold 9px monospace';ctx.fillStyle='#eee4ff';ctx.fillText(a.name,Math.round(x-ctx.measureText(a.name).width/2),Math.round(y-22+bob))}}
+function draw(){if(!ctx||!root||!root.isConnected)return;tick++;box(0,0,1200,800,'#111424');for(var y=0;y<800;y+=24)for(var x=0;x<1200;x+=24){box(x,y,23,23,((x/24+y/24)%2===0)?'#252a3b':'#222738');box(x,y,23,1,'#373b4e');box(x,y,1,23,'#373b4e')}
+ // central open promenade connecting every room
+ box(350,300,500,190,'#171d2c');box(375,315,450,160,'#20273a');box(345,385,510,22,'#36334e');box(589,300,22,195,'#36334e');for(var x2=365;x2<840;x2+=35){box(x2,394,17,3,'#b18aff');box(x2,398,8,1,'#f4c8ff')}
+ drawWater(395,535,105,175);drawWater(700,535,105,175);box(510,580,185,48,'#4b4d62');box(516,585,173,38,'#242a3c');for(var bx=522;bx<685;bx+=18)box(bx,588,3,31,'#c49aff');
+ [[380,320],[810,320],[380,475],[810,475],[380,520],[820,520],[380,710],[820,710],[35,350],[1160,350]].forEach(function(p,i){plant(p[0],p[1],i%3===0?1.1:.8)});
+ box(20,32,1160,5,'#44335d');box(20,32,1160,2,'#c49aff');for(var lx=40;lx<1180;lx+=95){box(lx,28,12,13,'#332847');box(lx+3,31,6,6,lx%2?'#4bdcff':'#ffb45d')}
+ rooms.forEach(drawRoom);crew.forEach(drawCrew);label('NEXUS FACILITY / LIVE MAP',28,25,13,'#e3d1ff');label('AUTONOMOUS CREW  '+crew.length,1000,25,10,'#b5f66c');ctx.globalAlpha=.06;for(var sy=0;sy<800;sy+=4)box(0,sy,1200,1,'#d7d4ff');ctx.globalAlpha=1;
+ if(!document.hidden)raf=requestAnimationFrame(draw);else raf=0;
+}
+function choose(i){selected=i;var r=rooms[i];if(!root)return;root.querySelector('#pfNum').textContent=String(i+1).padStart(2,'0');root.querySelector('#pfTitle').textContent=r.name;root.querySelector('#pfDesc').textContent=r.desc;root.querySelector('#pfAgent').textContent=r.agent;root.querySelector('#pfFunction').textContent=r.fn;root.querySelectorAll('#pfRooms button').forEach(function(b,j){b.classList.toggle('active',j===i);b.setAttribute('aria-pressed',j===i?'true':'false')})}
+function init(){if(mount())return;setTimeout(init,350)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+new MutationObserver(function(){if(!document.getElementById('senraiPixelFacility'))init()}).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&!raf)draw()});
+})();
+</script>
 </body>
 </html>
