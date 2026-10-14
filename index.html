@@ -1522,7 +1522,35 @@ choose(0);draw();
  box(30,285,940,30,'#161629');box(405,255,40,85,'#161629');box(665,255,40,85,'#161629');box(125,310,35,28,'#161629');box(500,310,35,28,'#161629');
  for(let x=35;x<965;x+=18)box(x,298,9,2,'#3a3156');
  box(455,268,90,60,'#302447');box(468,280,64,36,'#b5f66c');box(476,288,48,20,'#101b19');
- rooms.forEach(room);label('NEXUS STATION / SECTOR 01',38,32,14,'#a99bdc');label('5 SPECIALIST BAYS',800,32,11,'#8d83b5');
+ rooms.forEach(room);
+ // Living station dressing: hydroponics, coolant channels, floor lights and roaming crew.
+ function plant(x,y){box(x-8,y-7,16,14,'#0d1718');box(x-5,y-5,5,5,'#43b96f');box(x,y-7,5,6,'#8de078');box(x+2,y,5,5,'#287f58');box(x-3,y+2,4,4,'#5bd18a')}
+ function glow(x,y,color){ctx.save();ctx.globalAlpha=.35;box(x-10,y-3,20,6,color);ctx.globalAlpha=1;box(x-5,y-1,10,2,color);ctx.restore()}
+ // Hydroponic planters at the edges of the walkways.
+ [[24,275],[976,275],[420,330],[690,330],[85,320],[915,320],[480,350],[520,350]].forEach(p=>plant(p[0],p[1]));
+ // Coolant strips and luminous floor markers.
+ box(15,320,970,3,'#172c35');box(15,323,970,1,'#3a8290');
+ for(let x=35;x<965;x+=62){glow(x,319,x%2?'#b68cff':'#42d9f5');}
+ // Little autonomous crew patrols use distinct routes and never remain frozen at a desk.
+ const crew=[
+  {name:'SENRAI',color:'#c59bff',route:[[445,300],[470,300],[520,300],[555,300],[520,300],[470,300]],speed:.34,offset:0},
+  {name:'ORION',color:'#44d9ff',route:[[300,286],[360,286],[390,286],[360,286],[300,286],[260,286]],speed:.23,offset:90},
+  {name:'KAIRO',color:'#ffb45d',route:[[700,300],[735,300],[760,300],[735,300],[700,300],[680,300]],speed:.29,offset:160},
+  {name:'MIRA',color:'#78e69c',route:[[480,330],[480,355],[500,365],[520,355],[520,330],[500,320]],speed:.18,offset:230},
+  {name:'RIN',color:'#ff8cce',route:[[180,300],[210,300],[230,300],[210,300],[180,300],[160,300]],speed:.25,offset:310}
+ ];
+ function roaming(a){const p=(phase*a.speed+a.offset)%((a.route.length-1)*100),seg=Math.floor(p/100),t=(p%100)/100,A=a.route[seg],B=a.route[seg+1],x=A[0]+(B[0]-A[0])*t,y=A[1]+(B[1]-A[1])*t,bob=Math.sin(phase*.17+a.offset)*1.5;
+ ctx.fillStyle='#000';ctx.fillRect(Math.round(x-7),Math.round(y-10+bob),14,17);
+ ctx.fillStyle='#202337';ctx.fillRect(Math.round(x-5),Math.round(y-14+bob),10,8);
+ ctx.fillStyle='#e9c8ad';ctx.fillRect(Math.round(x-4),Math.round(y-12+bob),8,7);
+ ctx.fillStyle=a.color;ctx.fillRect(Math.round(x-5),Math.round(y-16+bob),10,4);ctx.fillRect(Math.round(x-5),Math.round(y-4+bob),10,7);
+ ctx.fillStyle='#242a43';ctx.fillRect(Math.round(x-4),Math.round(y+3+bob),3,5);ctx.fillRect(Math.round(x+1),Math.round(y+3+bob),3,5);
+ ctx.fillStyle='#dfffff';ctx.fillRect(Math.round(x-2),Math.round(y-10+bob),2,2);ctx.fillRect(Math.round(x+1),Math.round(y-10+bob),2,2);
+ ctx.fillStyle=a.color;ctx.globalAlpha=.8;ctx.fillRect(Math.round(x+8),Math.round(y-5+bob),3,3);ctx.globalAlpha=1;
+ if(Math.floor(phase/80+a.offset)%3===0){ctx.font='bold 8px monospace';ctx.fillStyle='#d7d0ff';ctx.fillText(a.name,Math.round(x-17),Math.round(y-21+bob))}
+ }
+ crew.forEach(roaming);
+ label('NEXUS STATION / SECTOR 01',38,32,14,'#c2a9ff');label('5 SPECIALIST BAYS  •  CREW PATROL ACTIVE',700,32,10,'#8d83b5');
  requestAnimationFrame(draw)}
  function taskCount(){let list=document.getElementById('taskList');return list?list.querySelectorAll('tr,[data-task-id],.task-row').length+' visible task record(s)':'Task records available in Missions'}
  function choose(i){selected=i;let r=rooms[i];document.getElementById('nwIndex').textContent=String(i).padStart(2,'0');document.getElementById('nwTitle').textContent=r.name;document.getElementById('nwDesc').textContent=r.desc;document.getElementById('nwAgent').textContent=r.agent;document.getElementById('nwFunction').textContent=r.fn;document.getElementById('nwTasks').textContent=taskCount();document.querySelectorAll('.nw-room-btn').forEach((b,j)=>b.classList.toggle('active',j===i))}
