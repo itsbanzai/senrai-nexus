@@ -136,8 +136,11 @@ function backdrop(){rect(0,0,1200,800,C.void);
  water(374,520,128,111);water(700,520,114,105);water(500,650,200,56);
  poly([[350,500],[380,480],[490,489],[516,524],[500,630],[470,645],[370,625]],'#273b43');
  poly([[686,503],[718,481],[820,496],[831,532],[805,627],[772,642],[700,615]],'#273b43');
- for(let i=0;i<45;i++){let x=125+seed(i+211)*930,y=120+seed(i+411)*570;let central=Math.hypot(x-600,y-400);if(central>155&&((i%3===0)||x<250||x>950)){plant(x,y,.55+(i%4)*.15,i%7===0)}}
- for(let i=0;i<23;i++){let x=130+seed(i+515)*950,y=130+seed(i+715)*580;if(Math.hypot(x-600,y-400)>190)tree(x,y,.55+(i%3)*.13,i%8===0)}
+ for(let i=0;i<125;i++){let x=95+seed(i+211)*1010,y=105+seed(i+411)*625;let central=Math.hypot(x-600,y-400);let roomClear=rooms.some(r=>x>r.x-22&&x<r.x+r.w+22&&y>r.y-22&&y<r.y+r.h+22);if(central>150&&!roomClear&&(i%4!==0||x<260||x>930||y>555)){plant(x,y,.5+(i%5)*.16,i%7===0)}}
+ for(let i=0;i<64;i++){let x=105+seed(i+515)*1000,y=115+seed(i+715)*615;let roomClear=rooms.some(r=>x>r.x-26&&x<r.x+r.w+26&&y>r.y-26&&y<r.y+r.h+26);if(Math.hypot(x-600,y-400)>190&&!roomClear)tree(x,y,.5+(i%4)*.16,i%8===0)}
+ // Connected planted courtyards create lush zones around the architecture.
+ const groves=[{x:142,y:158,w:172,h:45},{x:125,y:365,w:205,h:54},{x:115,y:584,w:135,h:44},{x:345,y:240,w:95,h:38},{x:755,y:244,w:122,h:36},{x:844,y:260,w:150,h:48},{x:970,y:520,w:76,h:80},{x:760,y:560,w:130,h:34},{x:395,y:565,w:92,h:44},{x:300,y:585,w:100,h:26},{x:805,y:700,w:155,h:24}];
+ groves.forEach((b,j)=>{poly([[b.x,b.y+8],[b.x+18,b.y],[b.x+b.w-15,b.y+3],[b.x+b.w,b.y+17],[b.x+b.w-9,b.y+b.h],[b.x+12,b.y+b.h-2]],j%2?'#203f3a':'#2a443e');for(let k=0;k<18;k++){let px=b.x+8+seed(k+j*29)*Math.max(8,b.w-16),py=b.y+5+seed(k+j*31)*Math.max(8,b.h-10);if(!rooms.some(r=>px>r.x-12&&px<r.x+r.w+12&&py>r.y-12&&py<r.y+r.h+12)){if(k%4===0)tree(px,py,.42+(k%3)*.12,j%4===0);else plant(px,py,.42+(k%4)*.12,k%7===0)}}});
 }
 function ambientArchitecture(){
  const braces=[[[345,260],[420,286],[468,325]],[[755,285],[790,260],[835,245]],[[330,390],[390,398],[466,406]],[[730,415],[775,425],[814,433]],[[430,570],[466,544],[493,510]],[[714,515],[746,554],[772,590]]];
