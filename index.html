@@ -96,43 +96,33 @@ body.app-active .topbar{display:none}
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
 <script>
 window.__senraiSupabaseLoadError = '';
-window.__senraiSupabaseReady = new Promise((resolve, reject) => {
-  let finished = false;
-  const finish = (err, api) => {
-    if (finished) return;
-    finished = true;
-    clearTimeout(timer);
-    if (err) {
-      window.__senraiSupabaseLoadError = err.message || String(err);
-      reject(err);
-    } else resolve(api);
-  };
-  const timer = setTimeout(() => finish(new Error('Supabase SDK timed out loading. Check network/content blockers.')), 12000);
-  const check = () => {
-    if (window.supabase && typeof window.supabase.createClient === 'function') finish(null, window.supabase);
-    else loadFallback();
-  };
-  const loadFallback = () => {
-    if (finished) return;
-    const backup = document.createElement('script');
-    backup.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-    backup.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
-      ? finish(null, window.supabase)
-      : finish(new Error('Supabase CDN loaded, but createClient was missing.'));
-    backup.onerror = () => finish(new Error('Both Supabase CDN sources failed to load.'));
-    document.head.appendChild(backup);
-  };
-  if (window.supabase && typeof window.supabase.createClient === 'function') finish(null, window.supabase);
-  else {
-    const primary = document.createElement('script');
-    primary.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-    primary.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
-      ? finish(null, window.supabase)
-      : loadFallback();
-    primary.onerror = loadFallback;
-    document.head.appendChild(primary);
-  }
-});
+window.__senraiSupabaseReady = import('https://esm.sh/@supabase/supabase-js@2')
+  .then(module => {
+    if (typeof module.createClient !== 'function') throw new Error('Supabase ESM bundle did not export createClient.');
+    return { createClient: module.createClient };
+  })
+  .catch(() => new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Supabase SDK failed to load from ESM and UMD CDNs.')), 12000);
+    const useFallback = () => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+      script.onload = () => {
+        clearTimeout(timer);
+        if (window.supabase && typeof window.supabase.createClient === 'function') resolve(window.supabase);
+        else reject(new Error('Supabase UMD bundle loaded without createClient.'));
+      };
+      script.onerror = () => {
+        clearTimeout(timer);
+        reject(new Error('Supabase SDK could not load from ESM or UMD CDN. Check content blockers or network access.'));
+      };
+      document.head.appendChild(script);
+    };
+    useFallback();
+  }))
+  .catch(error => {
+    window.__senraiSupabaseLoadError = error && error.message ? error.message : String(error);
+    throw error;
+  });
 window.__senraiSupabaseReady.catch(() => {});
 </script>
 <script>
