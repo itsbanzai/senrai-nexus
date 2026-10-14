@@ -20,3 +20,34 @@
  #senraiPixelFacility .pf-inspector{border-left:0!important;border-top:1px solid #47345f!important}
  #senraiPixelFacility .pf-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
+
+/* Alignment + safe-area pass: keep the map, inspector, room selector and app dock from colliding. */
+#senraiPixelFacility{width:100%;max-width:1600px;margin:8px auto 120px!important;overflow:visible!important}
+#senraiPixelFacility .pf-head{min-width:0;align-items:center}
+#senraiPixelFacility .pf-main{display:grid!important;grid-template-columns:minmax(0,1fr) 260px!important;gap:0!important;align-items:stretch!important}
+#senraiPixelFacility .pf-map{min-width:0!important;width:100%;padding:12px!important;display:flex;align-items:center;justify-content:center}
+#senraiPixelFacility #senraiWorldCanvas{display:block;width:100%!important;max-width:1200px;height:auto!important;aspect-ratio:3/2!important;object-fit:contain;align-self:center}
+#senraiPixelFacility .pf-inspector{min-width:0;width:100%;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+#senraiPixelFacility .pf-actions{margin-top:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#senraiPixelFacility .pf-actions button{min-width:0;white-space:normal;overflow-wrap:anywhere;min-height:40px}
+#senraiPixelFacility .pf-rooms{display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:8px!important;align-items:stretch!important;padding:12px!important}
+#senraiPixelFacility .pf-rooms button{min-width:0;min-height:44px;padding:10px 4px!important;line-height:1.25;white-space:normal;overflow-wrap:anywhere;text-align:center}
+#senraiPixelFacility .pf-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){
+ #senraiPixelFacility .pf-main{grid-template-columns:minmax(0,1fr) 220px!important}
+ #senraiPixelFacility .pf-map{padding:8px!important}
+ #senraiPixelFacility .pf-rooms{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+ #senraiPixelFacility{margin-bottom:135px!important}
+ #senraiPixelFacility .pf-head{gap:8px;padding:12px!important}
+ #senraiPixelFacility .pf-brand{font-size:13px!important}
+ #senraiPixelFacility .pf-live{max-width:48%;font-size:8px!important;line-height:1.5;text-align:right}
+ #senraiPixelFacility .pf-main{grid-template-columns:minmax(0,1fr)!important}
+ #senraiPixelFacility .pf-map{padding:6px!important}
+ #senraiPixelFacility #senraiWorldCanvas{width:100%!important}
+ #senraiPixelFacility .pf-inspector{border-left:0!important;border-top:1px solid #47345f!important;padding:14px!important}
+ #senraiPixelFacility .pf-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;padding:8px!important}
+ #senraiPixelFacility .pf-rooms button{min-height:42px;font-size:9px!important}
+ #senraiPixelFacility .pf-foot{font-size:8px;line-height:1.6}
+}
