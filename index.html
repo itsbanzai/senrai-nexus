@@ -36,6 +36,7 @@ body{background:#05040c;color:var(--text);background-image:radial-gradient(ellip
 @media(max-width:600px){.nexus-artwork{width:900px;max-width:none}.station-stage{overflow-x:auto;overscroll-behavior-x:contain}.image-hotspots{width:900px;right:auto}.shell{padding-left:0;padding-right:0}.topbar{margin:0 10px}.authbox{margin:20px 10px}}
 body.app-active .topbar{display:none}
 </style>
+  <link rel="stylesheet" href="assets/nexus-world.css?v=3">
 </head>
 <body>
 <div class="shell">
@@ -93,33 +94,11 @@ body.app-active .topbar{display:none}
 </div></div>
 <nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="agentNetwork"><span>▦</span>Agents</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Review</button></nav>
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
-<script>
-window.__senraiSupabaseReady = new Promise((resolve, reject) => {
- const sources = [
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
-  'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
- ];
- let index = 0;
- function attempt() {
-  if (index >= sources.length) {
-   const err = new Error('Supabase SDK failed to load from all CDN sources.');
-   window.__senraiSupabaseLoadError = err.message;
-   reject(err);
-   return;
-  }
-  const script = document.createElement('script');
-  script.src = sources[index++];
-  script.onload = () => {
-   if (window.supabase && typeof window.supabase.createClient === 'function') resolve(window.supabase);
-   else attempt();
-  };
-  script.onerror = attempt;
-  document.head.appendChild(script);
- }
- attempt();
-});
-</script>>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+window.__senraiSupabaseReady = Promise.resolve({ createClient });
+window.__senraiSupabaseLoadError = '';
+</script>
 <script>
 (() => {
 const SUPABASE_URL = 'https://gsvyogdydnkknqjueucj.supabase.co';
@@ -179,5 +158,6 @@ document.querySelectorAll('.image-hotspots [data-target]').forEach(button=>{
 if(window.__senraiSupabaseReady){window.__senraiSupabaseReady.then(()=>init()).catch(e=>{authInitError=e.message;showAuth();message('AUTH DIAGNOSTIC: '+authInitError,true)})}else{init()}
 })();
 </script>
+  <script src="assets/nexus-world.js?v=3"></script>
 </body>
 </html>
