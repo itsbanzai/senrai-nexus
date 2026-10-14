@@ -35,6 +35,24 @@ body{background:#05040c;color:var(--text);background-image:radial-gradient(ellip
 @media(max-width:800px){.shell{padding:8px 8px 88px}.station-caption{font-size:9px}.image-hotspots button:hover{background:rgba(181,105,255,.15)}}
 @media(max-width:600px){.nexus-artwork{width:900px;max-width:none}.station-stage{overflow-x:auto;overscroll-behavior-x:contain}.image-hotspots{width:900px;right:auto}.shell{padding-left:0;padding-right:0}.topbar{margin:0 10px}.authbox{margin:20px 10px}}
 body.app-active .topbar{display:none}
+
+/* AMBER THEME OVERRIDE — placed last so the concept-skin cannot override it. */
+:root{--bg:#100b06!important;--panel:#1b1209!important;--line:#70400f!important;--text:#fff2df!important;--muted:#c2a17d!important;--green:#ff9f1c!important;--green2:#d97706!important;--amber:#ffd166!important}
+body{background:#080604!important;background-image:radial-gradient(ellipse at 50% 0%,#472305 0,transparent 52%),linear-gradient(rgba(255,159,28,.035) 1px,transparent 1px)!important;background-size:auto,100% 4px!important}
+.topbar,.status,.station-head,.station-caption{border-color:#70400f!important}
+.logo{border-color:#ff9f1c!important;color:#ffbd59!important;box-shadow:0 0 22px #ff9f1c66!important}
+.brand h1,.eyebrow,.station-head,.station-caption b,.station-caption strong{color:#ffb347!important}
+.btn{border-color:#d97706!important;background:#321b08!important;color:#ffd6a0!important}
+.btn.primary{background:#ff9f1c!important;border-color:#ffd08a!important;color:#211000!important;box-shadow:0 0 18px #ff9f1c66!important}
+.panel,.stat,.authbox{background:linear-gradient(145deg,#241609,#130d07)!important;border-color:#8a4b13!important;box-shadow:0 0 0 1px #030201,0 0 24px #ff9f1c1f,inset 0 0 0 1px #000!important}
+.agent,.task,.project,.approval,.notice,.field,.command input,textarea,.authbox input{background:#140d06!important;border-color:#70400f!important;color:#fff2df!important}
+.agenticon{background:#321b08!important;border-color:#d97706!important;color:#ffb347!important}
+#authView{border-color:#ff9f1c!important;box-shadow:0 0 36px #ff9f1c35!important}
+.nav{border-top-color:#70400f!important;background:#100b06f5!important}
+.nav button.active{color:#ff9f1c!important;text-shadow:0 0 10px #ff9f1c88!important}
+.progress span,.dot{background:#ff9f1c!important;box-shadow:0 0 10px #ff9f1c88!important}
+.image-hotspots button:hover,.image-hotspots button:focus-visible{background:rgba(255,159,28,.16)!important;border-color:#ffbd59!important;box-shadow:0 0 20px #ff9f1c66!important;outline-color:#ffd08a!important}
+
 </style>
   <link rel="stylesheet" href="assets/nexus-world.css?v=3">
 </head>
