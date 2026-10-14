@@ -106,10 +106,79 @@ function ambientArchitecture(){
  for(let i=0;i<16;i++){let x=245+(i*47)%700,y=180+(i*71)%460;if(Math.hypot(x-600,y-398)>150){rect(x,y,12,8,'#11172a');rect(x+2,y+2,8,4,'#41435e');rect(x+4,y+3,4,2,i%2?C.cyan:C.gold)}}
 }
 
+
+function terrainDetail(){
+ // Broken contour lines make the floating island feel carved rather than flat.
+ const contours=[
+  [[120,250],[154,222],[195,215],[224,229],[261,224]],
+  [[128,465],[163,488],[185,522],[225,540],[252,564]],
+  [[865,135],[906,127],[938,146],[966,151],[1002,182]],
+  [[965,548],[934,576],[914,612],[874,634],[850,658]],
+  [[383,692],[416,680],[449,688],[473,674]],
+  [[724,154],[744,169],[755,192],[778,202]]
+ ];
+ contours.forEach((pts,i)=>{g.lineJoin='round';g.lineCap='round';g.strokeStyle=i%2?'#48516a':'#586078';g.lineWidth=3;g.beginPath();pts.forEach((p,j)=>j?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke();g.strokeStyle='#202e40';g.lineWidth=2;g.beginPath();pts.forEach((p,j)=>j?g.lineTo(p[0]+2,p[1]+5):g.moveTo(p[0]+2,p[1]+5));g.stroke()});
+ // Rocky outcrops, moss shelves and tiny bioluminescent flowers.
+ for(let i=0;i<115;i++){
+  const x=105+seed(i+1820)*990,y=125+seed(i+1920)*590;
+  if(Math.hypot(x-600,y-400)<176)continue;
+  if(!(x<265||x>920||y<180||y>580))continue;
+  const w=5+(i%5)*3,h=3+(i%3)*2;
+  rect(x,y,w,h,i%3===0?'#4b5267':i%3===1?'#222d3d':'#657080');
+  rect(x+1,y+1,Math.max(2,w-3),1,'#7a8490');
+  if(i%4===0){rect(x-2,y+h,w+5,2,'#1c493c');rect(x+2,y+h+2,3,2,i%8===0?C.pink:C.leaf2)}
+  if(i%9===0){rect(x+w+2,y-3,2,2,C.gold);glow(x+w+3,y-2,8,C.gold,.09)}
+ }
+ // More varied layered fern growth, luminous reeds and flower clusters.
+ for(let i=0;i<40;i++){
+  const x=135+seed(i+2220)*930,y=145+seed(i+2320)*570;
+  if(Math.hypot(x-600,y-400)<205)continue;
+  const s=.55+(i%4)*.16,co=i%5===0?C.pink:i%3===0?C.cyan:C.leaf2;
+  rect(x-2*s,y-2*s,4*s,13*s,'#28654f');
+  for(let k=0;k<4;k++){
+   const side=k%2===0?-1:1,yy=y+k*3*s;
+   rect(x+side*(4+k%2*2)*s-3*s,yy,7*s,3*s,k%3===0?co:C.green);
+   rect(x+side*(7+k%2*2)*s,yy-2*s,3*s,3*s,'#8de4a1');
+  }
+  rect(x-2*s,y-6*s,4*s,5*s,co);rect(x-1*s,y-5*s,2*s,2*s,C.hot);
+  if(i%3===0)glow(x,y,13*s,co,.12);
+ }
+ // Cable trenches, raised utility nodes and grates along service routes.
+ const conduits=[[[346,242],[380,259],[404,283]],[[835,265],[811,293],[780,316]],[[342,425],[380,432],[417,447]],[[781,520],[804,542],[811,570]],[[468,595],[490,572],[510,547]],[[692,573],[714,592],[731,611]]];
+ conduits.forEach((pts,i)=>{path(pts,4);pts.forEach((p,j)=>{rect(p[0]-4,p[1]-4,8,8,'#171b2b');rect(p[0]-2,p[1]-2,4,4,j%2?C.cyan:C.purple)})});
+ for(let i=0;i<16;i++){
+  const x=190+(i*71)%820,y=185+(i*43)%480;
+  if(Math.hypot(x-600,y-400)<160)continue;
+  rect(x,y,18,12,'#111728');rect(x+2,y+2,14,8,'#53536b');rect(x+4,y+4,3,4,'#242b40');rect(x+9,y+4,5,2,i%2?C.cyan:C.gold);rect(x+9,y+7,5,1,'#a9a6c7');
+ }
+ // Exterior floodlights and roof-adjacent machinery.
+ const fixtures=[[367,229,1],[744,243,-1],[343,380,1],[790,475,-1],[455,603,1],[743,600,-1],[244,600,1],[960,530,-1]];
+ fixtures.forEach((p,i)=>{const [x,y,dir]=p;rect(x-5,y-5,18,20,'#12182a');rect(x-2,y-2,12,14,'#45445f');rect(x+dir*5,y-8,4,7,'#171c2e');rect(x+dir*6,y-6,2,3,C.cyan);rect(x-1,y+1,9,2,i%2?C.purple:C.gold);glow(x+dir*6,y-4,13,i%2?C.cyan:C.purple,.12)});
+ // Footbridges get separate stepping plates and lit rivets.
+ const stones=[[[345,274],[361,280],[378,291],[392,304]],[[343,457],[361,452],[380,449],[399,448]],[[747,448],[765,449],[785,445],[800,438]],[[437,575],[449,559],[463,547]],[[734,555],[747,572],[760,587]]];
+ stones.forEach((pts,i)=>pts.forEach((p,j)=>{rect(p[0]-4,p[1]-3,8,6,'#272a43');rect(p[0]-3,p[1]-2,6,2,'#7b7792');rect(p[0]-2,p[1]+1,4,1,i%2?C.cyan:'#a99abd')}));
+}
+function reactorSpill(){
+ const x=600,y=398;
+ // Violet reflected light on the reactor's floor and containment structure.
+ for(let i=0;i<22;i++){
+  const a=i*Math.PI/11+frame*.0015,rx=154+(i%3)*8,ry=105+(i%4)*4;
+  const px=x+Math.cos(a)*rx,py=y+Math.sin(a)*ry;
+  rect(px-4,py-2,8,3,i%3?'#4d3379':'#b58cff');rect(px-1,py-5,2,3,C.hot);
+ }
+ // Four heavy anchor pylons with layered metal caps.
+ for(let i=0;i<4;i++){
+  const a=i*Math.PI/2+Math.PI/4,px=x+Math.cos(a)*145,py=y+Math.sin(a)*94;
+  rect(px-15,py-13,30,26,'#111729');rect(px-11,py-10,22,20,'#46435f');
+  rect(px-8,py-7,16,14,'#20233b');rect(px-5,py-4,10,8,i%2?C.cyan:C.purple);
+  rect(px-2,py-2,4,4,C.hot);rect(px-13,py-15,6,3,'#77738f');rect(px+7,py+12,6,3,'#77738f');
+ }
+}
+
 function draw(){if(!c.isConnected)return;frame++;backdrop();
  // elevated bridges and lit walkways weave between actual rooms
  path([[430,210],[465,260],[520,285]],15);path([[760,235],[730,276],[680,298]],15);path([[338,295],[400,310],[470,342]],15);path([[328,475],[395,460],[475,445]],15);path([[720,430],[770,425],[820,425]],16);path([[405,615],[445,570],[500,520]],15);path([[790,600],[755,555],[700,520]],15);path([[590,510],[590,580],[600,650]],15);path([[600,670],[600,655]],15);
- rooms.forEach(room);ambientArchitecture();core();
+ rooms.forEach(room);ambientArchitecture();terrainDetail();core();reactorSpill();
  // vegetation intentionally overlaps building edges like a living installation
  for(let i=0;i<32;i++){let x=120+seed(i+811)*960,y=130+seed(i+911)*570;if(Math.hypot(x-600,y-400)>170&&(x<350||x>830||y>550)){if(i%4===0)tree(x,y,.55+(i%3)*.12,i%7===0);else plant(x,y,.65+(i%4)*.12,i%6===0)}}
  // bridge rail lamps, flower pixels, and moving fireflies
