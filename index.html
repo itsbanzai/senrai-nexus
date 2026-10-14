@@ -94,24 +94,46 @@ body.app-active .topbar{display:none}
 </div></div>
 <nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="agentNetwork"><span>▦</span>Agents</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Review</button></nav>
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+window.__senraiSupabaseLoadError = '';
 window.__senraiSupabaseReady = new Promise((resolve, reject) => {
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
-    resolve(window.supabase);
-  } else {
+  let finished = false;
+  const finish = (err, api) => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    if (err) {
+      window.__senraiSupabaseLoadError = err.message || String(err);
+      reject(err);
+    } else resolve(api);
+  };
+  const timer = setTimeout(() => finish(new Error('Supabase SDK timed out loading. Check network/content blockers.')), 12000);
+  const check = () => {
+    if (window.supabase && typeof window.supabase.createClient === 'function') finish(null, window.supabase);
+    else loadFallback();
+  };
+  const loadFallback = () => {
+    if (finished) return;
     const backup = document.createElement('script');
     backup.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js';
-    backup.onload = () => window.supabase && window.supabase.createClient
-      ? resolve(window.supabase)
-      : reject(new Error('Supabase SDK loaded without createClient.'));
-    backup.onerror = () => reject(new Error('Supabase SDK could not load from either CDN.'));
+    backup.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
+      ? finish(null, window.supabase)
+      : finish(new Error('Supabase CDN loaded, but createClient was missing.'));
+    backup.onerror = () => finish(new Error('Both Supabase CDN sources failed to load.'));
     document.head.appendChild(backup);
+  };
+  if (window.supabase && typeof window.supabase.createClient === 'function') finish(null, window.supabase);
+  else {
+    const primary = document.createElement('script');
+    primary.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    primary.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
+      ? finish(null, window.supabase)
+      : loadFallback();
+    primary.onerror = loadFallback;
+    document.head.appendChild(primary);
   }
 });
-window.__senraiSupabaseReady.catch(error => {
-  window.__senraiSupabaseLoadError = error.message || String(error);
-});
+window.__senraiSupabaseReady.catch(() => {});
 </script>
 <script>
 (() => {
