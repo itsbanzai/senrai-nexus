@@ -62,3 +62,17 @@
 #appView > .stats,
 #appView > .layout,
 #appView > .footer{order:0}
+
+
+/* Purple-violet intelligence layer: keep briefing and facility in one visual system. */
+#nexusBriefing{border-color:#583477!important;background:linear-gradient(135deg,#170d26,#090612 72%)!important;color:#eee7ff!important;box-shadow:0 0 30px #a855f711!important}
+#nexusBriefing .nb-kicker,#nexusBriefing .nb-metric strong{color:#d8b4fe!important}
+#nexusBriefing h2{color:#f4eaff!important}
+#nexusBriefing .nb-sub,#nexusBriefing .nb-metric span{color:#c4b5d9!important}
+#nexusBriefing .nb-live{border-color:#4b2a67!important;color:#c4f7b2!important;background:#10141a}
+#nexusBriefing .nb-metric{border-color:#39204f!important;background:#100b19!important}
+#nexusBriefing .nb-panel{border-color:#39204f!important;background:#0c0912!important}
+#nexusBriefing .nb-panel h3{color:#d8b4fe!important}
+#nexusBriefing .nb-panel p{color:#e3d9f2!important}
+#nexusBriefing button{background:#211333!important;border-color:#583477!important;color:#eee7ff!important}
+#nexusBriefing button.primary{background:#a855f7!important;color:#160824!important;border-color:#d8b4fe!important}
