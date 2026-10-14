@@ -251,10 +251,47 @@ function heroSetPieces(){
  g.strokeStyle='#7b819e';g.lineWidth=2;g.beginPath();g.ellipse(600,718,69,20,0,0,Math.PI*2);g.stroke();g.strokeStyle=C.cyan;g.beginPath();g.ellipse(600,718,48,13,0,0,Math.PI*2);g.stroke();poly([[579,716],[592,708],[613,708],[626,716],[614,722],[591,722]],'#9a9bb6');poly([[594,714],[600,700],[606,714]],'#d7e7ff');rect(596,716,8,3,C.cyan);glow(600,716,20,C.cyan,.16);
 }
 
-function draw(){if(!c.isConnected)return;frame++;backdrop();
+function cinematicTerrain(){
+ // Sculpted layered cliffs and a far mountain ridge establish depth.
+ poly([[75,278],[126,215],[177,196],[225,217],[267,174],[311,205],[342,249],[302,265],[252,245],[208,268],[154,250],[110,290]],'#171a32');
+ poly([[845,245],[882,187],[924,204],[966,169],[1017,212],[1062,263],[1033,286],[991,263],[950,279],[904,249],[868,263]],'#171a32');
+ poly([[91,535],[139,500],[185,521],[218,559],[255,581],[243,622],[202,637],[159,608],[118,594]],'#20203a');
+ poly([[927,555],[964,518],[1000,532],[1036,510],[1082,549],[1060,603],[1014,627],[971,604]],'#20203a');
+ // Strata, mineral seams and inset cliff panels.
+ for(let i=0;i<56;i++){const side=i%2,x=side?945+seed(i+800)*130:83+seed(i+900)*135,y=210+seed(i+1000)*435;if(rooms.some(r=>x>r.x-16&&x<r.x+r.w+16&&y>r.y-16&&y<r.y+r.h+16))continue;const w=7+(i%5)*4,h=3+(i%3)*3;rect(x,y,w+4,h+3,'#12172b');rect(x+2,y+1,w,h,i%3?'#41445e':'#62627b');rect(x+2,y+1,w-3,1,i%4===0?C.cyan:'#77728e');if(i%5===0){rect(x+w,y-2,3,8,C.purple);glow(x+w,y,12,C.purple,.12)}}
+ // Reflective ponds nested inside stepped stone banks.
+ const ponds=[{p:[[335,535],[365,513],[414,518],[447,542],[437,577],[405,594],[357,582]],x:352,y:535,w:78,h:43},{p:[[752,532],[780,512],[819,521],[841,549],[827,580],[787,587],[759,567]],x:770,y:535,w:59,h:39},{p:[[461,665],[492,648],[540,654],[558,676],[544,694],[490,697]],x:482,y:665,w:63,h:23}];
+ ponds.forEach((p,i)=>{poly(p.p,'#10182c');poly(p.p.map(([x,y])=>[x,y+4]),'#45516b');poly(p.p.slice(1,-1),'#123f5e');water(p.x,p.y,p.w,p.h);for(let k=0;k<5;k++){let x=p.x+8+seed(k+i*17)*(p.w-18),y=p.y+7+seed(k+i*29)*(p.h-13);rect(x,y,7+(k%3)*4,2,C.ice)}});
+ // Purposeful forest pockets with overlapping canopies and bioluminescent flowers.
+ const groves=[{x:118,y:270,w:105,h:82},{x:260,y:232,w:75,h:45},{x:824,y:232,w:90,h:52},{x:957,y:290,w:84,h:92},{x:118,y:520,w:90,h:95},{x:251,y:578,w:92,h:57},{x:862,y:579,w:83,h:58},{x:974,y:618,w:75,h:60},{x:360,y:620,w:93,h:35},{x:756,y:622,w:86,h:38}];
+ groves.forEach((b,j)=>{poly([[b.x,b.y+10],[b.x+13,b.y],[b.x+b.w-16,b.y+4],[b.x+b.w,b.y+19],[b.x+b.w-9,b.y+b.h],[b.x+10,b.y+b.h-2]],j%3?'#17382f':'#213f3a');for(let k=0;k<13;k++){let x=b.x+8+seed(k+j*41)*(b.w-16),y=b.y+8+seed(k+j*53)*(b.h-16);if(rooms.some(r=>x>r.x-10&&x<r.x+r.w+10&&y>r.y-10&&y<r.y+r.h+10))continue;if(k%3===0)tree(x,y,.48+(k%4)*.13,(k+j)%7===0);else plant(x,y,.45+(k%4)*.16,(k+j)%6===0)}});
+ // Crystal formations punctuate the outer silhouette.
+ [[157,346,1],[1020,397,.85],[1000,654,.95],[272,638,.75],[879,185,.65]].forEach((p,i)=>{const [x,y,z]=p;glow(x,y-20*z,36*z,i%2?C.cyan:C.purple,.18);poly([[x-13*z,y],[x-7*z,y-21*z],[x-2*z,y-39*z],[x+5*z,y-20*z],[x+14*z,y]],i%2?'#286c9c':'#56398f');poly([[x-4*z,y-4*z],[x-2*z,y-31*z],[x+3*z,y-19*z],[x+8*z,y-3*z]],i%2?'#8beaff':'#d3a6ff');rect(x-15*z,y,30*z,4*z,'#222a43')});
+}
+function bespokeRoomArt(){
+ // Research sample racks with glowing containment vials.
+ rect(389,126,130,44,'#111629');rect(393,130,122,36,'#3a3b56');for(let i=0;i<5;i++){rect(399+i*22,135,14,23,'#10182a');rect(401+i*22,138,10,17,i%2?C.cyan:C.pink);rect(402+i*22,139,3,9,'#e2f8ff');rect(399+i*22,133,14,3,'#9a9bb8')}rect(428,174,52,8,'#121729');rect(432,176,44,3,C.cyan);glow(454,157,25,C.cyan,.09);
+ // Observation windows and telescope mount.
+ rect(767,110,188,43,'#0b1528');rect(771,114,180,35,'#17405d');for(let i=0;i<6;i++){rect(776+i*29,115,3,33,'#6d7994');rect(777+i*29,118,1,26,C.ice)}rect(920,165,42,6,'#171b30');rect(937,157,8,21,'#62627f');rect(940,153,3,25,C.cyan);
+ // Studio mixer, baffles and waveform controls.
+ for(let i=0;i<7;i++){rect(180+i*20,407,12,32,'#111629');rect(183+i*20,410,6,25,'#3e3559');rect(184+i*20,413+(i%4)*4,4,3,i%2?C.pink:C.cyan)}rect(190,448,127,12,'#101628');rect(194,451,119,6,'#56516e');for(let i=0;i<12;i++)rect(199+i*9,452,3,2,i%3?C.cyan:C.pink);
+ // Fitness equipment and weight rack.
+ for(let i=0;i<3;i++){rect(194+i*45,614,32,48,'#101729');rect(198+i*45,618,24,38,'#414961');rect(202+i*45,623,16,27,'#16283b');rect(204+i*45,625,12,3,C.cyan);rect(204+i*45,645,12,3,C.green)}rect(187,667,145,9,'#111628');for(let i=0;i<8;i++)rect(193+i*17,670,9,3,i%2?C.gold:C.cyan);
+ // Command holographic table.
+ poly([[836,459],[941,459],[963,473],[858,473]],'#111629');poly([[836,455],[941,455],[963,469],[858,469]],'#565273');for(let i=0;i<5;i++){rect(854+i*19,458,13,7,i%2?C.cyan:C.purple);rect(856+i*19,460,9,2,C.hot)}
+ // Fabrication robot and prototype pad.
+ rect(802,694,57,31,'#111629');rect(806,698,49,23,'#41445e');rect(825,682,8,18,'#9a91b5');rect(839,671,7,17,'#7b7895');rect(837,667,12,7,C.gold);rect(840,669,6,3,C.hot);rect(872,698,48,25,'#111629');rect(876,702,40,17,'#273e55');rect(882,707,28,7,C.cyan);glow(896,710,20,C.cyan,.13);
+ // Warm living quarters, planted balcony, dock landing circles and shuttle.
+ rect(303,682,71,28,'#111629');rect(307,686,63,20,'#46516a');rect(311,689,55,14,'#f4c789');rect(311,697,55,6,'#c57e9d');glow(338,697,32,C.gold,.17);for(let i=0;i<6;i++)plant(291+i*17,722,.5,i%2===0);
+ g.strokeStyle='#8b89ad';g.lineWidth=3;g.beginPath();g.ellipse(600,724,76,22,0,0,Math.PI*2);g.stroke();g.strokeStyle=C.cyan;g.lineWidth=2;g.beginPath();g.ellipse(600,724,53,14,0,0,Math.PI*2);g.stroke();poly([[577,723],[591,714],[612,714],[627,723],[614,729],[590,729]],'#a5abc8');poly([[594,720],[600,704],[606,720]],'#e5f4ff');rect(596,723,8,4,C.cyan);glow(600,724,25,C.cyan,.17);
+ // Mechanical reactor anchor pylons.
+ for(let i=0;i<8;i++){let a=i*Math.PI/4+frame*.001,x=600+Math.cos(a)*151,y=398+Math.sin(a)*102;rect(x-8,y-8,16,16,'#14182c');rect(x-5,y-5,10,10,i%2?C.cyan:C.purple);rect(x-2,y-2,4,4,C.hot);glow(x,y,18,i%2?C.cyan:C.purple,.14)}
+}
+
+function draw(){if(!c.isConnected)return;frame++;backdrop();cinematicTerrain();
  // elevated bridges and lit walkways weave between actual rooms
  path([[430,210],[465,260],[520,285]],15);path([[760,235],[730,276],[680,298]],15);path([[338,295],[400,310],[470,342]],15);path([[328,475],[395,460],[475,445]],15);path([[720,430],[770,425],[820,425]],16);path([[405,615],[445,570],[500,520]],15);path([[790,600],[755,555],[700,520]],15);path([[590,510],[590,580],[600,650]],15);path([[600,670],[600,655]],15);
- rooms.forEach(room);ambientArchitecture();terrainDetail();heroSetPieces();core();reactorSpill();
+ rooms.forEach(room);bespokeRoomArt();ambientArchitecture();terrainDetail();heroSetPieces();core();reactorSpill();
  // vegetation intentionally overlaps building edges like a living installation
  for(let i=0;i<32;i++){let x=120+seed(i+811)*960,y=130+seed(i+911)*570;if(Math.hypot(x-600,y-400)>170&&(x<350||x>830||y>550)){if(i%4===0)tree(x,y,.55+(i%3)*.12,i%7===0);else plant(x,y,.65+(i%4)*.12,i%6===0)}}
  // bridge rail lamps, flower pixels, and moving fireflies
