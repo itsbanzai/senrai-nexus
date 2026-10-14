@@ -92,6 +92,24 @@ body{background:#080604!important;background-image:radial-gradient(ellipse at 50
 <div id="authMessage" class="notice">Use your own account. If email confirmation is enabled, check your inbox after signing up.</div>
 </section>
 <div id="appView" class="hidden">
+<section id="nexusBriefing" aria-label="Nexus daily briefing">
+<style>
+#nexusBriefing{margin:8px 0 20px;padding:18px;border:1px solid #70400f;background:linear-gradient(135deg,#171007,#090b10 72%);color:#fff2df;font-family:ui-monospace,SFMono-Regular,monospace;box-shadow:0 0 28px #ff9f1c0b}
+#nexusBriefing *{box-sizing:border-box}#nexusBriefing .nb-head{display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap}
+#nexusBriefing .nb-kicker{font-size:9px;letter-spacing:.18em;color:#ffb347}#nexusBriefing h2{font-size:clamp(20px,3vw,28px);margin:7px 0;color:#fff2df}#nexusBriefing .nb-sub{font-size:11px;color:#c2a17d;line-height:1.6}
+#nexusBriefing .nb-live{font-size:9px;color:#b5f66c;border:1px solid #355a2b;padding:7px 9px}
+#nexusBriefing .nb-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}
+#nexusBriefing .nb-metric{border:1px solid #553711;background:#100d0a;padding:12px;min-width:0}#nexusBriefing .nb-metric strong{display:block;font-size:23px;color:#ffb347}#nexusBriefing .nb-metric span{font-size:9px;color:#c2a17d;letter-spacing:.08em}
+#nexusBriefing .nb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}#nexusBriefing .nb-panel{padding:12px;border:1px solid #392b1a;background:#0b0b0d;min-width:0}
+#nexusBriefing .nb-panel h3{font-size:11px;letter-spacing:.1em;margin:0 0 9px;color:#ffcb80}#nexusBriefing .nb-panel p{font-size:11px;line-height:1.6;color:#ded1bd;margin:6px 0;overflow-wrap:anywhere}
+#nexusBriefing .nb-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}#nexusBriefing button{cursor:pointer;border:1px solid #855019;background:#211609;color:#fff2df;padding:10px 12px;font:10px ui-monospace,monospace}#nexusBriefing button.primary{background:#ff9f1c;color:#211000;font-weight:800}
+@media(max-width:600px){#nexusBriefing{padding:13px}#nexusBriefing .nb-grid{grid-template-columns:1fr}#nexusBriefing .nb-metrics{gap:6px}#nexusBriefing .nb-metric{padding:9px}#nexusBriefing .nb-metric strong{font-size:20px}#nexusBriefing .nb-metric span{font-size:8px}}
+</style>
+<div class="nb-head"><div><div class="nb-kicker">SENRAI INTELLIGENCE / DAILY BRIEF</div><h2 id="nbGreeting">Welcome back, Commander.</h2><div class="nb-sub" id="nbSummary">Synchronizing project status, missions, and approvals…</div></div><div class="nb-live">● BRIEFING READY ON LOGIN</div></div>
+<div class="nb-metrics"><div class="nb-metric"><strong id="nbProjects">—</strong><span>ACTIVE PROJECTS</span></div><div class="nb-metric"><strong id="nbTasks">—</strong><span>OPEN TASKS</span></div><div class="nb-metric"><strong id="nbApprovals">—</strong><span>NEEDS YOUR REVIEW</span></div></div>
+<div class="nb-grid"><div class="nb-panel"><h3>◈ PRIORITY / NEXT MOVE</h3><div id="nbNext"><p>Loading your current priorities…</p></div></div><div class="nb-panel"><h3>◈ PROJECT STATUS</h3><div id="nbProjectStatus"><p>Checking active projects…</p></div></div><div class="nb-panel"><h3>◈ AWAITING APPROVAL</h3><div id="nbApprovalStatus"><p>Checking pending approvals…</p></div></div><div class="nb-panel"><h3>◈ RECENT ACTIVITY</h3><div id="nbActivity"><p>Checking the activity log…</p></div></div></div>
+<div class="nb-actions"><button class="primary" id="nbReviewApprovals">REVIEW APPROVALS ↗</button><button id="nbOpenTasks">OPEN MISSIONS ↗</button><button id="nbOpenProjects">OPEN PROJECTS ↗</button></div>
+</section>
 <section id="senraiPixelFacility" aria-label="Animated SENRAI living facility">
 <header class="pf-head"><div><div class="pf-brand">SENRAI <em>NEXUS</em></div><div class="pf-sub">LIVING FACILITY / SECTOR 01</div></div><div class="pf-live">● SYSTEM ONLINE / CREW AUTONOMOUS</div></header>
 <div class="pf-main"><div class="pf-map"><div class="pf-world-label">LIVE WORLD · TAP A ROOM OR CREW MEMBER</div></div><aside class="pf-inspector"><div class="pf-kicker">FACILITY NAVIGATION / <span id="pfNum">01</span></div><h2 id="pfTitle">SENRAI CORE</h2><div class="pf-desc" id="pfDesc">Central plasma reactor and mission routing.</div><div class="pf-stat"><label>ASSIGNED SPECIALIST</label><strong id="pfAgent">SENRAI / COORDINATOR</strong></div><div class="pf-stat"><label>FACILITY STATUS</label><strong>CREW PATROLLING</strong></div><div class="pf-stat"><label>ROOM FUNCTION</label><strong id="pfFunction">Power and orchestration</strong></div><div class="pf-actions"><button class="pf-primary" id="pfEnter" type="button">ENTER ROOM ↗</button><button id="pfTask" type="button">OPEN TASKS</button></div></aside></div>
@@ -186,7 +204,23 @@ function message(text, bad=false){const el=$('authMessage');el.textContent=text;
 function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function time(iso){try{return new Date(iso).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}catch{return ''}}
 async function log(title,detail){if(!currentUser)return;const {error}=await sb.from('nexus_activity').insert({user_id:currentUser.id,title,detail});if(error)console.warn('Activity log failed:',error.message);await loadActivity()}
-async function loadAll(){await Promise.all([loadProjects(),loadTasks(),loadApprovals(),loadActivity()]);renderStats()}
+function renderNexusBriefing(){
+ const set=(id,value)=>{const el=$(id);if(el)el.textContent=value};
+ const openTasks=tasks.filter(t=>!['completed','cancelled'].includes(t.status));
+ const pending=approvals.filter(a=>a.status==='pending');
+ const activeProjects=projects.filter(p=>!['completed','cancelled','archived'].includes(String(p.status||'').toLowerCase()));
+ set('nbProjects',String(activeProjects.length).padStart(2,'0'));
+ set('nbTasks',String(openTasks.length).padStart(2,'0'));
+ set('nbApprovals',String(pending.length).padStart(2,'0'));
+ set('nbGreeting','Welcome back, Commander.');
+ set('nbSummary',activeProjects.length+' active project'+(activeProjects.length===1?'':'s')+', '+openTasks.length+' open mission'+(openTasks.length===1?'':'s')+', and '+pending.length+' pending approval'+(pending.length===1?'':'s')+'. This briefing reflects data currently saved in Nexus.');
+ const next=$('nbNext'), proj=$('nbProjectStatus'), appr=$('nbApprovalStatus'), act=$('nbActivity');
+ if(next){let priority=openTasks.find(t=>t.status==='in_progress')||openTasks.find(t=>t.status==='queued')||null;next.innerHTML=priority?'<p><strong>'+safe(priority.title)+'</strong></p><p>'+(priority.status==='in_progress'?'Already in progress — continue this mission.':'Queued — a good candidate for your next move.')+'</p>':'<p>No open missions are recorded. Add a task when you are ready to move a project forward.</p>';if(pending.length)next.innerHTML+='<p><strong>'+pending.length+' approval'+(pending.length===1?'':'s')+' need review.</strong> Consider clearing those before starting new work.</p>';}
+ if(proj){proj.innerHTML=activeProjects.length?activeProjects.slice(0,4).map(p=>'<p><strong>'+safe(p.name)+'</strong> · '+Math.max(0,Math.min(100,Number(p.progress)||0))+'%<br>'+safe(p.description||'No project summary recorded.')+'</p>').join(''):'<p>No active projects are saved yet. Create one in Projects and it will appear here.</p>';}
+ if(appr){appr.innerHTML=pending.length?pending.slice(0,4).map(a=>'<p><strong>'+safe(a.title)+'</strong><br>'+safe(a.description||'Review requested; details not provided.')+'</p>').join(''):'<p>Nothing is currently marked as awaiting approval.</p>';}
+ if(act){act.innerHTML=activity.length?activity.slice(0,3).map(a=>'<p><strong>'+safe(a.title)+'</strong><br>'+safe(a.detail||'Activity recorded.')+'</p>').join(''):'<p>No recent activity has been recorded yet.</p>';}
+}
+async function loadAll(){await Promise.all([loadProjects(),loadTasks(),loadApprovals(),loadActivity()]);renderStats();renderNexusBriefing()}
 async function loadProjects(){const {data,error}=await sb.from('nexus_projects').select('*').order('created_at',{ascending:false});if(error){console.error(error);return message('Could not load projects: '+error.message,true)}projects=data||[];renderProjects()}
 async function loadTasks(){const {data,error}=await sb.from('nexus_tasks').select('*').order('created_at',{ascending:false});if(error){console.error(error);return message('Could not load tasks: '+error.message,true)}tasks=data||[];renderTasks()}
 async function loadApprovals(){const {data,error}=await sb.from('nexus_approvals').select('*').eq('status','pending').order('created_at',{ascending:false});if(error){console.error(error);return}approvals=data||[];renderApprovals()}
@@ -239,8 +273,12 @@ window.__senraiAuthInitPromise=(async()=>{try{await window.__senraiSupabaseReady
 
 // Facility controls connect to the existing workspace navigation.
 document.querySelectorAll('#senraiPixelFacility #pfRooms button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#senraiPixelFacility #pfRooms button').forEach(function(x){x.classList.toggle('active',x===b)});var title=document.getElementById('pfTitle');if(title)title.textContent=(b.textContent||'CORE').trim()+' SECTOR';});});
-document.getElementById('pfEnter')?.addEventListener('click',function(){var active=document.querySelector('#senraiPixelFacility #pfRooms button.active');var idx=active?Number(active.dataset.room):0;var views=['agents','agents','agents','business','home','agents','business','home'];var target=document.querySelector('#bottomNav button[data-view="'+(views[idx]||'agents')+'"]');if(target)target.click();});
-document.getElementById('pfTask')?.addEventListener('click',function(){var target=document.querySelector('#bottomNav button[data-view="missions"]');if(target)target.click();});
+function scrollToSection(id){var target=document.getElementById(id);if(target)target.scrollIntoView({behavior:'smooth',block:'start'});}
+document.getElementById('nbReviewApprovals')?.addEventListener('click',function(){scrollToSection('approvalList')});
+document.getElementById('nbOpenTasks')?.addEventListener('click',function(){scrollToSection('taskList')});
+document.getElementById('nbOpenProjects')?.addEventListener('click',function(){scrollToSection('projectList')});
+document.getElementById('pfEnter')?.addEventListener('click',function(){var active=document.querySelector('#senraiPixelFacility #pfRooms button.active');var idx=active?Number(active.dataset.room):0;var views=['agents','agents','agents','business','home','agents','business','home'];var ids=['top','agentNetwork','agentNetwork','businessView','taskList','agentNetwork','projectList','activityList'];scrollToSection(ids[idx]||'top');});
+document.getElementById('pfTask')?.addEventListener('click',function(){scrollToSection('taskList');});
 
   </script>
   <script src="assets/nexus-world.js?v=3"></script>
