@@ -1759,5 +1759,39 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #appView[data-nexus-view="business"] #senraiOverview { display:none !important; }
 #appView[data-nexus-view="home"] #senraiOverview { display:block !important; }
 </style>
+
+<!-- SENRAI WORLD VISIBILITY FIX: keep the living facility as the Station view, not the legacy atlas. -->
+<style id="senrai-force-living-world">
+#appView[data-nexus-view="agents"] #nexusWorld,
+#appView #nexusWorld{display:grid!important;visibility:visible!important;opacity:1!important;position:relative!important}
+#appView #agentHub,
+#appView .agent-command-layout,
+#appView .nexus-map,
+#appView .agent-work-panel{display:none!important}
+#nexusWorld .nw-layout{display:grid!important}
+#nexusWorld .nw-scene{display:flex!important}
+#nexusWorld #nwCanvas{display:block!important;width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:3/2!important}
+@media(max-width:760px){#nexusWorld .nw-layout{grid-template-columns:1fr!important}#nexusWorld #nwCanvas{width:100%!important;max-height:none!important}}
+</style>
+<script id="senrai-force-living-world-init">
+(function(){
+function enforce(){
+ var app=document.getElementById('appView');if(!app)return;
+ var world=document.getElementById('nexusWorld');
+ if(world){
+   var sub=world.querySelector('.nw-sub');
+   if(sub&&sub.textContent.indexOf('LIVING FACILITY')>=0){
+     app.setAttribute('data-nexus-view','agents');
+     world.style.setProperty('display','grid','important');
+     world.style.setProperty('visibility','visible','important');
+     var hub=document.getElementById('agentHub');if(hub)hub.style.setProperty('display','none','important');
+     document.querySelectorAll('#bottomNav button[data-view]').forEach(function(b){b.classList.toggle('active',b.dataset.view==='agents')});
+   }
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',enforce);else enforce();
+new MutationObserver(enforce).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body>
 </html>
