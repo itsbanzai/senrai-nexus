@@ -1,0 +1,25 @@
+name: Senrai Cloud Queue Worker
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  process-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process one queued task
+        env:
+          WORKER_URL: ${{ secrets.SENRAI_WORKER_URL }}
+          CRON_SECRET: ${{ secrets.SENRAI_CRON_SECRET }}
+        run: |
+          if [ -z "$WORKER_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "Missing repository secrets SENRAI_WORKER_URL and/or SENRAI_CRON_SECRET."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error \
+            --request POST "$WORKER_URL" \
+            --header "Authorization: Bearer $CRON_SECRET" \
+            --header "Content-Type: application/json" \
+            --data '{}'
