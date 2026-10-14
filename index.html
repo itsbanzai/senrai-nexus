@@ -115,7 +115,7 @@ window.__senraiSupabaseReady = new Promise((resolve, reject) => {
   const loadFallback = () => {
     if (finished) return;
     const backup = document.createElement('script');
-    backup.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js';
+    backup.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js';
     backup.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
       ? finish(null, window.supabase)
       : finish(new Error('Supabase CDN loaded, but createClient was missing.'));
@@ -125,7 +125,7 @@ window.__senraiSupabaseReady = new Promise((resolve, reject) => {
   if (window.supabase && typeof window.supabase.createClient === 'function') finish(null, window.supabase);
   else {
     const primary = document.createElement('script');
-    primary.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    primary.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
     primary.onload = () => window.supabase && typeof window.supabase.createClient === 'function'
       ? finish(null, window.supabase)
       : loadFallback();
