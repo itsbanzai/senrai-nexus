@@ -1884,5 +1884,9 @@ new MutationObserver(function(){if(!document.getElementById('senraiPixelFacility
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&!raf)draw()});
 })();
 </script>
+<style id="senrai-pixel-facility-only-view">
+#appView[data-nexus-view="agents"]>:not(#senraiPixelFacility){display:none!important}
+#appView[data-nexus-view="agents"]>#senraiPixelFacility{display:grid!important}
+</style>
 </body>
 </html>
