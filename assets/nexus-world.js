@@ -32,15 +32,56 @@ function consoleDesk(x,y,w,accent){rect(x,y,w,10,'#101626');rect(x+2,y+2,w-4,5,'
 function tank(x,y,accent){rect(x-8,y-3,25,54,'#171b31');rect(x-5,y,19,48,'#47516b');rect(x-2,y+5,13,38,accent);rect(x+1,y+9,5,28,'#d7f7ff');rect(x-8,y+4,25,3,'#aab1c9');rect(x-8,y+40,25,3,'#aab1c9');glow(x+4,y+20,24,accent,.13)}
 function machine(x,y,w,h,accent){rect(x,y,w,h,'#101525');rect(x+4,y+4,w-8,h-8,'#31364e');for(let i=0;i<5;i++)rect(x+7,y+8+i*8,w-14,2,'#161d31');rect(x+7,y+h-14,5,4,accent);rect(x+16,y+h-14,5,4,C.cyan);rect(x+w-16,y+h-14,5,4,C.green);rect(x+2,y+2,w-4,2,'#6d718d')}
 function room(r,i){let x=r.x,y=r.y,w=r.w,h=r.h,a=r.color;
- // broad shadow, foundation slab, corner armor and illuminated wall band
- poly([[x-13,y+13],[x+w-2,y-10],[x+w+13,y+5],[x+w+8,y+h+5],[x+8,y+h+15],[x-13,y+h-1]],'#080b18');
- poly([[x-7,y+8],[x+w-1,y-5],[x+w+7,y+5],[x+w+4,y+h],[x+4,y+h+7],[x-7,y+h-2]],'#55516c');
- rect(x,y,w,h,'#191e31');rect(x+5,y+5,w-10,h-10,'#30364b');
- for(let xx=x+8;xx<x+w-8;xx+=24)for(let yy=y+8;yy<y+h-8;yy+=24){rect(xx,yy,22,22,((xx+yy)/24)%2?'#353a50':'#2e3449');rect(xx+2,yy+2,18,1,'#444a61');rect(xx+2,yy+19,18,1,'#252b3f');rect(xx+2,yy+2,1,18,'#41465e')}
- rect(x+6,y+6,w-12,5,'#111526');rect(x+10,y+11,w-20,13,'#1c1930');rect(x+12,y+13,w-24,9,a);rect(x+15,y+15,w-30,5,'#19182a');rect(x+7,y+26,w-14,3,'#151a2a');for(let k=0;k<Math.floor((w-24)/26);k++){rect(x+13+k*26,y+28,17,3,'#111629');rect(x+15+k*26,y+29,3,1,k%2?C.cyan:a)}
- // bevelled pillars, rivets, light bars
- for(const p of [[x+5,y+32],[x+w-11,y+32],[x+5,y+h-20],[x+w-11,y+h-20]]){rect(p[0],p[1],6,14,'#171b2b');rect(p[0]+1,p[1]+2,4,3,a);rect(p[0]+1,p[1]+8,4,3,C.steel)}
- rect(x+12,y+35,w-24,3,'#1b2032');rect(x+14,y+36,w-28,1,'#66617f');rect(x+12,y+h-17,w-24,4,'#151a2b');rect(x+14,y+h-16,w-28,1,a);
+ // Each facility has its own architectural silhouette: chamfered, stepped, winged or circular shells.
+ const cut=[18,24,30,15,22,32,28,20,26][i];
+ let pts;
+ if(i===0) pts=[[x+26,y-10],[x+w-26,y-10],[x+w+8,y+20],[x+w+8,y+h-24],[x+w-28,y+h+10],[x+26,y+h+10],[x-8,y+h-22],[x-8,y+22]];
+ else if(i===1) pts=[[x+cut,y-8],[x+w-28,y-8],[x+w+8,y+18],[x+w+8,y+h-18],[x+w-18,y+h+7],[x+16,y+h+7],[x-8,y+h-20],[x-8,y+18]];
+ else if(i===2) pts=[[x+24,y-9],[x+w-42,y-9],[x+w+10,y+24],[x+w+10,y+h-26],[x+w-22,y+h+8],[x+38,y+h+8],[x-10,y+h-22],[x-10,y+24]];
+ else if(i===3) pts=[[x-8,y+20],[x+18,y-8],[x+w-20,y-8],[x+w+8,y+14],[x+w+8,y+h-30],[x+w-28,y+h+8],[x+20,y+h+8],[x-8,y+h-18]];
+ else if(i===4) pts=[[x+18,y-8],[x+w-20,y-8],[x+w+8,y+18],[x+w+8,y+h-22],[x+w-22,y+h+8],[x+24,y+h+8],[x-8,y+h-20],[x-8,y+20]];
+ else if(i===5) pts=[[x+28,y-10],[x+w-36,y-10],[x+w+10,y+26],[x+w+10,y+h-28],[x+w-28,y+h+9],[x+30,y+h+9],[x-10,y+h-26],[x-10,y+24]];
+ else if(i===6) pts=[[x+24,y-8],[x+w-24,y-8],[x+w+8,y+18],[x+w+8,y+h-18],[x+w-22,y+h+7],[x+22,y+h+7],[x-8,y+h-18],[x-8,y+18]];
+ else if(i===7) pts=[[x+20,y-8],[x+w-36,y-8],[x+w+8,y+20],[x+w+8,y+h-20],[x+w-18,y+h+8],[x+28,y+h+8],[x-8,y+h-22],[x-8,y+20]];
+ else pts=[[x+22,y-8],[x+w-22,y-8],[x+w+8,y+18],[x+w+8,y+h-16],[x+w-20,y+h+8],[x+20,y+h+8],[x-8,y+h-16],[x-8,y+18]];
+ // Floating shadow and deep understructure are deliberately wider than the roof.
+ poly(pts.map(p=>[p[0]+7,p[1]+13]),'#080b18');
+ poly(pts.map(p=>[p[0]+2,p[1]+5]),'#17192b');
+ poly(pts,'#69627f');
+ const inner=pts.map(([px,py])=>[x+(px-x)*.965,y+(py-y)*.94]);
+ poly(inner,'#171c2d');
+ // Thick illuminated perimeter with short dark breaks like segmented alloy armor.
+ g.save();g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let k=1;k<pts.length;k++)g.lineTo(pts[k][0],pts[k][1]);g.closePath();g.strokeStyle='#9a91b3';g.lineWidth=2;g.stroke();g.restore();
+ // Roof fins and corner armor are unique to each structure.
+ for(let k=0;k<pts.length;k++){const p=pts[k];rect(p[0]-4,p[1]-4,8,8,'#24273d');rect(p[0]-2,p[1]-2,4,4,k%2?a:C.steel)}
+ if(i===0){
+  // Massive octagonal containment ring around the central core room.
+  poly([[x+36,y+15],[x+w-36,y+15],[x+w-15,y+39],[x+w-15,y+h-39],[x+w-38,y+h-15],[x+38,y+h-15],[x+15,y+h-39],[x+15,y+39]],'#232039');
+  poly([[x+44,y+22],[x+w-44,y+22],[x+w-22,y+43],[x+w-22,y+h-43],[x+w-44,y+h-22],[x+44,y+h-22],[x+22,y+h-43],[x+22,y+43]],'#30304c');
+  g.save();g.beginPath();g.moveTo(x+44,y+22);g.lineTo(x+w-44,y+22);g.lineTo(x+w-22,y+43);g.lineTo(x+w-22,y+h-43);g.lineTo(x+w-44,y+h-22);g.lineTo(x+44,y+h-22);g.lineTo(x+22,y+h-43);g.lineTo(x+22,y+43);g.closePath();g.clip();
+  rect(x+24,y+24,w-48,h-48,'#28253f');
+  for(let xx=x+30;xx<x+w-30;xx+=18)rect(xx,y+25,2,h-50,'#393452');
+  g.restore();
+ } else {
+  // Main room deck with cut-off corners, inset floor panels and visible structural ribs.
+  g.save();g.beginPath();g.moveTo(pts[0][0]+8,pts[0][1]+12);for(let k=1;k<pts.length;k++)g.lineTo(pts[k][0]+(pts[k][0]<x?7:-7),pts[k][1]+(pts[k][1]<y?8:-8));g.closePath();g.clip();
+  rect(x-4,y-4,w+8,h+8,'#242a3e');
+  rect(x+4,y+4,w-8,h-8,'#30364b');
+  for(let xx=x+8;xx<x+w-8;xx+=24)for(let yy=y+8;yy<y+h-8;yy+=24){rect(xx,yy,22,22,((xx+yy)/24)%2?'#353a50':'#2e3449');rect(xx+2,yy+2,18,1,'#444a61');rect(xx+2,yy+19,18,1,'#252b3f');rect(xx+2,yy+2,1,18,'#41465e')}
+  g.restore();
+ }
+ // Bright roofline, segmented warning strips, exposed conduits and roof service panels.
+ rect(x+16,y+5,w-32,4,'#101526');rect(x+20,y+7,w-40,2,a);
+ rect(x+18,y+12,w-36,9,'#12172a');rect(x+22,y+14,w-44,2,a);
+ for(let k=0;k<Math.floor((w-36)/22);k++){rect(x+18+k*22,y+25,15,3,'#111629');rect(x+20+k*22,y+26,4,1,k%2?C.cyan:a)}
+ rect(x+12,y+h-13,w-24,4,'#141a2c');rect(x+16,y+h-12,w-32,2,a);
+ // Raised side wings, vents and visible bridge docking collars.
+ for(let side of [-1,1]){
+  let sx=side<0?x-14:x+w-2;
+  rect(sx,y+h*.38,16,25,'#111729');rect(sx+3,y+h*.38+3,10,19,'#44435f');
+  rect(sx+5,y+h*.38+5,6,3,side<0?C.cyan:C.purple);
+  for(let k=0;k<3;k++)rect(sx+4,y+h*.38+10+k*3,8,1,'#77748f');
+ }
  // Interior furnishings specific to each room
  if(i===0){ // containment chamber
   rect(x+22,y+42,w-44,h-62,'#22263d');rect(x+28,y+48,w-56,h-74,'#171d31');
