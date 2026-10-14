@@ -93,7 +93,23 @@ body.app-active .topbar{display:none}
 </div></div>
 <nav class="nav" id="bottomNav"><button class="active" data-scroll="top"><span>⌂</span>Home</button><button data-scroll="agentNetwork"><span>▦</span>Agents</button><button data-scroll="taskList"><span>☷</span>Missions</button><button data-scroll="projectList"><span>◇</span>Projects</button><button data-scroll="approvalList"><span>✓</span>Review</button></nav>
 <div id="modalBack" class="hidden" style="position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px"><div style="width:min(520px,100%);background:#101815;border:1px solid var(--line);border-radius:18px;padding:20px"><h3 id="modalTitle">Add project</h3><form id="modalForm"><label for="modalName">Name</label><input class="field" id="modalName" maxlength="100" required><label for="modalDesc" style="display:block;color:var(--muted);font-size:12px;margin:12px 0 6px">Description (optional)</label><textarea id="modalDesc" maxlength="500" placeholder="What is this project trying to achieve?"></textarea><div class="authactions" style="justify-content:end"><button type="button" class="btn subtle" id="modalCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div></form></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="this.onerror=null;this.src='https://unpkg.com/@supabase/supabase-js@2';"></script>
+<script>
+(function(){
+ const sources=[
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+  'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'
+ ];
+ let index=0;
+ function loadNext(){
+  if(index>=sources.length){window.__senraiSupabaseLoadError='Supabase SDK failed to load from all CDN sources.';return}
+  const src=sources[index++],script=document.createElement('script');
+  script.src=src;script.onload=function(){if(!window.supabase||typeof window.supabase.createClient!=='function'){loadNext()}};
+  script.onerror=loadNext;document.head.appendChild(script);
+ }
+ loadNext();
+})();
+</script>
 <script>
 (() => {
 const SUPABASE_URL = 'https://gsvyogdydnkknqjueucj.supabase.co';
@@ -135,7 +151,7 @@ if(a==='approve'||a==='reject'){const ap=approvals.find(x=>x.id===id);const {err
 $('clearCompleted').addEventListener('click',async()=>{if(!currentUser)return;const ids=tasks.filter(t=>t.status==='completed').map(t=>t.id);if(!ids.length)return;if(!confirm('Delete all completed tasks?'))return;const {error}=await sb.from('nexus_tasks').delete().in('id',ids);if(error)return alert(error.message);await log('Completed tasks cleared',String(ids.length)+' tasks');await loadTasks();renderStats()});
 $('clearActivity').addEventListener('click',async()=>{if(!currentUser)return;if(!confirm('Clear your activity history?'))return;const {error}=await sb.from('nexus_activity').delete().eq('user_id',currentUser.id);if(error)return alert(error.message);activity=[];renderActivity()});
 function navigateTo(id,btn){document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='top')window.scrollTo({top:0,behavior:'smooth'});else{const target=$(id);if(target)target.scrollIntoView({behavior:'smooth',block:'start'});}}document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>navigateTo(b.dataset.scroll,b)));
-async function init(){try{const api=window.supabase;if(!api||typeof api.createClient!=='function')throw new Error('Supabase SDK did not load.');const client=api.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);if(!client)throw new Error('createClient returned no client.');if(!client.auth)throw new Error('Supabase client has no auth property. SDK loaded, but the returned client is incompatible.');sb=client;const result=await sb.auth.getSession();if(result.error)throw result.error;const session=result.data&&result.data.session;if(session)showApp(session.user);else showAuth();sb.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{currentUser=null;showAuth()}})}catch(e){$('systemStatus').textContent='AUTH INIT FAILED';showAuth();message('AUTH DIAGNOSTIC: '+(e&&e.message?e.message:String(e)),true);console.error('SENRAI auth init',e)}}
+async function init(){try{const api=window.supabase;if(!api||typeof api.createClient!=='function')throw new Error(window.__senraiSupabaseLoadError||'Supabase SDK is still loading or was blocked.');const client=api.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);if(!client)throw new Error('createClient returned no client.');if(!client.auth)throw new Error('Supabase client has no auth property. SDK loaded, but the returned client is incompatible.');sb=client;const result=await sb.auth.getSession();if(result.error)throw result.error;const session=result.data&&result.data.session;if(session)showApp(session.user);else showAuth();sb.auth.onAuthStateChange((_event,session)=>{if(session)showApp(session.user);else{currentUser=null;showAuth()}})}catch(e){$('systemStatus').textContent='AUTH INIT FAILED';showAuth();message('AUTH DIAGNOSTIC: '+(e&&e.message?e.message:String(e)),true);console.error('SENRAI auth init',e)}}
 
 // The supplied art is embedded in this HTML; the room and sidebar hotspots are real controls.
 const nexusStage=$('nexusStage');
