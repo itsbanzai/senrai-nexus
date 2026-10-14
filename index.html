@@ -1858,13 +1858,70 @@ function screen(x,y,w,h,col){box(x-3,y-3,w+6,h+6,'#0b0e1a');box(x,y,w,h,'#1b3448
 function desk(x,y,w,col){box(x,y,w,8,'#596276');box(x+2,y+2,w-4,3,'#202638');screen(x+w/2-16,y-17,32,15,col);box(x+4,y+8,4,9,'#374158');box(x+w-8,y+8,4,9,'#374158')}
 function tank(x,y,col){box(x-4,y-4,28,60,'#141b2b');box(x,y,20,52,'#36334d');box(x+4,y+5,12,42,col);box(x+7,y+10,6,30,'#d5faff');box(x+20,y+14,5,4,col)}
 function drawRoom(r,i){
- var x=r.x,y=r.y,w=r.w,h=r.h;box(x-9,y-9,w+18,h+18,'#111321');box(x-6,y-6,w+12,h+12,i===selected?'#e7c8ff':'#65517f');box(x-2,y-2,w+4,h+4,'#24283b');box(x,y,w,h,'#30384a');
- for(var xx=x;xx<x+w;xx+=24)box(xx,y,1,h,'#454b5d');for(var yy=y;yy<y+h;yy+=24)box(x,yy,w,1,'#454b5d');
- box(x+4,y+4,w-8,22,r.color);box(x+8,y+7,w-16,16,'#141426');label(r.short,x+13,y+19,11,'#f5edff');
- for(var k=0;k<Math.floor((w-35)/48);k++){box(x+15+k*48,y+32,30,5,'#101523');box(x+18+k*48,y+33,24,2,k%2?'#4bdcff':r.color)}
- box(x+12,y+h-13,w-24,2,r.color);
- if(i===0){ctx.save();ctx.globalAlpha=.18;ctx.fillStyle=r.color;ctx.beginPath();ctx.arc(x+w/2,y+105,77,0,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#9777cb';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x+w/2,y+105,65,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='#e2bdff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x+w/2,y+105,51,tick*.012,tick*.012+Math.PI*1.7);ctx.stroke();box(x+w/2-25,y+80,50,50,'#8054c0');box(x+w/2-17,y+88,34,34,'#c49aff');box(x+w/2-8,y+97,16,16,'#f2dcff');desk(x+20,y+h-50,62,r.color);desk(x+w-82,y+h-50,62,r.color)}
- else{desk(x+18,y+65,66,r.color);desk(x+w-84,y+65,66,r.color);if(i===1||i===2){tank(x+w/2-10,y+80,r.color);plant(x+34,y+h-27);plant(x+w-34,y+h-27)}if(i===3){for(var z=0;z<4;z++){box(x+20+z*23,y+90,16,23,'#28233b');box(x+24+z*23,y+94,8,15,['#4bdcff','#c49aff','#ffb45d','#7be39e'][z])}plant(x+w-35,y+115)}if(i===4){for(var q=0;q<3;q++)screen(x+25+q*78,y+85,52,34,['#7be39e','#4bdcff','#d19aff'][q]);tank(x+w-45,y+130,'#7be39e')}if(i===5){for(var a=0;a<3;a++){box(x+22+a*98,y+74,74,42,'#111627');box(x+27+a*98,y+79,64,30,'#30264f');for(var b=0;b<4;b++)box(x+34+a*98,y+84+b*5,40+b*3,2,b%2?'#4bdcff':'#d19aff')}}plant(x+15,y+h-27,.8);plant(x+w-15,y+h-27,.8)}
+ var x=r.x,y=r.y,w=r.w,h=r.h;
+ // Deep wall shadow, metal sill, corner brackets and inset floor.
+ box(x-12,y-10,w+24,h+24,'#080a13');box(x-9,y-8,w+18,h+18,'#161728');
+ box(x-7,y-7,w+14,h+14,i===selected?'#f0ceff':'#65517e');box(x-3,y-3,w+6,h+6,'#171b2b');box(x,y,w,h,'#30384a');
+ // Alternating metal floor panels, seams, bolts and worn highlights.
+ for(var xx=x;xx<x+w;xx+=24){for(var yy=y;yy<y+h;yy+=24){box(xx+1,yy+1,22,22,((xx/24+yy/24)%2===0)?'#343b4d':'#2d3446');box(xx+2,yy+2,20,1,'#42485a');box(xx+2,yy+21,20,1,'#272d3e');box(xx+2,yy+2,1,20,'#3b4355');box(xx+21,yy+2,1,20,'#252c3d');box(xx+4,yy+4,2,2,'#606176');box(xx+18,yy+18,2,2,'#202638')}}
+ // Heavy modular walls and inset luminous header.
+ box(x+2,y+2,w-4,5,'#121625');box(x+5,y+5,w-10,20,'#19172b');box(x+7,y+7,w-14,16,r.color);box(x+10,y+9,w-20,12,'#171526');
+ label(r.short,x+15,y+19,11,'#f9f0ff');
+ // Header data ticks and segmented status lamps.
+ for(var k=0;k<Math.floor((w-45)/34);k++){box(x+12+k*34,y+31,25,5,'#121725');box(x+14+k*34,y+32,3,3,[r.color,'#4bdcff','#9de17c'][k%3]);box(x+19+k*34,y+33,14,1,'#68708a')}
+ // Thick corner pillars with little maintenance lights.
+ [[x+4,y+31],[x+w-10,y+31],[x+4,y+h-22],[x+w-10,y+h-22]].forEach(function(p,j){box(p[0],p[1],6,15,'#151a29');box(p[0]+1,p[1]+2,4,3,j%2?'#4bdcff':r.color);box(p[0]+1,p[1]+8,4,4,'#6a7185')});
+ // Cable raceway follows the walls.
+ box(x+11,y+36,w-22,3,'#1a2031');box(x+13,y+37,w-26,1,'#657087');box(x+11,y+h-17,w-22,4,'#151b2b');box(x+13,y+h-16,w-26,1,r.color);
+ // Room-specific machinery, storage and work surfaces.
+ if(i===0){
+  // Containment reactor: concentric housing, segmented ring, four stabilizers and radial conduits.
+  box(x+w/2-93,y+42,186,139,'#25263e');box(x+w/2-86,y+48,172,127,'#1b2034');box(x+w/2-78,y+54,156,115,'#34324b');
+  ctx.save();ctx.globalAlpha=.2;ctx.fillStyle=r.color;ctx.beginPath();ctx.arc(x+w/2,y+105,82,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.strokeStyle='#615582';ctx.lineWidth=9;ctx.beginPath();ctx.arc(x+w/2,y+105,68,0,Math.PI*2);ctx.stroke();
+  ctx.strokeStyle='#b28ae9';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x+w/2,y+105,68,tick*.009,tick*.009+Math.PI*1.65);ctx.stroke();
+  ctx.strokeStyle='#8c75b5';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x+w/2,y+105,52,0,Math.PI*2);ctx.stroke();
+  for(var q=0;q<8;q++){var ang=q*Math.PI/4;box(x+w/2+Math.cos(ang)*68-4,y+105+Math.sin(ang)*68-4,8,8,q%2?'#4bdcff':'#f7c979')}
+  box(x+w/2-34,y+71,68,68,'#111727');box(x+w/2-28,y+77,56,56,'#7351a5');box(x+w/2-20,y+85,40,40,'#b184ed');box(x+w/2-11,y+94,22,22,'#ead8ff');box(x+w/2-4,y+101,8,8,'#ffffff');
+  // Control plinths and display consoles.
+  desk(x+18,y+h-50,68,r.color);desk(x+w-86,y+h-50,68,r.color);
+  for(var q2=0;q2<3;q2++){box(x+22+q2*18,y+h-28,13,7,'#101724');box(x+24+q2*18,y+h-26,9,2,q2%2?'#4bdcff':r.color)}
+  // Cable conduits radiate to reactor.
+  box(x+32,y+92,x+w/2-75,3,'#4a4166');box(x+w/2+43,y+92,x+w/2-75,3,'#4a4166');
+ }else{
+  // Wall-mounted equipment racks with vent slats and LED bars.
+  for(var rack=0;rack<2;rack++){var rx=rack===0?x+15:x+w-48;box(rx,y+48,33,48,'#171c2b');box(rx+3,y+51,27,42,'#24283b');for(var vent=0;vent<5;vent++)box(rx+6,y+54+vent*7,21,2,'#515a70');box(rx+5,y+89,4,3,r.color);box(rx+12,y+89,4,3,'#4bdcff');box(rx+19,y+89,4,3,'#9de17c')}
+  // Central specialist desk with lit keyboard and large monitor.
+  desk(x+w/2-35,y+76,70,r.color);box(x+w/2-26,y+91,52,5,'#151a29');for(var key=0;key<8;key++)box(x+w/2-22+key*6,y+92,3,2,key%3===0?r.color:'#66718a');
+  if(i===1){ // Scout: specimen tanks and holographic radar
+   tank(x+w/2-10,y+112,r.color);box(x+w/2-31,y+118,62,4,'#535c75');plant(x+62,y+h-42);plant(x+w-62,y+h-42);
+   ctx.strokeStyle='#4bdcff';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x+w/2,y+142,24,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(x+w/2-22,y+142);ctx.lineTo(x+w/2+22,y+142);ctx.moveTo(x+w/2,y+120);ctx.lineTo(x+w/2,y+164);ctx.stroke();
+  }
+  if(i===2){ // Forge: fabrication table, tool drawers and glowing build unit
+   box(x+w/2-54,y+119,108,39,'#202638');box(x+w/2-49,y+123,98,30,'#3b4054');for(var tool=0;tool<5;tool++){box(x+w/2-40+tool*18,y+129,11,13,tool%2?'#59657b':'#292d43');box(x+w/2-38+tool*18,y+132,7,2,r.color)}
+   tank(x+w/2-10,y+164,'#ffb45d');box(x+w/2-17,y+175,34,3,'#ffb45d');
+  }
+  if(i===3){ // Studio: bookshelves, soundproof panels and a creative desk
+   for(var shelf=0;shelf<4;shelf++){box(x+57+shelf*23,y+105,17,33,'#1c2030');box(x+60+shelf*23,y+109,11,25,['#4bdcff','#c49aff','#ffb45d','#7be39e'][shelf]);box(x+60+shelf*23,y+112,11,2,'#d8d2e7');}
+   for(var pad=0;pad<3;pad++){box(x+w-88+pad*19,y+112,13,13,'#29243d');box(x+w-85+pad*19,y+115,7,7,'#4a3b65')}
+   plant(x+w-36,y+h-38);
+  }
+  if(i===4){ // Analyst: three distinct status screens and data terminal
+   for(var mon=0;mon<3;mon++){screen(x+49+mon*68,y+112,52,34,['#7be39e','#4bdcff','#d19aff'][mon]);for(var graph=0;graph<4;graph++)box(x+54+mon*68+graph*10,y+137-(graph%3)*5,4,3,['#7be39e','#4bdcff','#d19aff'][mon])}
+   box(x+w/2-36,y+155,72,15,'#171b2a');for(var led=0;led<7;led++)box(x+w/2-29+led*9,y+160,4,4,led%2?'#4bdcff':'#7be39e');
+  }
+  if(i===5){ // Mission deck: queue screens and holographic task table
+   for(var q3=0;q3<3;q3++){box(x+22+q3*98,y+111,74,42,'#111627');box(x+27+q3*98,y+116,64,30,'#30264f');for(var bar=0;bar<4;bar++){box(x+34+q3*98,y+121+bar*5,40+bar*3,2,bar%2?'#4bdcff':'#d19aff')}box(x+34+q3*98,y+143,8,2,'#9de17c')}
+   box(x+w/2-42,y+165,84,15,'#3d315a');box(x+w/2-36,y+168,72,9,'#b58af0');box(x+w/2-26,y+171,52,3,'#f1d8ff');
+  }
+  // Tiny floor lights around each room perimeter.
+  for(var fl=0;fl<Math.floor((w-30)/28);fl++){box(x+15+fl*28,y+h-28,3,3,fl%2?r.color:'#4bdcff')}
+  plant(x+27,y+h-34,.85);plant(x+w-27,y+h-34,.85);
+ }
+ // Door threshold with striped safety markings.
+ box(x+w/2-29,y+h-4,58,8,'#111522');box(x+w/2-23,y+h-2,46,4,r.color);for(var stripe=0;stripe<5;stripe++)box(x+w/2-20+stripe*9,y+h+1,4,2,'#f2e5ff');
+ // Pulsing corner indicators, kept subtle.
+ ctx.globalAlpha=.65+.25*Math.sin(tick*.08+i);box(x+9,y+9,3,3,r.color);box(x+w-12,y+9,3,3,'#4bdcff');ctx.globalAlpha=1;
 }
 function drawWater(x,y,w,h){box(x,y,w,h,'#10384e');box(x+4,y+4,w-8,h-8,'#197b99');box(x+8,y+8,w-16,h-16,'#1b526c');for(var i=0;i<13;i++){var xx=x+12+((i*31+tick*.55)%(w-24)),yy=y+12+((i*17+tick*.25)%(h-24));box(xx,yy,10+(i%3)*3,2,'#70eaff');box(xx+3,yy-2,2,6,'#b0f8ff')}}
 function drawCrew(a){var p=(tick*a.speed+a.off)%(a.path.length*100)/100,k=Math.floor(p),u=p-k,A=a.path[k],B=a.path[(k+1)%a.path.length],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,bob=Math.sin(tick*.13+a.off)*2;box(x-9,y+8,18,4,'#151a2a');box(x-7,y-13+bob,14,13,'#e9c5b0');box(x-9,y-17+bob,18,6,'#29243a');box(x-7,y-1+bob,14,12,a.color);box(x-7,y+11+bob,5,8,'#303750');box(x+2,y+11+bob,5,8,'#303750');box(x-4,y-8+bob,2,2,'#151626');box(x+2,y-8+bob,2,2,'#151626');if(Math.floor((tick+a.off)/85)%3===0){ctx.font='bold 9px monospace';ctx.fillStyle='#eee4ff';ctx.fillText(a.name,Math.round(x-ctx.measureText(a.name).width/2),Math.round(y-22+bob))}}
