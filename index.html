@@ -695,6 +695,12 @@ body{background-color:var(--bg);background-image:linear-gradient(#a3e63508 1px,t
 #nexusWorld .nw-actions button.primary{background:#b5f66c;border-color:#b5f66c;color:#10140b}
 #nexusWorld .nw-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid #30284a;background:#090a12;font:8px ui-monospace,monospace;letter-spacing:.1em;color:#7f75a6}
 #nexusWorld .nw-room-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:8px 12px;background:#090a12;border-top:1px solid #211a37}
+#nexusWorld .nw-layout{grid-template-columns:minmax(0,1fr) 220px!important}
+#nexusWorld .nw-scene{padding:8px!important;background:#080914!important}
+#nexusWorld canvas{width:100%!important;max-height:none!important;image-rendering:pixelated;box-shadow:0 0 28px #9b70ff1a}
+#nexusWorld .nw-side-note{margin-top:8px;padding-top:12px;border-top:1px solid #30284a;font:8px/1.9 ui-monospace,monospace;letter-spacing:.12em;color:#8277a7}
+#nexusWorld .nw-room-btn.active{color:#f5eaff;border-color:#b98aff;background:#2b2045;box-shadow:inset 0 -2px #b98aff,0 0 12px #b98aff20}
+@media(max-width:760px){#nexusWorld .nw-layout{grid-template-columns:1fr!important}#nexusWorld .nw-side{border-left:0;border-top:1px solid #30284a;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}#nexusWorld .nw-side .nw-kicker,#nexusWorld .nw-side .nw-room,#nexusWorld .nw-side .nw-description,#nexusWorld .nw-side-note{grid-column:1/-1}#nexusWorld .nw-actions{grid-column:1/-1;grid-template-columns:1fr 1fr}#nexusWorld .nw-room-list{grid-template-columns:repeat(3,minmax(0,1fr))}#nexusWorld canvas{max-height:none!important}}
 #nexusWorld .nw-room-btn{min-width:0;padding:8px 4px;border:1px solid #28213d;background:#0d0d19;color:#9d95ba;font:8px/1.4 ui-monospace,monospace;cursor:pointer}
 #nexusWorld .nw-room-btn.active{border-color:#b5f66c;color:#d7ff9e;background:#172018}
 @media (orientation:landscape) and (min-width:760px){
@@ -1491,74 +1497,109 @@ choose(0);draw();
 
 <script id="senrai-world-engine">
 (function(){
- const app=document.getElementById('appView');if(!app||document.getElementById('nexusWorld'))return;
- const world=document.createElement('section');world.id='nexusWorld';
- world.innerHTML='<header class="nw-top"><div><div class="nw-brand">SENRAI <span style="color:#b5f66c">NEXUS</span></div><div class="nw-sub">AUTONOMOUS OPERATIONS STATION / SECTOR 01</div></div><div class="nw-live">■ SYSTEM ONLINE</div></header><div class="nw-layout"><div class="nw-scene"><canvas id="nwCanvas" width="1000" height="600" aria-label="Interactive SENRAI station map"></canvas></div><aside class="nw-side"><div class="nw-kicker">SELECTED BAY / <span id="nwIndex">00</span></div><h2 class="nw-room" id="nwTitle">SENRAI CORE</h2><div class="nw-description" id="nwDesc">Central coordination and task routing.</div><div class="nw-stat"><label>ASSIGNED SPECIALIST</label><strong id="nwAgent">CORE / COORDINATOR</strong></div><div class="nw-stat"><label>SAVED TASK RECORDS</label><strong id="nwTasks">Reading saved tasks…</strong></div><div class="nw-stat"><label>STATION FUNCTION</label><strong id="nwFunction">Mission routing</strong></div><div class="nw-actions"><button id="nwEnter" class="primary">OPEN WORKSPACE ↗</button><button id="nwTasksBtn">VIEW MISSIONS</button></div></aside></div><div class="nw-room-list" id="nwRooms"></div><footer class="nw-bottom"><span>WORLD VIEW / SELECT A BAY</span><span>CHARACTER ANIMATION IS VISUAL</span><span>SENRAI NEXUS</span></footer>';
- const hub=app.querySelector('#agentHub');if(hub)app.insertBefore(world,hub);else app.insertBefore(world,app.firstChild);
- const c=document.getElementById('nwCanvas'),ctx=c.getContext('2d');
- const rooms=[
- {name:'SENRAI CORE',short:'CORE',agent:'CORE / COORDINATOR',fn:'Mission routing',desc:'Central command and task routing.',x:45,y:55,w:360,h:210,color:'#ff9147'},
- {name:'SCOUT LAB',short:'SCOUT',agent:'SCOUT / RESEARCH',fn:'Research & discovery',desc:'Market discovery and source research.',x:445,y:55,w:220,h:210,color:'#39c9ff'},
- {name:'FORGE WORKSHOP',short:'FORGE',agent:'FORGE / CREATION',fn:'Product creation',desc:'Digital product and asset production.',x:705,y:55,w:250,h:210,color:'#7ce56f'},
- {name:'SCRIBE STUDIO',short:'SCRIBE',agent:'SCRIBE / CONTENT',fn:'Writing & packaging',desc:'Listing copy, instructions and product packaging.',x:145,y:335,w:330,h:210,color:'#b68cff'},
- {name:'ANALYST BAY',short:'ANALYST',agent:'ANALYST / REVIEW',fn:'Quality & performance',desc:'Quality review and performance analysis.',x:535,y:335,w:330,h:210,color:'#ffce5c'}
- ];
- let selected=0,phase=0;
- function box(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
- function label(t,x,y,size,color){ctx.font='bold '+size+'px monospace';ctx.fillStyle=color;ctx.fillText(t,x,y)}
- function agent(x,y,color,id){let bob=Math.sin(phase*.09+id)*3;box(x-13,y-18+bob,26,30,'#080a12');box(x-9,y-25+bob,18,16,'#f0c79c');box(x-10,y-29+bob,20,7,color);box(x-8,y-9+bob,16,13,color);box(x-10,y+4+bob,7,10,'#20263a');box(x+3,y+4+bob,7,10,'#20263a');box(x-5,y-18+bob,3,3,'#10131a');box(x+3,y-18+bob,3,3,'#10131a');box(x+11,y-6+bob,3,3,'#b5f66c')}
- function room(r,i){let active=i===selected;box(r.x-6,r.y-6,r.w+12,r.h+12,active?'#b5f66c':'#34294e');box(r.x,r.y,r.w,r.h,'#1a1b29');box(r.x+4,r.y+4,r.w-8,25,r.color);box(r.x+4,r.y+33,r.w-8,r.h-37,'#242b3a');
- for(let x=r.x+10;x<r.x+r.w-5;x+=24)box(x,r.y+36,1,r.h-43,'#343b4c');
- for(let y=r.y+43;y<r.y+r.h-4;y+=24)box(r.x+5,y,r.w-10,1,'#343b4c');
- box(r.x+15,r.y+50,62,32,'#080d17');box(r.x+20,r.y+55,52,22,'#24546a');box(r.x+26,r.y+61,25,3,'#70e6ff');box(r.x+26,r.y+68,35,2,'#f5a35b');
- box(r.x+r.w-75,r.y+50,58,37,'#090c15');box(r.x+r.w-69,r.y+56,46,25,'#3c4857');box(r.x+r.w-64,r.y+61,33,4,r.color);
- if(i===0){box(r.x+r.w/2-43,r.y+72,86,80,'#0a0a14');box(r.x+r.w/2-35,r.y+80,70,64,'#e65031');box(r.x+r.w/2-24,r.y+91,48,43,'#ffb447');box(r.x+r.w/2-10,r.y+104,20,17,'#fff0b3')}
- else{box(r.x+r.w/2-22,r.y+91,44,44,'#0b0c15');box(r.x+r.w/2-16,r.y+97,32,32,r.color);box(r.x+r.w/2-8,r.y+105,16,16,'#171725')}
- agent(r.x+r.w/2,r.y+r.h-38,r.color,i);
- label(r.short,r.x+10,r.y+20,12,'#11131a');label(active?'SELECTED':'CLICK TO ENTER',r.x+10,r.y+r.h-10,9,active?'#d5ff9d':'#aaa2c1');
+'use strict';
+const app=document.getElementById('appView');if(!app||document.getElementById('nexusWorld'))return;
+const world=document.createElement('section');world.id='nexusWorld';
+world.innerHTML='<header class="nw-top"><div><div class="nw-brand">SENRAI <span style="color:#c49aff">NEXUS</span></div><div class="nw-sub">LIVING FACILITY / SECTOR 01</div></div><div class="nw-live">● SYSTEM ONLINE &nbsp; / &nbsp; CREW AUTONOMOUS</div></header><div class="nw-layout"><div class="nw-scene"><canvas id="nwCanvas" width="1200" height="800" aria-label="Interactive living pixel-art SENRAI facility map"></canvas></div><aside class="nw-side"><div class="nw-kicker">FACILITY NAVIGATION / <span id="nwIndex">01</span></div><h2 class="nw-room" id="nwTitle">SENRAI CORE</h2><div class="nw-description" id="nwDesc">Central command and task routing.</div><div class="nw-stat"><label>STATION SPECIALIST</label><strong id="nwAgent">SENRAI / COORDINATOR</strong></div><div class="nw-stat"><label>FACILITY STATUS</label><strong id="nwTasks">CREW PATROLLING</strong></div><div class="nw-stat"><label>ROOM FUNCTION</label><strong id="nwFunction">Mission routing</strong></div><div class="nw-actions"><button id="nwEnter" class="primary">ENTER ROOM ↗</button><button id="nwTasksBtn">OPEN TASKS</button></div><div class="nw-side-note">CREW MOVES INDEPENDENTLY<br>SELECT ANY ROOM TO NAVIGATE</div></aside></div><div class="nw-room-list" id="nwRooms"></div><footer class="nw-bottom"><span>PIXEL FACILITY / LIVE WORLD</span><span>SELECT A ROOM OR CHARACTER</span><span>SENRAI NEXUS</span></footer>';
+const hub=app.querySelector('#agentHub');if(hub)app.insertBefore(world,hub);else app.insertBefore(world,app.firstChild);
+const c=world.querySelector('#nwCanvas'),ctx=c.getContext('2d');
+const rooms=[
+{name:'SENRAI CORE',short:'CORE',agent:'SENRAI / COORDINATOR',fn:'Mission routing',desc:'The central reactor coordinates active missions and the facility.',x:420,y:70,w:360,h:235,color:'#bd8cff',view:'home'},
+{name:'SCOUT LAB',short:'SCOUT LAB',agent:'ORION / RESEARCH',fn:'Research & discovery',desc:'A research bay for discovery, planning, and source analysis.',x:55,y:85,w:290,h:220,color:'#4bdcff',view:'agents'},
+{name:'FORGE WORKSHOP',short:'FORGE',agent:'KAIRO / CREATION',fn:'Product creation',desc:'A warm-lit fabrication workshop for building and packaging assets.',x:855,y:85,w:290,h:220,color:'#ffb45d',view:'business'},
+{name:'SCRIBE STUDIO',short:'STUDIO',agent:'MIRA / CONTENT',fn:'Writing & content',desc:'Content workstations, publishing systems, and creative production.',x:55,y:485,w:320,h:235,color:'#d19aff',view:'business'},
+{name:'ANALYST BAY',short:'ANALYST',agent:'RIN / REVIEW',fn:'Quality & performance',desc:'Monitoring screens, reports, and performance review tools.',x:825,y:485,w:320,h:235,color:'#78e69c',view:'missions'},
+{name:'MISSION DECK',short:'MISSIONS',agent:'NEXUS / OPERATIONS',fn:'Task execution',desc:'The mission deck tracks queued work and completed operations.',x:420,y:505,w:360,h:215,color:'#ff7fbd',view:'missions'}
+];
+let selected=0,phase=0,raf=0,last=0;
+const box=(x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))};
+function text(t,x,y,size,color){ctx.font='bold '+size+'px monospace';ctx.fillStyle=color;ctx.fillText(t,x,y)}
+function glow(x,y,w,h,color,alpha){ctx.save();ctx.globalAlpha=alpha||.22;ctx.fillStyle=color;ctx.fillRect(x-5,y-5,w+10,h+10);ctx.restore();box(x,y,w,h,color)}
+function plant(x,y,s){s=s||1;box(x-10*s,y-7*s,20*s,15*s,'#17221e');box(x-7*s,y-8*s,6*s,7*s,'#58bd78');box(x-1*s,y-12*s,7*s,10*s,'#9add78');box(x+4*s,y-5*s,7*s,8*s,'#2c885f');box(x-5*s,y+2*s,6*s,4*s,'#397b50');box(x-2*s,y+7*s,4*s,3*s,'#a47c52')}
+function screen(x,y,w,h,accent){box(x-3,y-3,w+6,h+6,'#090d19');box(x,y,w,h,'#16283a');box(x+3,y+3,w-6,h-6,'#24516a');for(let i=0;i<4;i++)box(x+6,y+6+i*4,w-12-(i%2)*8,1,accent);box(x+w/2-2,y+h,w*0.0+4,5,'#5a667d')}
+function desk(x,y,w,accent){box(x,y,w,8,'#536276');box(x+2,y+2,w-4,3,'#192231');screen(x+w/2-15,y-17,30,15,accent);box(x+4,y+8,4,9,'#344255');box(x+w-8,y+8,4,9,'#344255')}
+function tank(x,y,accent){glow(x,y,20,52,accent,.13);box(x,y,20,52,'#35364e');box(x+3,y+4,14,44,'#111b2a');box(x+5,y+8,10,36,accent);box(x+7,y+11,6,30,'#d4faff');box(x-3,y+7,3,38,'#77718f');box(x+20,y+15,5,4,accent)}
+function room(r,i){
+ const active=i===selected,x=r.x,y=r.y,w=r.w,h=r.h;
+ // Heavy modular walls, lit trim and tiled interior.
+ box(x-10,y-10,w+20,h+20,'#111320');box(x-7,y-7,w+14,h+14,active?'#e3c7ff':'#51436f');box(x-3,y-3,w+6,h+6,'#27253a');box(x,y,w,h,'#33394b');
+ for(let tx=x+1;tx<x+w;tx+=24)box(tx,y,1,h,'#454b5d');
+ for(let ty=y+1;ty<y+h;ty+=24)box(x,ty,w,1,'#454b5d');
+ box(x+5,y+5,w-10,22,r.color);box(x+8,y+8,Math.min(w-16,180),16,'#141426');text(r.short,x+14,y+20,11,'#f6efff');
+ // Room lighting strips and wall machinery.
+ glow(x+12,y+h-13,w-24,3,r.color,.16);box(x+12,y+h-13,w-24,2,r.color);
+ for(let k=0;k<Math.floor((w-32)/48);k++){box(x+16+k*48,y+34,30,5,'#111523');box(x+19+k*48,y+35,24,2,k%2?'#4bdcff':r.color)}
+ if(i===0){
+   // central reactor with layered rings, core and four pylons
+   ctx.save();ctx.globalAlpha=.18;ctx.fillStyle=r.color;ctx.beginPath();ctx.arc(x+w/2,y+105,76,0,Math.PI*2);ctx.fill();ctx.restore();
+   ctx.strokeStyle='#8e73c9';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x+w/2,y+105,65,0,Math.PI*2);ctx.stroke();
+   ctx.strokeStyle='#d4a9ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x+w/2,y+105,51,phase*.008,Math.PI*1.7+phase*.008);ctx.stroke();
+   ctx.strokeStyle='#68578d';ctx.beginPath();ctx.arc(x+w/2,y+105,39,0,Math.PI*2);ctx.stroke();
+   glow(x+w/2-26,y+79,52,52,'#b98aff',.25);box(x+w/2-23,y+82,46,46,'#7b4ec1');box(x+w/2-15,y+90,30,30,'#bd91ff');box(x+w/2-7,y+98,14,14,'#f0ddff');
+   for(let k=0;k<4;k++){let px=x+w/2-5,py=y+105;let ang=k*Math.PI/2;box(px+Math.cos(ang)*67-6,py+Math.sin(ang)*67-6,12,12,'#ffb45d')}
+   desk(x+22,y+h-54,62,r.color);desk(x+w-84,y+h-54,62,r.color);
+ }else{
+   desk(x+18,y+65,68,r.color);desk(x+w-87,y+65,68,r.color);
+   if(i===1||i===2){tank(x+w/2-10,y+75,r.color);plant(x+34,y+h-30);plant(x+w-34,y+h-30)}
+   if(i===3){for(let k=0;k<4;k++){box(x+22+k*22,y+90,15,24,'#27253a');box(x+25+k*22,y+94,9,16,['#3dc8dd','#bc8cff','#ffb45d','#7be39e'][k])}plant(x+w-34,y+112)}
+   if(i===4){for(let k=0;k<3;k++){screen(x+28+k*78,y+82,52,36,['#7be39e','#4bdcff','#d19aff'][k]);}tank(x+w-43,y+125,'#7be39e')}
+   if(i===5){for(let k=0;k<3;k++){box(x+24+k*98,y+75,74,42,'#101625');box(x+29+k*98,y+80,64,29,'#2d2a51');for(let q=0;q<4;q++)box(x+35+k*98,y+85+q*5,40+q*3,2,q%2?'#4bdcff':'#d19aff')}glow(x+w/2-32,y+136,64,28,'#d19aff',.16);box(x+w/2-28,y+140,56,20,'#8d5dcc')}
  }
- function draw(){phase++;box(0,0,1000,600,'#070811');for(let y=10;y<600;y+=20)box(0,y,1000,1,'#111321');for(let x=10;x<1000;x+=20)box(x,0,1,600,'#111321');
- // Central corridors physically connect the bays
- box(30,285,940,30,'#161629');box(405,255,40,85,'#161629');box(665,255,40,85,'#161629');box(125,310,35,28,'#161629');box(500,310,35,28,'#161629');
- for(let x=35;x<965;x+=18)box(x,298,9,2,'#3a3156');
- box(455,268,90,60,'#302447');box(468,280,64,36,'#b5f66c');box(476,288,48,20,'#101b19');
+ // Doorway threshold, corner lights and planters.
+ box(x+w/2-25,y+h-3,50,7,'#0c111c');box(x+w/2-18,y+h-2,36,3,r.color);
+ for(let k=0;k<4;k++){box(x+8+k*5,y+30,2,2,'#f9e7ff');box(x+w-17-k*5,y+30,2,2,'#f9e7ff')}
+ if(i!==0){plant(x+15,y+h-30,.8);plant(x+w-15,y+h-30,.8)}
+}
+const crew=[
+{name:'SENRAI',color:'#d3a5ff',path:[[600,350],[690,360],[770,400],[785,440],[700,455],[600,450],[500,450],[400,430],[390,390],[500,365]],speed:.22,offset:0},
+{name:'ORION',color:'#4bdcff',path:[[190,320],[290,340],[360,390],[390,440],[360,470],[280,455],[200,420],[150,370]],speed:.18,offset:90},
+{name:'KAIRO',color:'#ffb45d',path:[[1000,320],[900,340],[820,390],[800,440],[860,470],[970,440],[1040,390]],speed:.2,offset:180},
+{name:'MIRA',color:'#d19aff',path:[[180,730],[300,735],[390,700],[420,650],[370,610],[300,630],[220,680]],speed:.16,offset:250},
+{name:'RIN',color:'#7be39e',path:[[1020,730],[900,730],[820,700],[790,650],[840,610],[920,630],[1000,670]],speed:.19,offset:330},
+{name:'ASTRA',color:'#ff83c7',path:[[600,730],[570,680],[570,620],[630,610],[650,660],[620,700]],speed:.14,offset:400}
+];
+function drawCharacter(a){
+ let total=a.path.length,segmentLength=100,full=total*segmentLength,t=(phase*a.speed+a.offset)%full/segmentLength,k=Math.floor(t),u=t-k,A=a.path[k],B=a.path[(k+1)%total],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,bob=Math.sin(phase*.13+a.offset)*2;
+ // cast shadow
+ box(x-9,y+9,18,4,'#161b2a');box(x-7,y-13+bob,14,13,'#e8c5b0');box(x-9,y-17+bob,18,6,'#25243a');box(x-7,y-1+bob,14,12,a.color);box(x-7,y+11+bob,5,8,'#2d3550');box(x+2,y+11+bob,5,8,'#2d3550');box(x-4,y-8+bob,2,2,'#151626');box(x+2,y-8+bob,2,2,'#151626');box(x-10,y+1+bob,3,7,'#e8c5b0');box(x+7,y+1+bob,3,7,'#e8c5b0');
+ if(Math.floor((phase+a.offset)/85)%3===0){ctx.font='bold 9px monospace';ctx.fillStyle='#eee4ff';ctx.fillText(a.name,Math.round(x-ctx.measureText(a.name).width/2),Math.round(y-22+bob))}
+}
+function drawWater(x,y,w,h){
+ box(x,y,w,h,'#103c55');box(x+4,y+4,w-8,h-8,'#1a829d');box(x+8,y+8,w-16,h-16,'#1d526e');
+ for(let i=0;i<12;i++){let xx=x+12+((i*31+phase*.55)%(w-24)),yy=y+12+((i*17+phase*.25)%(h-24));box(xx,yy,8+(i%3)*4,2,'#63eaff');box(xx+3,yy-2,2,6,'#a0f5ff')}
+}
+function drawWorld(){
+ phase++;box(0,0,1200,800,'#101321');
+ // broad tile floor, metal seams and scattered luminous floor markers
+ for(let y=0;y<800;y+=24)for(let x=0;x<1200;x+=24){box(x,y,23,23,((x/24+y/24)%2===0)?'#252a3b':'#222738');box(x,y,23,1,'#35394b');box(x,y,1,23,'#35394b');}
+ // central promenades link all rooms
+ box(350,305,500,180,'#171d2c');box(375,315,450,160,'#20273a');box(345,385,510,22,'#32354a');box(589,300,22,195,'#32354a');
+ for(let x=365;x<840;x+=35){box(x,394,17,3,'#b18aff');box(x,398,8,1,'#f3c7ff')}
+ // pools and waterfalls give the facility life
+ drawWater(400,535,105,175);drawWater(695,535,105,175);
+ // bridges over water
+ box(515,580,170,48,'#4c4d61');box(520,584,160,40,'#242a3c');for(let x=526;x<680;x+=18)box(x,588,3,31,'#b18aff');
+ // overgrown corners and hanging greenery
+ [[385,320],[810,320],[385,475],[810,475],[380,520],[820,520],[380,710],[820,710],[45,350],[1150,350]].forEach((p,i)=>plant(p[0],p[1],i%3===0?1.1:.8));
+ // overhead conduits and amber/cyan light bars
+ box(20,32,1160,5,'#44335d');box(20,32,1160,2,'#b98aff');for(let x=40;x<1180;x+=95){box(x,28,12,13,'#332847');box(x+3,31,6,6,x%2?'#4bdcff':'#ffb45d')}
  rooms.forEach(room);
- // Living station dressing: hydroponics, coolant channels, floor lights and roaming crew.
- function plant(x,y){box(x-8,y-7,16,14,'#0d1718');box(x-5,y-5,5,5,'#43b96f');box(x,y-7,5,6,'#8de078');box(x+2,y,5,5,'#287f58');box(x-3,y+2,4,4,'#5bd18a')}
- function glow(x,y,color){ctx.save();ctx.globalAlpha=.35;box(x-10,y-3,20,6,color);ctx.globalAlpha=1;box(x-5,y-1,10,2,color);ctx.restore()}
- // Hydroponic planters at the edges of the walkways.
- [[24,275],[976,275],[420,330],[690,330],[85,320],[915,320],[480,350],[520,350]].forEach(p=>plant(p[0],p[1]));
- // Coolant strips and luminous floor markers.
- box(15,320,970,3,'#172c35');box(15,323,970,1,'#3a8290');
- for(let x=35;x<965;x+=62){glow(x,319,x%2?'#b68cff':'#42d9f5');}
- // Little autonomous crew patrols use distinct routes and never remain frozen at a desk.
- const crew=[
-  {name:'SENRAI',color:'#c59bff',route:[[445,300],[470,300],[520,300],[555,300],[520,300],[470,300]],speed:.34,offset:0},
-  {name:'ORION',color:'#44d9ff',route:[[300,286],[360,286],[390,286],[360,286],[300,286],[260,286]],speed:.23,offset:90},
-  {name:'KAIRO',color:'#ffb45d',route:[[700,300],[735,300],[760,300],[735,300],[700,300],[680,300]],speed:.29,offset:160},
-  {name:'MIRA',color:'#78e69c',route:[[480,330],[480,355],[500,365],[520,355],[520,330],[500,320]],speed:.18,offset:230},
-  {name:'RIN',color:'#ff8cce',route:[[180,300],[210,300],[230,300],[210,300],[180,300],[160,300]],speed:.25,offset:310}
- ];
- function roaming(a){const p=(phase*a.speed+a.offset)%((a.route.length-1)*100),seg=Math.floor(p/100),t=(p%100)/100,A=a.route[seg],B=a.route[seg+1],x=A[0]+(B[0]-A[0])*t,y=A[1]+(B[1]-A[1])*t,bob=Math.sin(phase*.17+a.offset)*1.5;
- ctx.fillStyle='#000';ctx.fillRect(Math.round(x-7),Math.round(y-10+bob),14,17);
- ctx.fillStyle='#202337';ctx.fillRect(Math.round(x-5),Math.round(y-14+bob),10,8);
- ctx.fillStyle='#e9c8ad';ctx.fillRect(Math.round(x-4),Math.round(y-12+bob),8,7);
- ctx.fillStyle=a.color;ctx.fillRect(Math.round(x-5),Math.round(y-16+bob),10,4);ctx.fillRect(Math.round(x-5),Math.round(y-4+bob),10,7);
- ctx.fillStyle='#242a43';ctx.fillRect(Math.round(x-4),Math.round(y+3+bob),3,5);ctx.fillRect(Math.round(x+1),Math.round(y+3+bob),3,5);
- ctx.fillStyle='#dfffff';ctx.fillRect(Math.round(x-2),Math.round(y-10+bob),2,2);ctx.fillRect(Math.round(x+1),Math.round(y-10+bob),2,2);
- ctx.fillStyle=a.color;ctx.globalAlpha=.8;ctx.fillRect(Math.round(x+8),Math.round(y-5+bob),3,3);ctx.globalAlpha=1;
- if(Math.floor(phase/80+a.offset)%3===0){ctx.font='bold 8px monospace';ctx.fillStyle='#d7d0ff';ctx.fillText(a.name,Math.round(x-17),Math.round(y-21+bob))}
- }
- crew.forEach(roaming);
- label('NEXUS STATION / SECTOR 01',38,32,14,'#c2a9ff');label('5 SPECIALIST BAYS  •  CREW PATROL ACTIVE',700,32,10,'#8d83b5');
- requestAnimationFrame(draw)}
- function taskCount(){let list=document.getElementById('taskList');return list?list.querySelectorAll('tr,[data-task-id],.task-row').length+' visible task record(s)':'Task records available in Missions'}
- function choose(i){selected=i;let r=rooms[i];document.getElementById('nwIndex').textContent=String(i).padStart(2,'0');document.getElementById('nwTitle').textContent=r.name;document.getElementById('nwDesc').textContent=r.desc;document.getElementById('nwAgent').textContent=r.agent;document.getElementById('nwFunction').textContent=r.fn;document.getElementById('nwTasks').textContent=taskCount();document.querySelectorAll('.nw-room-btn').forEach((b,j)=>b.classList.toggle('active',j===i))}
- rooms.forEach((r,i)=>{let b=document.createElement('button');b.className='nw-room-btn';b.textContent=r.short;b.onclick=()=>choose(i);document.getElementById('nwRooms').appendChild(b)});
- c.addEventListener('click',e=>{let b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width*1000,y=(e.clientY-b.top)/b.height*600;let i=rooms.findIndex(r=>x>=r.x-6&&x<=r.x+r.w+6&&y>=r.y-6&&y<=r.y+r.h+6);if(i>=0)choose(i)});
- document.getElementById('nwEnter').onclick=()=>{let target=selected===0?'home':'business';let b=document.querySelector('#bottomNav [data-view="'+target+'"]');if(b)b.click()};
- document.getElementById('nwTasksBtn').onclick=()=>{let b=document.querySelector('#bottomNav [data-view="missions"]');if(b)b.click()};
- choose(0);draw();
+ // small environmental light strips on corridor floor
+ for(let x=360;x<850;x+=44){let col=x%3?'#bb8aff':'#4bdcff';ctx.globalAlpha=.8;box(x,330,2,7,col);box(x,455,2,7,col);ctx.globalAlpha=1}
+ crew.forEach(drawCharacter);
+ text('NEXUS FACILITY / LIVE MAP',28,25,13,'#e3d1ff');text('AUTONOMOUS CREW  '+crew.length,1000,25,10,'#b5f66c');
+ // scanline shimmer
+ ctx.globalAlpha=.08;for(let y=0;y<800;y+=4)box(0,y,1200,1,'#d7d4ff');ctx.globalAlpha=1;
+ if(!document.hidden)raf=requestAnimationFrame(drawWorld);
+}
+function taskCount(){let list=document.getElementById('taskList');return list?list.querySelectorAll('tr,[data-task-id],.task-row').length+' visible task record(s)':'Tasks available in Mission Deck'}
+function choose(i){selected=i;const r=rooms[i];world.querySelector('#nwIndex').textContent=String(i+1).padStart(2,'0');world.querySelector('#nwTitle').textContent=r.name;world.querySelector('#nwDesc').textContent=r.desc;world.querySelector('#nwAgent').textContent=r.agent;world.querySelector('#nwFunction').textContent=r.fn;world.querySelector('#nwTasks').textContent=taskCount();world.querySelectorAll('.nw-room-btn').forEach((b,j)=>{b.classList.toggle('active',j===i);b.setAttribute('aria-pressed',j===i?'true':'false')});}
+rooms.forEach((r,i)=>{const b=document.createElement('button');b.className='nw-room-btn';b.textContent=r.short;b.onclick=()=>choose(i);world.querySelector('#nwRooms').appendChild(b)});
+c.addEventListener('click',e=>{const rect=c.getBoundingClientRect(),x=(e.clientX-rect.left)/rect.width*1200,y=(e.clientY-rect.top)/rect.height*800;let i=rooms.findIndex(r=>x>=r.x-10&&x<=r.x+r.w+10&&y>=r.y-10&&y<=r.y+r.h+10);if(i<0){i=crew.reduce((best,a,j)=>{const p=a.path[Math.floor((phase*a.speed+a.offset)% (a.path.length*100)/100)];return Math.hypot(p[0]-x,p[1]-y)<Math.hypot(crew[best].path[0][0]-x,crew[best].path[0][1]-y)?j:best},0)%rooms.length}choose(i)});
+world.querySelector('#nwEnter').onclick=()=>{const r=rooms[selected];let target=r.view;const b=document.querySelector('#bottomNav [data-view="'+target+'"]');if(b)b.click();else{const nav=[...document.querySelectorAll('#bottomNav button')].find(x=>/studio|business|missions|agents|home/i.test(x.textContent));if(nav)nav.click()}};
+world.querySelector('#nwTasksBtn').onclick=()=>{const b=document.querySelector('#bottomNav [data-view="missions"]');if(b)b.click()};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!raf)raf=requestAnimationFrame(drawWorld);if(document.hidden){cancelAnimationFrame(raf);raf=0}});
+choose(0);drawWorld();
 })();
 </script>
 
