@@ -7,6 +7,8 @@ const c=document.createElement('canvas');c.id='senraiWorldCanvas';c.width=1200;c
 const g=c.getContext('2d',{alpha:false});g.imageSmoothingEnabled=false;
 const C={void:'#080a16',deep:'#10152a',water:'#102d4d',water2:'#17608a',cyan:'#5fe8ff',ice:'#b4f7ff',purple:'#9a5bff',violet:'#d0a2ff',hot:'#f4dcff',green:'#5bbf83',leaf:'#347c5a',leaf2:'#91db83',pink:'#ef75d0',gold:'#ffc879',wall:'#242840',wall2:'#42445f',floor:'#343951',floor2:'#292e44',ink:'#111426',steel:'#71728c'};
 let frame=0,raf=0,selected=0,last=0;
+let liveNexus={projects:[],tasks:[],approvals:[],activity:[]};
+window.addEventListener('senrai:nexus-state',e=>{if(e&&e.detail){liveNexus={...liveNexus,...e.detail};}});
 const rooms=[
  {name:'SENRAI CORE',short:'CORE',x:478,y:288,w:244,h:222,color:C.purple,desc:'Central plasma reactor and mission routing.',agent:'SENRAI / COORDINATOR',fn:'Power and orchestration',view:'agents'},
  {name:'RESEARCH LAB',short:'LAB',x:352,y:78,w:205,h:142,color:C.cyan,desc:'Specimen analysis, research benches and synthesis tanks.',agent:'MIRA / RESEARCH',fn:'Discovery and synthesis',view:'agents'},
@@ -115,7 +117,18 @@ function core(){const x=600,y=398;glow(x,y,220,C.purple,.12);glow(x,y,165,C.purp
  for(let i=0;i<58;i++){let a=seed(i+5)*Math.PI*2,r=76+seed(i+30)*82+Math.sin(frame*.04+i)*6,xx=x+Math.cos(a+frame*.001)*r,yy=y+Math.sin(a+frame*.001)*r;rect(xx,yy,2+(i%3),2,i%3?C.violet:C.cyan);if(i%5===0){rect(xx-3,yy+3,2,2,C.hot);line(xx,yy,xx+Math.cos(a)*8,yy+Math.sin(a)*8,'#9362ff',1)}}
 }
 const crew=[{name:'MIRA',color:C.pink,path:[[395,175],[425,196],[505,265],[465,310],[408,260]],speed:.14,off:0},{name:'RIN',color:C.cyan,path:[[850,200],[890,260],[790,300],[770,260]],speed:.12,off:75},{name:'ASTRA',color:C.gold,path:[[230,300],[280,330],[310,400],[245,420]],speed:.13,off:155},{name:'KAI',color:C.green,path:[[220,510],[275,530],[310,580],[265,600]],speed:.16,off:220},{name:'FORGE',color:C.gold,path:[[825,665],[875,660],[920,690],[855,715]],speed:.11,off:320},{name:'NEX',color:C.violet,path:[[570,690],[600,650],[660,675],[650,725]],speed:.15,off:410}];
-function person(p){let q=(frame*p.speed+p.off)%1000/1000,idx=Math.floor(q*(p.path.length-1)),u=q*(p.path.length-1)-idx,A=p.path[idx],B=p.path[Math.min(idx+1,p.path.length-1)],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,b=Math.sin(frame*.12+p.off)*2;rect(x-7,y+10,15,4,'#070b17');rect(x-5,y+1+b,4,9,'#25243e');rect(x+1,y+1+b,4,9,'#25243e');rect(x-8,y-10+b,16,12,p.color);rect(x-5,y-17+b,11,9,'#d7b49e');rect(x-7,y-19+b,14,5,'#29223f');rect(x-5,y-12+b,3,2,'#111426');rect(x+2,y-12+b,3,2,'#111426');rect(x-10,y-8+b,3,8,p.color);rect(x+7,y-8+b,3,8,p.color);rect(x-4,y-1+b,8,5,'#f2e6ff');if(Math.floor((frame+p.off)/95)%3===0){rect(x-13,y-33,27,10,'#111426');rect(x-13,y-33,27,1,p.color);g.fillStyle='#f3edff';g.font='bold 8px monospace';g.fillText(p.name,Math.round(x-11),Math.round(y-26))}}
+function crewStatus(name){
+ const tasks=liveNexus.tasks||[],projects=liveNexus.projects||[],approvals=liveNexus.approvals||[];
+ const active=tasks.find(t=>t.status==='in_progress'),queued=tasks.find(t=>t.status==='queued');
+ if(name==='NEX')return approvals.length?approvals.length+' FOR REVIEW':tasks.length?tasks.length+' MISSIONS':'COORDINATING';
+ if(name==='FORGE')return active?'BUILDING MISSION':queued?'READY TO BUILD':'STANDING BY';
+ if(name==='MIRA')return projects.length?'SCANNING PROJECTS':'RESEARCH READY';
+ if(name==='RIN')return 'SCOUTING SECTOR';
+ if(name==='ASTRA')return 'IDEAS / DESIGN';
+ if(name==='KAI')return 'CREW SUPPORT';
+ return 'ON PATROL';
+}
+function person(p){let q=(frame*p.speed+p.off)%1000/1000,idx=Math.floor(q*(p.path.length-1)),u=q*(p.path.length-1)-idx,A=p.path[idx],B=p.path[Math.min(idx+1,p.path.length-1)],x=A[0]+(B[0]-A[0])*u,y=A[1]+(B[1]-A[1])*u,b=Math.sin(frame*.12+p.off)*2;rect(x-7,y+10,15,4,'#070b17');rect(x-5,y+1+b,4,9,'#25243e');rect(x+1,y+1+b,4,9,'#25243e');rect(x-8,y-10+b,16,12,p.color);rect(x-5,y-17+b,11,9,'#d7b49e');rect(x-7,y-19+b,14,5,'#29223f');rect(x-5,y-12+b,3,2,'#111426');rect(x+2,y-12+b,3,2,'#111426');rect(x-10,y-8+b,3,8,p.color);rect(x+7,y-8+b,3,8,p.color);rect(x-4,y-1+b,8,5,'#f2e6ff');if(Math.floor((frame+p.off)/95)%2===0){const status=crewStatus(p.name);rect(x-36,y-39,73,20,'#090d1b');rect(x-36,y-39,73,2,p.color);rect(x-34,y-35,69,14,'#19172b');g.fillStyle='#f3edff';g.font='bold 8px monospace';g.fillText(p.name,Math.round(x-32),Math.round(y-27));g.fillStyle=p.color;g.font='6px monospace';g.fillText(status.slice(0,16),Math.round(x-32),Math.round(y-20))}}
 function backdrop(){rect(0,0,1200,800,C.void);
  // starfield, distant moon and floating land silhouettes
  for(let i=0;i<150;i++){let x=seed(i)*1200,y=seed(i+900)*800;rect(x,y,i%11===0?3:1,i%11===0?3:1,i%3===0?'#a18fd3':'#41415f')}
@@ -299,7 +312,13 @@ function draw(){if(!c.isConnected)return;frame++;backdrop();cinematicTerrain();
  crew.forEach(person);
  // pixel HUD engraved into the world, not a generic overlay
  rect(27,27,196,32,'#0a0d1b');rect(30,30,190,26,'#1a1930');rect(34,34,5,18,C.violet);g.fillStyle='#f1e8ff';g.font='bold 12px monospace';g.fillText('NEXUS / SECTOR 01',46,47);
- rect(967,27,203,32,'#0a0d1b');rect(970,30,197,26,'#1a1930');rect(979,38,5,10,C.green);g.fillStyle='#c8ffad';g.font='bold 10px monospace';g.fillText('AUTONOMOUS CREW  /  06',991,47);
+ rect(967,27,203,32,'#0a0d1b');rect(970,30,197,26,'#1a1930');rect(979,38,5,10,C.green);g.fillStyle='#c8ffad';g.font='bold 10px monospace';g.fillText('MISSIONS '+String((liveNexus.tasks||[]).length).padStart(2,'0')+'  /  REVIEW '+String((liveNexus.approvals||[]).length).padStart(2,'0'),991,47);
+ // Mission ticker makes the environment react to actual workspace data.
+ rect(27,748,505,27,'#090d1b');rect(30,751,499,21,'#19172b');rect(34,755,3,13,C.violet);
+ g.fillStyle='#d8c5ff';g.font='bold 8px monospace';
+ const pending=(liveNexus.approvals||[]),open=(liveNexus.tasks||[]),active=open.find(t=>t.status==='in_progress'),queued=open.find(t=>t.status==='queued');
+ const headline=pending.length?'REVIEW: '+pending[0].title:active?'IN PROGRESS: '+active.title:queued?'NEXT MISSION: '+queued.title:(liveNexus.projects||[]).length?'PROJECTS ONLINE / CREW STANDING BY':'NEXUS READY / ADD YOUR FIRST MISSION';
+ g.fillText(headline.length>64?headline.slice(0,61)+'...':headline,43,765);
  // atmospheric pixel scanline treatment
  g.globalAlpha=.045;for(let y=0;y<800;y+=4)rect(0,y,1200,1,'#e4dcff');g.globalAlpha=1;
  if(!document.hidden)raf=requestAnimationFrame(draw);else raf=0}
