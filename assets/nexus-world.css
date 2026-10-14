@@ -5,3 +5,18 @@
 #senraiPixelFacility .pf-map:after{content:"";pointer-events:none;position:absolute;inset:10px;background:repeating-linear-gradient(0deg,#d9c8ff05 0 1px,transparent 1px 4px);mix-blend-mode:screen}
 @media(max-width:760px){#senraiPixelFacility .pf-map{padding:5px!important}#senraiPixelFacility .pf-map:after{inset:5px}}
 @media(prefers-reduced-motion:reduce){#senraiPixelFacility #senraiWorldCanvas{image-rendering:pixelated}}
+
+/* World-first presentation pass: let the map dominate and keep room controls legible on touch screens. */
+#senraiPixelFacility .pf-main{grid-template-columns:minmax(0,1fr) 235px!important;align-items:stretch!important}
+#senraiPixelFacility .pf-map{min-width:0!important;display:flex;align-items:center;justify-content:center;min-height:0!important}
+#senraiPixelFacility #senraiWorldCanvas{width:100%;max-width:1200px;aspect-ratio:3/2;height:auto;max-height:none;object-fit:contain;touch-action:manipulation}
+#senraiPixelFacility .pf-inspector{min-width:0}
+#senraiPixelFacility .pf-rooms{display:grid!important;grid-template-columns:repeat(9,minmax(0,1fr))!important}
+#senraiPixelFacility .pf-rooms button{min-width:0;overflow-wrap:anywhere}
+@media(max-width:760px){
+ #senraiPixelFacility .pf-main{grid-template-columns:minmax(0,1fr)!important}
+ #senraiPixelFacility .pf-map{padding:5px!important}
+ #senraiPixelFacility #senraiWorldCanvas{width:100%;aspect-ratio:3/2}
+ #senraiPixelFacility .pf-inspector{border-left:0!important;border-top:1px solid #47345f!important}
+ #senraiPixelFacility .pf-rooms{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
