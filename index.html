@@ -274,7 +274,7 @@ let authRestoreResolved=false;
 const NEXUS_SESSION_CACHE='senrai-nexus-session-recovery-v2';
 function saveNexusSession(session){try{if(session&&session.access_token&&session.refresh_token){localStorage.setItem(NEXUS_SESSION_CACHE,JSON.stringify({access_token:session.access_token,refresh_token:session.refresh_token,saved_at:Date.now()}));}}catch(e){console.warn('SENRAI session backup unavailable',e)}}
 function clearNexusSession(){try{localStorage.removeItem(NEXUS_SESSION_CACHE)}catch(e){}}
-async function restoreNexusSession(){
+async function restoreNexusSession(options={}){
  if(!sb||!sb.auth)return null;
  let result=await sb.auth.getSession();
  if(result.error)throw result.error;
@@ -289,7 +289,8 @@ async function restoreNexusSession(){
   }
  }
  if(session&&session.user){saveNexusSession(session);showApp(session.user)}
- else if(authRestoreResolved){currentUser=null;showAuth()}
+ else if(options.showLoginIfMissing){currentUser=null;showAuth()}
+ // Safari can fire pageshow during restoration; an empty transient read must not hide the workspace.
  return session;
 }
 async function init(){
@@ -304,7 +305,7 @@ async function init(){
    if(session&&session.user){saveNexusSession(session);showApp(session.user)}
    else if(event==='SIGNED_OUT'){clearNexusSession();if(authRestoreResolved){currentUser=null;showAuth()}}
   });
-  await restoreNexusSession();
+  await restoreNexusSession({showLoginIfMissing:true});
   authRestoreResolved=true;
  }catch(e){
   authRestoreResolved=true;
@@ -315,7 +316,7 @@ async function init(){
   console.error('SENRAI auth init',e);
  }
 }
-window.addEventListener('pageshow',()=>{if(authRestoreResolved&&sb&&sb.auth)restoreNexusSession().catch(e=>console.warn('SENRAI session restore',e));});
+window.addEventListener('pageshow',()=>{if(authRestoreResolved&&sb&&sb.auth)restoreNexusSession({showLoginIfMissing:false}).catch(e=>console.warn('SENRAI session restore',e));});
 
 // The supplied art is embedded in this HTML; the room and sidebar hotspots are real controls.
 const nexusStage=$('nexusStage');
