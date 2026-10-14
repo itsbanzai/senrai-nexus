@@ -301,11 +301,33 @@ async function init(){
   if(!client)throw new Error('createClient returned no client.');
   if(!client.auth)throw new Error('Supabase client has no auth property. SDK loaded, but the returned client is incompatible.');
   sb=client;
+  // Wait for Supabase's own INITIAL_SESSION event before deciding that Safari has no saved login.
+  let resolveInitialSession;
+  const initialSessionReady=new Promise(resolve=>{resolveInitialSession=resolve});
+  let initialSessionSeen=false;
   sb.auth.onAuthStateChange((event,session)=>{
+   if(event==='INITIAL_SESSION'){
+    initialSessionSeen=true;
+    if(session&&session.user){saveNexusSession(session);showApp(session.user)}
+    resolveInitialSession(session||null);
+    return;
+   }
    if(session&&session.user){saveNexusSession(session);showApp(session.user)}
    else if(event==='SIGNED_OUT'){clearNexusSession();if(authRestoreResolved){currentUser=null;showAuth()}}
   });
-  await restoreNexusSession({showLoginIfMissing:true});
+  // The auth SDK normally emits INITIAL_SESSION quickly. A short fallback avoids an endless splash if the event is blocked.
+  let initialSession=null;
+  await Promise.race([initialSessionReady,new Promise(resolve=>setTimeout(()=>resolve(null),2500))]).then(value=>{initialSession=value});
+  if(!initialSessionSeen){
+   await restoreNexusSession({showLoginIfMissing:true});
+  }else if(initialSession&&initialSession.user){
+   saveNexusSession(initialSession);
+   showApp(initialSession.user);
+  }else{
+   // One additional read handles storage becoming available just after Safari restores a page.
+   const recovered=await restoreNexusSession({showLoginIfMissing:false});
+   if(!recovered||!recovered.user){currentUser=null;showAuth()}
+  }
   authRestoreResolved=true;
  }catch(e){
   authRestoreResolved=true;
