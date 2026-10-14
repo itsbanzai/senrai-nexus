@@ -1008,7 +1008,7 @@ async function runNextQueuedTask(){
   if(!data||!data.reply)throw new Error(data?.error||'SENRAI returned no result.');
   const base=(t.description||'').split('\n\n--- SENRAI RUN ').slice(0,1)[0];
   const updatedDescription=base+'\n\n--- SENRAI AUTO-RUN '+new Date().toLocaleString()+' ---\n'+data.reply;
-  const {error:updateError}=await sb.from('nexus_tasks').update({description:updatedDescription,updated_at:new Date().toISOString()}).eq('id',t.id).eq('user_id',currentUser.id);
+  const {error:updateError}=await sb.from('nexus_tasks').update({description:updatedDescription,status:'completed',updated_at:new Date().toISOString()}).eq('id',t.id).eq('user_id',currentUser.id);
   if(updateError)throw updateError;
   await log('Auto-run completed',t.title+' — output saved to task');
  }catch(err){
